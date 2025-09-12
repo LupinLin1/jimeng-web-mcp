@@ -1,0 +1,2393 @@
+{
+  "timestamp": "2025-09-12T05:02:39.336Z",
+  "requestedModel": "jimeng-4.0",
+  "actualModel": "high_aes_general_v40",
+  "pollResult": [
+    {
+      "common_attr": {
+        "id": "7549063609385602313",
+        "effect_id": "7549063609385602313",
+        "effect_type": 9,
+        "title": "",
+        "description": "可爱的小猫咪，方形社交媒体图片",
+        "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=aWSLbosu2xh5%2F1bvwjOtk16El1I%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653348,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=iZFd9KJeJqop6WI1O7BCoUAFVDE%3D&format=.webp",
+          "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m%2BZHcnzfpqu0C3bu3nb1b3jzew0%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=KvinmhwsXgTrPGbID7mSyaxoDT4%3D&format=.webp",
+          "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=DNAW1gH3oTTnoywQzyDuIc%2B%2BIzE%3D&format=.webp",
+          "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=TUvFaSRfnShYVV%2BqHXRDUbswXUM%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=v00kQe4h55BMMwdYWRgu4HSUm1E%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ygyRFbJUSO7CwoR06rrhRm0veFw%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=r51u8%2B9mF5wsmHgM4RXU6m6pphQ%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m%2BZHcnzfpqu0C3bu3nb1b3jzew0%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=jlD9hAxvZdl7kZ8TjqMTEWfeHAk%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=QBSytGofHkSlANdhDhUBU%2F94bpk%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ImGqwcEEzOkmY6jCpk3gLym5pmY%3D&format=.webp"
+        },
+        "local_item_id": "7549063609385602313",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff",
+        "smart_crop_loc": null,
+        "cover_height": 1024,
+        "cover_width": 1024
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff",
+            "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=e2lbhbHQRk83yJL2mbiD317yIFk%3D&format=.png",
+            "width": 1024,
+            "height": 1024,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 1,
+          "model_config": {
+            "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "可爱的小猫咪，方形社交媒体图片",
+          "sample_steps": 25,
+          "seed": 2591071354,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1024,
+            "width": 1024,
+            "resolution_type": "1k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "27ff4a47b06f9be619cc0a6bb70bd5b9c48109e5da10f11c9c50faa967cd11ac",
+        "generate_id": "20250912130220E312380A6153B2B95C5B",
+        "origin_request_id": "27ff4a47b06f9be619cc0a6bb70bd5b9c48109e5da10f11c9c50faa967cd11ac",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532745022466",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549063623990119718",
+        "effect_id": "7549063623990119718",
+        "effect_type": 9,
+        "title": "",
+        "description": "可爱的小猫咪，方形社交媒体图片",
+        "cover_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=I56xF9CrKSzEf8p8NgjjxnJM8OY%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653349,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PqQwvtmkTiByoWi%2FdruxJ2tr%2BzM%3D&format=.webp",
+          "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=5hDaDHCZgEvMhOeCnh0hjLPGLp4%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rqzErLfVUm%2B2nZdXuJxYJiWiipA%3D&format=.webp",
+          "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=p2Umj9lhxXiJiMc8atFQDho36Yk%3D&format=.webp",
+          "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=x%2Fw77RvEYz6sz%2BUwmDLUYLZy16c%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=eBd1UzOG0%2F0P8GMNBwOHiKM63%2BU%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=qDkNpzqFsjU0Lvp0mfsnfF18MPU%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PqQwvtmkTiByoWi%2FdruxJ2tr%2BzM%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=c3xVUUW6cx48PN2eTs3qm3fcdBs%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=I20VjaWTRVPQRDcOgS3QYkxRUYw%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=sCOk53rR%2Fa6Mnav1Cm5S7p68gaQ%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=R5b6OxP2Z10p08hAaP8om2ct0K4%3D&format=.webp"
+        },
+        "local_item_id": "7549063623990119718",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a",
+        "smart_crop_loc": null,
+        "cover_height": 1024,
+        "cover_width": 1024
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a",
+            "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=NpCQjqJl1gU12pOoQ8ozWBE2XfY%3D&format=.png",
+            "width": 1024,
+            "height": 1024,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 1,
+          "model_config": {
+            "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "可爱的小猫咪，方形社交媒体图片",
+          "sample_steps": 25,
+          "seed": 2591071354,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1024,
+            "width": 1024,
+            "resolution_type": "1k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "ed19c155ca1a392a5d8d714560322e7ef36ef4abd469be2c4d9384452932ddc5",
+        "generate_id": "20250912130220E312380A6153B2B95C5B",
+        "origin_request_id": "ed19c155ca1a392a5d8d714560322e7ef36ef4abd469be2c4d9384452932ddc5",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532745022466",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549063611545668874",
+        "effect_id": "7549063611545668874",
+        "effect_type": 9,
+        "title": "",
+        "description": "可爱的小猫咪，方形社交媒体图片",
+        "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=tCf%2BUWhtkYH3lB2yp4gDwkW60x8%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653349,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=i1MoHvK3pfve0YI9Y%2B4HpriBzHc%3D&format=.webp",
+          "480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fPtKWn03UmgXeaductcFwderSZw%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=6gV3U9KsBcyZ%2BG1GDom0qcCQ%2F0Q%3D&format=.webp",
+          "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=vtrAw4NGDZYDbqz%2FqsAm5VaOU88%3D&format=.webp",
+          "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=0sYdaauzJG6exIHtMwm63rW51lg%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Uf%2BK%2BNR2twHF1R%2BbptKois%2FMFq4%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=9v3Qb7U2I6IKvb%2F3y4mSc1Vq1k8%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=2pxZY7ZClmFHPd94S9Ud96MdhFY%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fPtKWn03UmgXeaductcFwderSZw%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=uUuggsLzZuX9u%2FMDm3blEfHnT54%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=VA2cD1jf1kMEAlmpnUOyJz5FXPQ%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ale3kM%2BPJYB6%2BLqNHBmfs9dD5VQ%3D&format=.webp"
+        },
+        "local_item_id": "7549063611545668874",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d",
+        "smart_crop_loc": null,
+        "cover_height": 1024,
+        "cover_width": 1024
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=aFIAH14mBN6mYt6bPg%2Fej%2BhBsmg%3D&format=.png",
+            "width": 1024,
+            "height": 1024,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 1,
+          "model_config": {
+            "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "可爱的小猫咪，方形社交媒体图片",
+          "sample_steps": 25,
+          "seed": 2591071354,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1024,
+            "width": 1024,
+            "resolution_type": "1k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "6748c2101b4b6173a637b4cd6f875d97beb07f451b0e4ec016ea9898b769a998",
+        "generate_id": "20250912130220E312380A6153B2B95C5B",
+        "origin_request_id": "6748c2101b4b6173a637b4cd6f875d97beb07f451b0e4ec016ea9898b769a998",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532745022466",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549063622903778606",
+        "effect_id": "7549063622903778606",
+        "effect_type": 9,
+        "title": "",
+        "description": "可爱的小猫咪，方形社交媒体图片",
+        "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=YAlQrQjojUGRQrCWvZxihKt3Abk%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653349,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=k3qdcw%2F%2B6xScRymBFUJHK1GFFMg%3D&format=.webp",
+          "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Mn3iWZW7uR63WR2HeZiA2wFVVaM%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=MycPJZQsHAs2qcaBxQQDhOokVjk%3D&format=.webp",
+          "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=QfzMmC4urZ8mlB40vkAHmOEQPuQ%3D&format=.webp",
+          "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=lL4LYjStJQxG0QMpE5xBSMtRP7g%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fit7WpGhgMqI1H%2Fl5Qm%2Ba1dG25g%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m7j12nrTKoTU%2BwUTSl03xZe%2BIHA%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=k3qdcw%2F%2B6xScRymBFUJHK1GFFMg%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=XYi2HkTrj2a2jbNqcANuH1WnQf0%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=z0TZElHN%2BMOn%2BiScyg7oRxdKlUo%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=P%2BbkzgH34MoMZj%2B5aUoS%2FcvGvL0%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=xtA0qdWzhPgk1doUjp7RpLa7ejM%3D&format=.webp"
+        },
+        "local_item_id": "7549063622903778606",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9",
+        "smart_crop_loc": null,
+        "cover_height": 1024,
+        "cover_width": 1024
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9",
+            "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=Am5TmzHeDuw0Afjustzvt647AW8%3D&format=.png",
+            "width": 1024,
+            "height": 1024,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 1,
+          "model_config": {
+            "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "可爱的小猫咪，方形社交媒体图片",
+          "sample_steps": 25,
+          "seed": 2591071354,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1024,
+            "width": 1024,
+            "resolution_type": "1k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "c06c163a4bc52625615966d02cd50412bea40d5f2dae1b112ee8391569cd3fae",
+        "generate_id": "20250912130220E312380A6153B2B95C5B",
+        "origin_request_id": "c06c163a4bc52625615966d02cd50412bea40d5f2dae1b112ee8391569cd3fae",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532745022466",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    }
+  ],
+  "originalResult": {
+    "ret": "0",
+    "errmsg": "success",
+    "systime": "1757653340",
+    "logid": "20250912130220E312380A6153B2B95C5B",
+    "data": {
+      "aigc_data": {
+        "generate_type": 1,
+        "history_record_id": "25548228539650",
+        "origin_history_record_id": null,
+        "created_time": 1757653340.673,
+        "item_list": [],
+        "origin_item_list": [],
+        "task": {
+          "task_id": "25548228539650",
+          "submit_id": "f4831eae-b94d-4c0d-8391-029f0476e80d",
+          "aid": 0,
+          "status": 20,
+          "finish_time": 0,
+          "history_id": "25548228539650",
+          "task_payload": null,
+          "original_input": null,
+          "req_first_frame_image": null,
+          "ai_gen_prompt": "",
+          "priority": 0,
+          "lip_sync_info": null,
+          "multi_size_first_frame_image": null,
+          "multi_size_end_frame_image": null,
+          "process_flows": null,
+          "create_time": 0,
+          "aigc_image_params": null,
+          "ref_item": null,
+          "resp_ret": {
+            "ret": ""
+          }
+        },
+        "mode": "workbench",
+        "asset_option": {
+          "has_favorited": false
+        },
+        "uid": "4246729963603161",
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "status": 20,
+        "history_group_key_md5": "e4ddb28ab7bf6538f6699f7801e07e48",
+        "history_group_key": "可爱的小猫咪，方形社交媒体图片",
+        "draft_content": "{\"type\":\"draft\",\"id\":\"30cc3353-04d2-4d91-a814-3c2b37745dca\",\"min_version\":\"3.0.2\",\"min_features\":[],\"is_from_tsn\":true,\"version\":\"3.0.2\",\"main_component_id\":\"9025e7c9-4341-43c7-b9ad-8c3ec4041cf2\",\"component_list\":[{\"type\":\"image_base_component\",\"id\":\"9025e7c9-4341-43c7-b9ad-8c3ec4041cf2\",\"min_version\":\"3.0.2\",\"aigc_mode\":\"workbench\",\"gen_type\":1,\"metadata\":{\"type\":\"\",\"id\":\"6c1ec5be-4f9e-4f64-87d2-b4ec7d6d0fe2\",\"created_platform\":3,\"created_platform_version\":\"\",\"created_time_in_ms\":\"1757653338155\",\"created_did\":\"\"},\"generate_type\":\"generate\",\"abilities\":{\"type\":\"\",\"id\":\"1ed697ce-ecf3-4f64-b510-ccc1051780cf\",\"generate\":{\"type\":\"\",\"id\":\"350b90cf-febb-4fd6-9628-797ea501c073\",\"core_param\":{\"type\":\"\",\"id\":\"6cec5593-fe7d-4e70-9c57-0ee93dc3d2ff\",\"model\":\"high_aes_general_v40\",\"prompt\":\"可爱的小猫咪，方形社交媒体图片\",\"negative_prompt\":\"\",\"seed\":2591071354,\"sample_strength\":0.5,\"image_ratio\":1,\"large_image_info\":{\"type\":\"\",\"id\":\"2a55bd36-c023-4571-bde5-8408f43b172f\",\"height\":1024,\"width\":1024,\"resolution_type\":\"1k\"},\"intelligent_ratio\":false},\"history_option\":{\"type\":\"\",\"id\":\"58456ab0-0a8d-49a7-a027-e06bf570afbe\"}}}}]}",
+        "submit_id": "f4831eae-b94d-4c0d-8391-029f0476e80d",
+        "capflow_id": "f4831eae-b94d-4c0d-8391-029f0476e80d",
+        "metrics_extra": "{\"templateId\":\"\",\"generateCount\":1,\"promptSource\":\"custom\",\"templateSource\":\"\",\"lastRequestId\":\"\",\"originRequestId\":\"\"}",
+        "generate_id": "20250912130220E312380A6153B2B95C5B",
+        "finish_time": 0,
+        "model_info": {
+          "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189337&x-signature=ZHEHFE4%2BmPwumoIe%2Fibv%2BzQfgFM%3D",
+          "model_name_starling_key": "dreamina_image4_title",
+          "model_tip_starling_key": "dreamina_image4_desc",
+          "model_req_key": "high_aes_general_v40",
+          "model_name": "图片 4.0",
+          "video_model_options": null
+        },
+        "forecast_generate_cost": 23,
+        "forecast_queue_cost": 1,
+        "fail_starling_key": "",
+        "fail_starling_message": "",
+        "min_feats": null,
+        "queue_info": {
+          "queue_idx": 1,
+          "priority": 3,
+          "queue_status": 1,
+          "queue_length": 3,
+          "polling_config": {
+            "interval_seconds": 30,
+            "timeout_seconds": 86400
+          },
+          "priority_queue_display_threshold": {
+            "vip_queuing_time_threshold": 300,
+            "waiting_time_threshold": 60
+          }
+        },
+        "agent_history_id": null,
+        "total_image_count": 0,
+        "finished_image_count": 0,
+        "confirm_status": 0,
+        "confirm_token": "",
+        "image_type": 0
+      },
+      "fail_code": "",
+      "fail_starling_key": "",
+      "fail_starling_message": ""
+    }
+  },
+  "recordData": {
+    "generate_type": 1,
+    "history_record_id": "25548228539650",
+    "origin_history_record_id": null,
+    "created_time": 1757653340.673,
+    "item_list": [
+      {
+        "common_attr": {
+          "id": "7549063609385602313",
+          "effect_id": "7549063609385602313",
+          "effect_type": 9,
+          "title": "",
+          "description": "可爱的小猫咪，方形社交媒体图片",
+          "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=aWSLbosu2xh5%2F1bvwjOtk16El1I%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653348,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=iZFd9KJeJqop6WI1O7BCoUAFVDE%3D&format=.webp",
+            "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m%2BZHcnzfpqu0C3bu3nb1b3jzew0%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=KvinmhwsXgTrPGbID7mSyaxoDT4%3D&format=.webp",
+            "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=DNAW1gH3oTTnoywQzyDuIc%2B%2BIzE%3D&format=.webp",
+            "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=TUvFaSRfnShYVV%2BqHXRDUbswXUM%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=v00kQe4h55BMMwdYWRgu4HSUm1E%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ygyRFbJUSO7CwoR06rrhRm0veFw%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=r51u8%2B9mF5wsmHgM4RXU6m6pphQ%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m%2BZHcnzfpqu0C3bu3nb1b3jzew0%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=jlD9hAxvZdl7kZ8TjqMTEWfeHAk%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=QBSytGofHkSlANdhDhUBU%2F94bpk%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ImGqwcEEzOkmY6jCpk3gLym5pmY%3D&format=.webp"
+          },
+          "local_item_id": "7549063609385602313",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff",
+          "smart_crop_loc": null,
+          "cover_height": 1024,
+          "cover_width": 1024
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff",
+              "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/eb42bf68cc9b469d876590848a81aeff~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=e2lbhbHQRk83yJL2mbiD317yIFk%3D&format=.png",
+              "width": 1024,
+              "height": 1024,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 1,
+            "model_config": {
+              "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "可爱的小猫咪，方形社交媒体图片",
+            "sample_steps": 25,
+            "seed": 2591071354,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1024,
+              "width": 1024,
+              "resolution_type": "1k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "27ff4a47b06f9be619cc0a6bb70bd5b9c48109e5da10f11c9c50faa967cd11ac",
+          "generate_id": "20250912130220E312380A6153B2B95C5B",
+          "origin_request_id": "27ff4a47b06f9be619cc0a6bb70bd5b9c48109e5da10f11c9c50faa967cd11ac",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532745022466",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549063623990119718",
+          "effect_id": "7549063623990119718",
+          "effect_type": 9,
+          "title": "",
+          "description": "可爱的小猫咪，方形社交媒体图片",
+          "cover_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=I56xF9CrKSzEf8p8NgjjxnJM8OY%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653349,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PqQwvtmkTiByoWi%2FdruxJ2tr%2BzM%3D&format=.webp",
+            "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=5hDaDHCZgEvMhOeCnh0hjLPGLp4%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rqzErLfVUm%2B2nZdXuJxYJiWiipA%3D&format=.webp",
+            "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=p2Umj9lhxXiJiMc8atFQDho36Yk%3D&format=.webp",
+            "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=x%2Fw77RvEYz6sz%2BUwmDLUYLZy16c%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=eBd1UzOG0%2F0P8GMNBwOHiKM63%2BU%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=qDkNpzqFsjU0Lvp0mfsnfF18MPU%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PqQwvtmkTiByoWi%2FdruxJ2tr%2BzM%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=c3xVUUW6cx48PN2eTs3qm3fcdBs%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=I20VjaWTRVPQRDcOgS3QYkxRUYw%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=sCOk53rR%2Fa6Mnav1Cm5S7p68gaQ%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=R5b6OxP2Z10p08hAaP8om2ct0K4%3D&format=.webp"
+          },
+          "local_item_id": "7549063623990119718",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a",
+          "smart_crop_loc": null,
+          "cover_height": 1024,
+          "cover_width": 1024
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a",
+              "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0e0e6b0003e4410096bafc8e3453425a~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=NpCQjqJl1gU12pOoQ8ozWBE2XfY%3D&format=.png",
+              "width": 1024,
+              "height": 1024,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 1,
+            "model_config": {
+              "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "可爱的小猫咪，方形社交媒体图片",
+            "sample_steps": 25,
+            "seed": 2591071354,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1024,
+              "width": 1024,
+              "resolution_type": "1k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "ed19c155ca1a392a5d8d714560322e7ef36ef4abd469be2c4d9384452932ddc5",
+          "generate_id": "20250912130220E312380A6153B2B95C5B",
+          "origin_request_id": "ed19c155ca1a392a5d8d714560322e7ef36ef4abd469be2c4d9384452932ddc5",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532745022466",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549063611545668874",
+          "effect_id": "7549063611545668874",
+          "effect_type": 9,
+          "title": "",
+          "description": "可爱的小猫咪，方形社交媒体图片",
+          "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=tCf%2BUWhtkYH3lB2yp4gDwkW60x8%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653349,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=i1MoHvK3pfve0YI9Y%2B4HpriBzHc%3D&format=.webp",
+            "480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fPtKWn03UmgXeaductcFwderSZw%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=6gV3U9KsBcyZ%2BG1GDom0qcCQ%2F0Q%3D&format=.webp",
+            "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=vtrAw4NGDZYDbqz%2FqsAm5VaOU88%3D&format=.webp",
+            "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=0sYdaauzJG6exIHtMwm63rW51lg%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Uf%2BK%2BNR2twHF1R%2BbptKois%2FMFq4%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=9v3Qb7U2I6IKvb%2F3y4mSc1Vq1k8%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=2pxZY7ZClmFHPd94S9Ud96MdhFY%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fPtKWn03UmgXeaductcFwderSZw%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=uUuggsLzZuX9u%2FMDm3blEfHnT54%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=VA2cD1jf1kMEAlmpnUOyJz5FXPQ%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ale3kM%2BPJYB6%2BLqNHBmfs9dD5VQ%3D&format=.webp"
+          },
+          "local_item_id": "7549063611545668874",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d",
+          "smart_crop_loc": null,
+          "cover_height": 1024,
+          "cover_width": 1024
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d",
+              "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/58bb9ce7a886440fa547a44b6d3e1c8d~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=aFIAH14mBN6mYt6bPg%2Fej%2BhBsmg%3D&format=.png",
+              "width": 1024,
+              "height": 1024,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 1,
+            "model_config": {
+              "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "可爱的小猫咪，方形社交媒体图片",
+            "sample_steps": 25,
+            "seed": 2591071354,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1024,
+              "width": 1024,
+              "resolution_type": "1k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "6748c2101b4b6173a637b4cd6f875d97beb07f451b0e4ec016ea9898b769a998",
+          "generate_id": "20250912130220E312380A6153B2B95C5B",
+          "origin_request_id": "6748c2101b4b6173a637b4cd6f875d97beb07f451b0e4ec016ea9898b769a998",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532745022466",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549063622903778606",
+          "effect_id": "7549063622903778606",
+          "effect_type": 9,
+          "title": "",
+          "description": "可爱的小猫咪，方形社交媒体图片",
+          "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=YAlQrQjojUGRQrCWvZxihKt3Abk%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653349,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=k3qdcw%2F%2B6xScRymBFUJHK1GFFMg%3D&format=.webp",
+            "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Mn3iWZW7uR63WR2HeZiA2wFVVaM%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=MycPJZQsHAs2qcaBxQQDhOokVjk%3D&format=.webp",
+            "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=QfzMmC4urZ8mlB40vkAHmOEQPuQ%3D&format=.webp",
+            "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=lL4LYjStJQxG0QMpE5xBSMtRP7g%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fit7WpGhgMqI1H%2Fl5Qm%2Ba1dG25g%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m7j12nrTKoTU%2BwUTSl03xZe%2BIHA%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=k3qdcw%2F%2B6xScRymBFUJHK1GFFMg%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=XYi2HkTrj2a2jbNqcANuH1WnQf0%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=z0TZElHN%2BMOn%2BiScyg7oRxdKlUo%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=P%2BbkzgH34MoMZj%2B5aUoS%2FcvGvL0%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=xtA0qdWzhPgk1doUjp7RpLa7ejM%3D&format=.webp"
+          },
+          "local_item_id": "7549063622903778606",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9",
+          "smart_crop_loc": null,
+          "cover_height": 1024,
+          "cover_width": 1024
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9",
+              "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dfaa851ee5124962a1d4800f834e0da9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=Am5TmzHeDuw0Afjustzvt647AW8%3D&format=.png",
+              "width": 1024,
+              "height": 1024,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 1,
+            "model_config": {
+              "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "可爱的小猫咪，方形社交媒体图片",
+            "sample_steps": 25,
+            "seed": 2591071354,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1024,
+              "width": 1024,
+              "resolution_type": "1k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "c06c163a4bc52625615966d02cd50412bea40d5f2dae1b112ee8391569cd3fae",
+          "generate_id": "20250912130220E312380A6153B2B95C5B",
+          "origin_request_id": "c06c163a4bc52625615966d02cd50412bea40d5f2dae1b112ee8391569cd3fae",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532745022466",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      }
+    ],
+    "origin_item_list": [],
+    "task": {
+      "task_id": "25548228539650",
+      "submit_id": "f4831eae-b94d-4c0d-8391-029f0476e80d",
+      "aid": 0,
+      "status": 50,
+      "finish_time": 1757653350,
+      "history_id": "25548228539650",
+      "task_payload": null,
+      "original_input": null,
+      "req_first_frame_image": null,
+      "ai_gen_prompt": "",
+      "priority": 0,
+      "lip_sync_info": null,
+      "multi_size_first_frame_image": null,
+      "multi_size_end_frame_image": null,
+      "process_flows": null,
+      "create_time": 0,
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 1,
+          "model_config": {
+            "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "可爱的小猫咪，方形社交媒体图片",
+          "sample_steps": 25,
+          "seed": 2591071354,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1024,
+            "width": 1024,
+            "resolution_type": "1k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "27ff4a47b06f9be619cc0a6bb70bd5b9c48109e5da10f11c9c50faa967cd11ac",
+        "generate_id": "20250912130220E312380A6153B2B95C5B",
+        "origin_request_id": "27ff4a47b06f9be619cc0a6bb70bd5b9c48109e5da10f11c9c50faa967cd11ac",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "ref_item": null,
+      "resp_ret": {
+        "ret": ""
+      }
+    },
+    "mode": "workbench",
+    "asset_option": {
+      "has_favorited": false
+    },
+    "uid": "4246729963603161",
+    "aigc_flow": {
+      "version": "3.0.2"
+    },
+    "status": 50,
+    "history_group_key_md5": "e4ddb28ab7bf6538f6699f7801e07e48",
+    "history_group_key": "可爱的小猫咪，方形社交媒体图片",
+    "draft_content": "{\"type\":\"draft\",\"id\":\"30cc3353-04d2-4d91-a814-3c2b37745dca\",\"min_version\":\"3.0.2\",\"min_features\":[],\"is_from_tsn\":true,\"version\":\"3.0.2\",\"main_component_id\":\"9025e7c9-4341-43c7-b9ad-8c3ec4041cf2\",\"component_list\":[{\"type\":\"image_base_component\",\"id\":\"9025e7c9-4341-43c7-b9ad-8c3ec4041cf2\",\"min_version\":\"3.0.2\",\"aigc_mode\":\"workbench\",\"gen_type\":1,\"metadata\":{\"type\":\"\",\"id\":\"6c1ec5be-4f9e-4f64-87d2-b4ec7d6d0fe2\",\"created_platform\":3,\"created_platform_version\":\"\",\"created_time_in_ms\":\"1757653338155\",\"created_did\":\"\"},\"generate_type\":\"generate\",\"abilities\":{\"type\":\"\",\"id\":\"1ed697ce-ecf3-4f64-b510-ccc1051780cf\",\"generate\":{\"type\":\"\",\"id\":\"350b90cf-febb-4fd6-9628-797ea501c073\",\"core_param\":{\"type\":\"\",\"id\":\"6cec5593-fe7d-4e70-9c57-0ee93dc3d2ff\",\"model\":\"high_aes_general_v40\",\"prompt\":\"可爱的小猫咪，方形社交媒体图片\",\"negative_prompt\":\"\",\"seed\":2591071354,\"sample_strength\":0.5,\"image_ratio\":1,\"large_image_info\":{\"type\":\"\",\"id\":\"2a55bd36-c023-4571-bde5-8408f43b172f\",\"height\":1024,\"width\":1024,\"resolution_type\":\"1k\"},\"intelligent_ratio\":false},\"history_option\":{\"type\":\"\",\"id\":\"58456ab0-0a8d-49a7-a027-e06bf570afbe\"}}}}]}",
+    "fail_code": "0",
+    "submit_id": "f4831eae-b94d-4c0d-8391-029f0476e80d",
+    "capflow_id": "f4831eae-b94d-4c0d-8391-029f0476e80d",
+    "metrics_extra": "{\"templateId\":\"\",\"generateCount\":1,\"promptSource\":\"custom\",\"templateSource\":\"\",\"lastRequestId\":\"\",\"originRequestId\":\"\"}",
+    "fail_msg": "Success",
+    "generate_id": "20250912130220E312380A6153B2B95C5B",
+    "finish_time": 1757653350,
+    "model_info": {
+      "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189360&x-signature=GN%2Fu2OD3T4AZtiDyVyFeaCFOCxk%3D",
+      "model_name_starling_key": "dreamina_image4_title",
+      "model_tip_starling_key": "dreamina_image4_desc",
+      "model_req_key": "high_aes_general_v40",
+      "model_name": "图片 4.0",
+      "video_model_options": null
+    },
+    "forecast_generate_cost": 23,
+    "forecast_queue_cost": 0,
+    "fail_starling_key": "",
+    "fail_starling_message": "",
+    "min_feats": null,
+    "queue_info": {
+      "queue_idx": 0,
+      "priority": 3,
+      "queue_status": 3,
+      "queue_length": 0,
+      "polling_config": {
+        "interval_seconds": 30,
+        "timeout_seconds": 86400
+      },
+      "priority_queue_display_threshold": {
+        "vip_queuing_time_threshold": 300,
+        "waiting_time_threshold": 60
+      }
+    },
+    "agent_history_id": null,
+    "total_image_count": 4,
+    "finished_image_count": 4,
+    "confirm_status": 2,
+    "confirm_token": "",
+    "image_type": 3
+  }
+}

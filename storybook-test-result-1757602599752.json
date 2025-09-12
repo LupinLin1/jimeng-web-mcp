@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-09-11T14:56:39.752Z",
+  "theme": "中年男人去钓鱼的故事",
+  "prompt": "中年男人去钓鱼为主题的10张图的绘本，温馨画风，连续故事情节，详细描绘每个场景",
+  "model": "jimeng-4.0",
+  "expectedCount": 10,
+  "actualCount": 14,
+  "success": true,
+  "duration": 132.99,
+  "imageUrls": [
+    "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/fe5857d61f5543b08df1d96a0a1d2eb9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=Cf%2BS%2BOXMMwL7G041q3OksYvb5%2FA%3D&format=.png",
+    "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/fe5857d61f5543b08df1d96a0a1d2eb9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=q5vwWUV0VKGGMuCIQZL9xBoFt0s%3D&format=.png",
+    "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/a30dea1f1cc94fa0960930289431dab9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=YruxthhISDtnkphYtga%2FseTjAwI%3D&format=.png",
+    "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/fe5857d61f5543b08df1d96a0a1d2eb9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=Cf%2BS%2BOXMMwL7G041q3OksYvb5%2FA%3D&format=.png",
+    "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/a30dea1f1cc94fa0960930289431dab9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=4avQ5lRBGZBxZZAEctgcsYiGCsU%3D&format=.png",
+    "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/1071f116ff22460db3f25182e17cfcdf~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=Kn2twK%2Bv2OZ3LDSEoNcGwIIweAA%3D&format=.png",
+    "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/fe5857d61f5543b08df1d96a0a1d2eb9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=bGCYkCFxP4Ob7oH%2BczxxqwRXJ6s%3D&format=.png",
+    "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/a30dea1f1cc94fa0960930289431dab9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=Y3cEOFD1jy8OfOFm5HqrB0CcF2E%3D&format=.png",
+    "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/1071f116ff22460db3f25182e17cfcdf~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=K5n1eJA0T6XQ1oF928Ly4sWlVqA%3D&format=.png",
+    "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/fe5857d61f5543b08df1d96a0a1d2eb9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=Cf%2BS%2BOXMMwL7G041q3OksYvb5%2FA%3D&format=.png",
+    "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/a30dea1f1cc94fa0960930289431dab9~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=YruxthhISDtnkphYtga%2FseTjAwI%3D&format=.png",
+    "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/1071f116ff22460db3f25182e17cfcdf~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=K5n1eJA0T6XQ1oF928Ly4sWlVqA%3D&format=.png",
+    "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/1b87135685bb4acd84e0a8c5cd4e06ca~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=Lk42DZhQK2uPEMWS4rTgWh4OP5s%3D&format=.png",
+    "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/aaf2f207002542a6a2d5947736a0d1ee~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757606400&x-signature=S3zd25vaOT0xGniX9EsNmRxOVsI%3D&format=.png"
+  ]
+}

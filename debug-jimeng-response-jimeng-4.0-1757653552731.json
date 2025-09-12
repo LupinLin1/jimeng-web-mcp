@@ -1,0 +1,2393 @@
+{
+  "timestamp": "2025-09-12T05:05:52.731Z",
+  "requestedModel": "jimeng-4.0",
+  "actualModel": "high_aes_general_v40",
+  "pollResult": [
+    {
+      "common_attr": {
+        "id": "7549064425542618420",
+        "effect_id": "7549064425542618420",
+        "effect_type": 9,
+        "title": "",
+        "description": "现代城市夜景，竖屏手机壁纸",
+        "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=oXMnuU%2B1rgEKV0i2ABwTE1XuOt4%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653546,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 0.5625,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=9J3GzpqPx8oi304LCB6%2F%2FRkquSA%3D&format=.webp",
+          "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=EZV2%2FyD450gE5SfO7TW3cqBhae0%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=YR7wklmEDIl0uiabLDaiwatnw5Q%3D&format=.webp",
+          "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=hHqwD6WpCCwzGXSD0dmQzL%2BCbck%3D&format=.webp",
+          "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=HzUt4Sj3xTIMDkSWFlf4U2dFWR8%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=iIGy%2BQPUEwp29%2FmUU9WQFwxdNZ0%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=imrcP4%2FsPRhgJJ%2FCmpqEn8S8qeM%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=l3un5PMmYqfC94xuowTa%2BAiFYt0%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=CUcCvL6VBFr%2FSs4C%2FtXtYtHUgw8%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=w0LrHjUAF7Re5uGsBEbYZtPVv5Y%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=h7RaYmrZah4YsqxXREL%2FmYVm6hk%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=pJ0sD4MO8%2BeG7%2Fefs%2FTIjStkwFs%3D&format=.webp"
+        },
+        "local_item_id": "7549064425542618420",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7",
+        "smart_crop_loc": null,
+        "cover_height": 2048,
+        "cover_width": 1152
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=G1NBEMnDJkUi1hnFvTefJYiflHQ%3D&format=.png",
+            "width": 1440,
+            "height": 2560,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 5,
+          "model_config": {
+            "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "现代城市夜景，竖屏手机壁纸",
+          "sample_steps": 25,
+          "seed": 2533158144,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 2560,
+            "width": 1440,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "8010f12497427f67d6390fe1a33c469c8d40d13cdf7b57cbdf849c88554cdd32",
+        "generate_id": "202509121305332E2CEFC594FE998B6238",
+        "origin_request_id": "8010f12497427f67d6390fe1a33c469c8d40d13cdf7b57cbdf849c88554cdd32",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532096322050",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549064428889640232",
+        "effect_id": "7549064428889640232",
+        "effect_type": 9,
+        "title": "",
+        "description": "现代城市夜景，竖屏手机壁纸",
+        "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=J%2BX6fdLPr7or%2FuQifvNK164E4nA%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653546,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 0.5625,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=RtvFwGsmo4JAyIjnoOTzdEaiHQ4%3D&format=.webp",
+          "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=I8%2Bf0TPkdbyhidNEw1oerYOidrI%3D&format=.webp",
+          "720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=wWDbnJdSVrr0oFpwN9cO64BKmNw%3D&format=.webp",
+          "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=VFzfdbosfuMHq%2BEz4M350rDkWFg%3D&format=.webp",
+          "2400": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=SP8MHuuKLzL%2Fhdzq%2B95uF3Sehew%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=eTP7m516C%2B53utf02k4yANTs10U%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=%2BE%2FbL7mSR7xW6EQ2RLDcgGKqMAw%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=gwfsLDG65nCT9WtHbtNulC0xd2c%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=I8%2Bf0TPkdbyhidNEw1oerYOidrI%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Z0DG1cDLMtq%2Bg4ntho%2BA%2FJRAuDU%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=jsN6Ihd5ZbJqK1gKMJ7Pf8MFpmk%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=cNry05LDTUkGn5%2Bm0nyEADpBJ4Q%3D&format=.webp"
+        },
+        "local_item_id": "7549064428889640232",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8",
+        "smart_crop_loc": null,
+        "cover_height": 2048,
+        "cover_width": 1152
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=u8TkT6XnKelRWn%2Bh10uKfnB%2Fd7Q%3D&format=.png",
+            "width": 1440,
+            "height": 2560,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 5,
+          "model_config": {
+            "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "现代城市夜景，竖屏手机壁纸",
+          "sample_steps": 25,
+          "seed": 2533158144,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 2560,
+            "width": 1440,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "734230d9f946d5d76924d4fdd0afafe734caabc15f1fbd7b52819f79ec454e69",
+        "generate_id": "202509121305332E2CEFC594FE998B6238",
+        "origin_request_id": "734230d9f946d5d76924d4fdd0afafe734caabc15f1fbd7b52819f79ec454e69",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532096322050",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549064463857569059",
+        "effect_id": "7549064463857569059",
+        "effect_type": 9,
+        "title": "",
+        "description": "现代城市夜景，竖屏手机壁纸",
+        "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=cDbqxJXnQfJkuDV81pUFbn3NB1E%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653546,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 0.5625,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m68mTjLpUTwrFCbvIchjSFLHVK4%3D&format=.webp",
+          "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=x7Q1rwPIDzul4vwwjgvV9Svp9Vo%3D&format=.webp",
+          "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=OxRKcA9x7yN4xTEyRlwWiYntEFM%3D&format=.webp",
+          "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=zXQ8DVWg3UccwPeWjNd9EXkjuo8%3D&format=.webp",
+          "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PToPYXd9eQHkkxCrtArAzZ%2FHAV4%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=0%2FCHuvgYT%2Bq4n7nD7IAQFBow%2BrY%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=GJhoCF3hBaipjKvdq2W80ULipTQ%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3sZXaua6gnqk00fO4iF3AG5xk3Y%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Ft7QeB2u%2FUQeLnnGH%2F3XYVx92tc%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Zq0vGL6%2Fe1i5GXcj9CqX%2BuFuHsU%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=BSLcGANcmDhIUjq55Fr3BZ0xMyk%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Ep4DR3gUPFTCmKG331NBENl20Zo%3D&format=.webp"
+        },
+        "local_item_id": "7549064463857569059",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe",
+        "smart_crop_loc": null,
+        "cover_height": 2048,
+        "cover_width": 1152
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe",
+            "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=1LeD9e9Zjqs%2Bns5nP4vrreKNX10%3D&format=.png",
+            "width": 1440,
+            "height": 2560,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 5,
+          "model_config": {
+            "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "现代城市夜景，竖屏手机壁纸",
+          "sample_steps": 25,
+          "seed": 2533158144,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 2560,
+            "width": 1440,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "25386918095045d59e9866b9ae9ebce9f231371e8ef95c0953da780dade8e55a",
+        "generate_id": "202509121305332E2CEFC594FE998B6238",
+        "origin_request_id": "25386918095045d59e9866b9ae9ebce9f231371e8ef95c0953da780dade8e55a",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532096322050",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549064458019114240",
+        "effect_id": "7549064458019114240",
+        "effect_type": 9,
+        "title": "",
+        "description": "现代城市夜景，竖屏手机壁纸",
+        "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=vxDYu7oB3jcRHAuOOdVpO7fjPX0%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757653546,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 0.5625,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Hm1WEZ7ddEKZSLeGuLifMq%2FA2gk%3D&format=.webp",
+          "480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=sOg9Zmi81%2FdMUE2IyVZFU4MGuyg%3D&format=.webp",
+          "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mUokkqG1b4Kfp0CCFC2GWMuPGXk%3D&format=.webp",
+          "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=SxqIUvhjvkslp0oiJ%2FnYnYL9o4I%3D&format=.webp",
+          "2400": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=UVC7IoqeBhZPQ5Fw5zyL1W5ghUI%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=1uzNarK0aqGp2s%2B18%2BuK5jIgQtI%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ck%2BH1bTn9vCD7A3oGf8toi5io3s%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Hm1WEZ7ddEKZSLeGuLifMq%2FA2gk%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=aFSdV1Cj2SvCJROy%2Fullldt7Sj0%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=2wpo31lylenvht%2BAy9Zkms6tSu4%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=gwJW7qZMW4uJ1B8T0Kjp8KNT5lI%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mUokkqG1b4Kfp0CCFC2GWMuPGXk%3D&format=.webp"
+        },
+        "local_item_id": "7549064458019114240",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700",
+        "smart_crop_loc": null,
+        "cover_height": 2048,
+        "cover_width": 1152
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=ZfFsmkJwrAxkLfRtJzJuvUihn8w%3D&format=.png",
+            "width": 1440,
+            "height": 2560,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 5,
+          "model_config": {
+            "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "现代城市夜景，竖屏手机壁纸",
+          "sample_steps": 25,
+          "seed": 2533158144,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 2560,
+            "width": 1440,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "207fe4c723673749cec12105d008a18eb711c1992b5e4bc614cbbdae6d144be3",
+        "generate_id": "202509121305332E2CEFC594FE998B6238",
+        "origin_request_id": "207fe4c723673749cec12105d008a18eb711c1992b5e4bc614cbbdae6d144be3",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7532096322050",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    }
+  ],
+  "originalResult": {
+    "ret": "0",
+    "errmsg": "success",
+    "systime": "1757653533",
+    "logid": "202509121305332E2CEFC594FE998B6238",
+    "data": {
+      "aigc_data": {
+        "generate_type": 1,
+        "history_record_id": "25536915094786",
+        "origin_history_record_id": null,
+        "created_time": 1757653534.034,
+        "item_list": [],
+        "origin_item_list": [],
+        "task": {
+          "task_id": "25536915094786",
+          "submit_id": "b39354e6-bd55-4437-b36c-314b94ac6139",
+          "aid": 0,
+          "status": 20,
+          "finish_time": 0,
+          "history_id": "25536915094786",
+          "task_payload": null,
+          "original_input": null,
+          "req_first_frame_image": null,
+          "ai_gen_prompt": "",
+          "priority": 0,
+          "lip_sync_info": null,
+          "multi_size_first_frame_image": null,
+          "multi_size_end_frame_image": null,
+          "process_flows": null,
+          "create_time": 0,
+          "aigc_image_params": null,
+          "ref_item": null,
+          "resp_ret": {
+            "ret": ""
+          }
+        },
+        "mode": "workbench",
+        "asset_option": {
+          "has_favorited": false
+        },
+        "uid": "4246729963603161",
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "status": 20,
+        "history_group_key_md5": "871dfe8db9b9a8d7b6d1c666b7a880bc",
+        "history_group_key": "现代城市夜景，竖屏手机壁纸",
+        "draft_content": "{\"type\":\"draft\",\"id\":\"face2642-8a2d-498b-a4f8-14d9f9751537\",\"min_version\":\"3.0.2\",\"min_features\":[],\"is_from_tsn\":true,\"version\":\"3.0.2\",\"main_component_id\":\"5cf2e6cc-e7da-40cb-b815-47e5d8b111cb\",\"component_list\":[{\"type\":\"image_base_component\",\"id\":\"5cf2e6cc-e7da-40cb-b815-47e5d8b111cb\",\"min_version\":\"3.0.2\",\"aigc_mode\":\"workbench\",\"gen_type\":1,\"metadata\":{\"type\":\"\",\"id\":\"b3ad4463-5209-4833-9843-b8a9df746a9a\",\"created_platform\":3,\"created_platform_version\":\"\",\"created_time_in_ms\":\"1757653531516\",\"created_did\":\"\"},\"generate_type\":\"generate\",\"abilities\":{\"type\":\"\",\"id\":\"a2bcd852-66d1-45be-b262-2c9fafde7a73\",\"generate\":{\"type\":\"\",\"id\":\"f7e817f6-41a9-4d2a-806d-06139251491a\",\"core_param\":{\"type\":\"\",\"id\":\"9c12cdec-27b6-4f94-a176-ed62d54878da\",\"model\":\"high_aes_general_v40\",\"prompt\":\"现代城市夜景，竖屏手机壁纸\",\"negative_prompt\":\"\",\"seed\":2533158144,\"sample_strength\":0.5,\"image_ratio\":5,\"large_image_info\":{\"type\":\"\",\"id\":\"1a1bbac1-2c43-4370-ac99-2b4604d0aa9c\",\"height\":2560,\"width\":1440,\"resolution_type\":\"2.5k\"},\"intelligent_ratio\":false},\"history_option\":{\"type\":\"\",\"id\":\"e8f5e075-606e-42da-8914-cdcb963563da\"}}}}]}",
+        "submit_id": "b39354e6-bd55-4437-b36c-314b94ac6139",
+        "capflow_id": "b39354e6-bd55-4437-b36c-314b94ac6139",
+        "metrics_extra": "{\"templateId\":\"\",\"generateCount\":1,\"promptSource\":\"custom\",\"templateSource\":\"\",\"lastRequestId\":\"\",\"originRequestId\":\"\"}",
+        "generate_id": "202509121305332E2CEFC594FE998B6238",
+        "finish_time": 0,
+        "model_info": {
+          "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189533&x-signature=bbdy5HSmDK9Jerw9TlneKQ6K6m8%3D",
+          "model_name_starling_key": "dreamina_image4_title",
+          "model_tip_starling_key": "dreamina_image4_desc",
+          "model_req_key": "high_aes_general_v40",
+          "model_name": "图片 4.0",
+          "video_model_options": null
+        },
+        "forecast_generate_cost": 26,
+        "forecast_queue_cost": 0,
+        "fail_starling_key": "",
+        "fail_starling_message": "",
+        "min_feats": null,
+        "queue_info": {
+          "queue_idx": 1,
+          "priority": 3,
+          "queue_status": 1,
+          "queue_length": 1,
+          "polling_config": {
+            "interval_seconds": 30,
+            "timeout_seconds": 86400
+          },
+          "priority_queue_display_threshold": {
+            "vip_queuing_time_threshold": 300,
+            "waiting_time_threshold": 60
+          }
+        },
+        "agent_history_id": null,
+        "total_image_count": 0,
+        "finished_image_count": 0,
+        "confirm_status": 0,
+        "confirm_token": "",
+        "image_type": 0
+      },
+      "fail_code": "",
+      "fail_starling_key": "",
+      "fail_starling_message": ""
+    }
+  },
+  "recordData": {
+    "generate_type": 1,
+    "history_record_id": "25536915094786",
+    "origin_history_record_id": null,
+    "created_time": 1757653534.034,
+    "item_list": [
+      {
+        "common_attr": {
+          "id": "7549064425542618420",
+          "effect_id": "7549064425542618420",
+          "effect_type": 9,
+          "title": "",
+          "description": "现代城市夜景，竖屏手机壁纸",
+          "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=oXMnuU%2B1rgEKV0i2ABwTE1XuOt4%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653546,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 0.5625,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=9J3GzpqPx8oi304LCB6%2F%2FRkquSA%3D&format=.webp",
+            "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=EZV2%2FyD450gE5SfO7TW3cqBhae0%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=YR7wklmEDIl0uiabLDaiwatnw5Q%3D&format=.webp",
+            "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=hHqwD6WpCCwzGXSD0dmQzL%2BCbck%3D&format=.webp",
+            "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=HzUt4Sj3xTIMDkSWFlf4U2dFWR8%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=iIGy%2BQPUEwp29%2FmUU9WQFwxdNZ0%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=imrcP4%2FsPRhgJJ%2FCmpqEn8S8qeM%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=l3un5PMmYqfC94xuowTa%2BAiFYt0%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=CUcCvL6VBFr%2FSs4C%2FtXtYtHUgw8%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=w0LrHjUAF7Re5uGsBEbYZtPVv5Y%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=h7RaYmrZah4YsqxXREL%2FmYVm6hk%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=pJ0sD4MO8%2BeG7%2Fefs%2FTIjStkwFs%3D&format=.webp"
+          },
+          "local_item_id": "7549064425542618420",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7",
+          "smart_crop_loc": null,
+          "cover_height": 2048,
+          "cover_width": 1152
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7",
+              "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/2eb58f4dc7e74a0abe9c744d8e9443b7~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=G1NBEMnDJkUi1hnFvTefJYiflHQ%3D&format=.png",
+              "width": 1440,
+              "height": 2560,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 5,
+            "model_config": {
+              "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "现代城市夜景，竖屏手机壁纸",
+            "sample_steps": 25,
+            "seed": 2533158144,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 2560,
+              "width": 1440,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "8010f12497427f67d6390fe1a33c469c8d40d13cdf7b57cbdf849c88554cdd32",
+          "generate_id": "202509121305332E2CEFC594FE998B6238",
+          "origin_request_id": "8010f12497427f67d6390fe1a33c469c8d40d13cdf7b57cbdf849c88554cdd32",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532096322050",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549064428889640232",
+          "effect_id": "7549064428889640232",
+          "effect_type": 9,
+          "title": "",
+          "description": "现代城市夜景，竖屏手机壁纸",
+          "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=J%2BX6fdLPr7or%2FuQifvNK164E4nA%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653546,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 0.5625,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=RtvFwGsmo4JAyIjnoOTzdEaiHQ4%3D&format=.webp",
+            "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=I8%2Bf0TPkdbyhidNEw1oerYOidrI%3D&format=.webp",
+            "720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=wWDbnJdSVrr0oFpwN9cO64BKmNw%3D&format=.webp",
+            "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=VFzfdbosfuMHq%2BEz4M350rDkWFg%3D&format=.webp",
+            "2400": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=SP8MHuuKLzL%2Fhdzq%2B95uF3Sehew%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=eTP7m516C%2B53utf02k4yANTs10U%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=%2BE%2FbL7mSR7xW6EQ2RLDcgGKqMAw%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=gwfsLDG65nCT9WtHbtNulC0xd2c%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=I8%2Bf0TPkdbyhidNEw1oerYOidrI%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Z0DG1cDLMtq%2Bg4ntho%2BA%2FJRAuDU%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=jsN6Ihd5ZbJqK1gKMJ7Pf8MFpmk%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=cNry05LDTUkGn5%2Bm0nyEADpBJ4Q%3D&format=.webp"
+          },
+          "local_item_id": "7549064428889640232",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8",
+          "smart_crop_loc": null,
+          "cover_height": 2048,
+          "cover_width": 1152
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8",
+              "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/5913cddbdae843daa13f4e8c300c31f8~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=u8TkT6XnKelRWn%2Bh10uKfnB%2Fd7Q%3D&format=.png",
+              "width": 1440,
+              "height": 2560,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 5,
+            "model_config": {
+              "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "现代城市夜景，竖屏手机壁纸",
+            "sample_steps": 25,
+            "seed": 2533158144,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 2560,
+              "width": 1440,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "734230d9f946d5d76924d4fdd0afafe734caabc15f1fbd7b52819f79ec454e69",
+          "generate_id": "202509121305332E2CEFC594FE998B6238",
+          "origin_request_id": "734230d9f946d5d76924d4fdd0afafe734caabc15f1fbd7b52819f79ec454e69",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532096322050",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549064463857569059",
+          "effect_id": "7549064463857569059",
+          "effect_type": 9,
+          "title": "",
+          "description": "现代城市夜景，竖屏手机壁纸",
+          "cover_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=cDbqxJXnQfJkuDV81pUFbn3NB1E%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653546,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 0.5625,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=m68mTjLpUTwrFCbvIchjSFLHVK4%3D&format=.webp",
+            "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=x7Q1rwPIDzul4vwwjgvV9Svp9Vo%3D&format=.webp",
+            "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=OxRKcA9x7yN4xTEyRlwWiYntEFM%3D&format=.webp",
+            "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=zXQ8DVWg3UccwPeWjNd9EXkjuo8%3D&format=.webp",
+            "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PToPYXd9eQHkkxCrtArAzZ%2FHAV4%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=0%2FCHuvgYT%2Bq4n7nD7IAQFBow%2BrY%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=GJhoCF3hBaipjKvdq2W80ULipTQ%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3sZXaua6gnqk00fO4iF3AG5xk3Y%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Ft7QeB2u%2FUQeLnnGH%2F3XYVx92tc%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Zq0vGL6%2Fe1i5GXcj9CqX%2BuFuHsU%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=BSLcGANcmDhIUjq55Fr3BZ0xMyk%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Ep4DR3gUPFTCmKG331NBENl20Zo%3D&format=.webp"
+          },
+          "local_item_id": "7549064463857569059",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe",
+          "smart_crop_loc": null,
+          "cover_height": 2048,
+          "cover_width": 1152
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe",
+              "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e859ea369af746b18f913b1bf07c51fe~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=1LeD9e9Zjqs%2Bns5nP4vrreKNX10%3D&format=.png",
+              "width": 1440,
+              "height": 2560,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 5,
+            "model_config": {
+              "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "现代城市夜景，竖屏手机壁纸",
+            "sample_steps": 25,
+            "seed": 2533158144,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 2560,
+              "width": 1440,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "25386918095045d59e9866b9ae9ebce9f231371e8ef95c0953da780dade8e55a",
+          "generate_id": "202509121305332E2CEFC594FE998B6238",
+          "origin_request_id": "25386918095045d59e9866b9ae9ebce9f231371e8ef95c0953da780dade8e55a",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532096322050",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549064458019114240",
+          "effect_id": "7549064458019114240",
+          "effect_type": 9,
+          "title": "",
+          "description": "现代城市夜景，竖屏手机壁纸",
+          "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=vxDYu7oB3jcRHAuOOdVpO7fjPX0%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757653546,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 0.5625,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Hm1WEZ7ddEKZSLeGuLifMq%2FA2gk%3D&format=.webp",
+            "480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=sOg9Zmi81%2FdMUE2IyVZFU4MGuyg%3D&format=.webp",
+            "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mUokkqG1b4Kfp0CCFC2GWMuPGXk%3D&format=.webp",
+            "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=SxqIUvhjvkslp0oiJ%2FnYnYL9o4I%3D&format=.webp",
+            "2400": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=UVC7IoqeBhZPQ5Fw5zyL1W5ghUI%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=1uzNarK0aqGp2s%2B18%2BuK5jIgQtI%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=ck%2BH1bTn9vCD7A3oGf8toi5io3s%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Hm1WEZ7ddEKZSLeGuLifMq%2FA2gk%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=aFSdV1Cj2SvCJROy%2Fullldt7Sj0%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=2wpo31lylenvht%2BAy9Zkms6tSu4%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=gwJW7qZMW4uJ1B8T0Kjp8KNT5lI%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mUokkqG1b4Kfp0CCFC2GWMuPGXk%3D&format=.webp"
+          },
+          "local_item_id": "7549064458019114240",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700",
+          "smart_crop_loc": null,
+          "cover_height": 2048,
+          "cover_width": 1152
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700",
+              "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/c76f5355202b44e48593995a28ff6700~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=ZfFsmkJwrAxkLfRtJzJuvUihn8w%3D&format=.png",
+              "width": 1440,
+              "height": 2560,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 5,
+            "model_config": {
+              "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "现代城市夜景，竖屏手机壁纸",
+            "sample_steps": 25,
+            "seed": 2533158144,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 2560,
+              "width": 1440,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "207fe4c723673749cec12105d008a18eb711c1992b5e4bc614cbbdae6d144be3",
+          "generate_id": "202509121305332E2CEFC594FE998B6238",
+          "origin_request_id": "207fe4c723673749cec12105d008a18eb711c1992b5e4bc614cbbdae6d144be3",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7532096322050",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      }
+    ],
+    "origin_item_list": [],
+    "task": {
+      "task_id": "25536915094786",
+      "submit_id": "b39354e6-bd55-4437-b36c-314b94ac6139",
+      "aid": 0,
+      "status": 50,
+      "finish_time": 1757653547,
+      "history_id": "25536915094786",
+      "task_payload": null,
+      "original_input": null,
+      "req_first_frame_image": null,
+      "ai_gen_prompt": "",
+      "priority": 0,
+      "lip_sync_info": null,
+      "multi_size_first_frame_image": null,
+      "multi_size_end_frame_image": null,
+      "process_flows": null,
+      "create_time": 0,
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 5,
+          "model_config": {
+            "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "现代城市夜景，竖屏手机壁纸",
+          "sample_steps": 25,
+          "seed": 2533158144,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 2560,
+            "width": 1440,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "8010f12497427f67d6390fe1a33c469c8d40d13cdf7b57cbdf849c88554cdd32",
+        "generate_id": "202509121305332E2CEFC594FE998B6238",
+        "origin_request_id": "8010f12497427f67d6390fe1a33c469c8d40d13cdf7b57cbdf849c88554cdd32",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "ref_item": null,
+      "resp_ret": {
+        "ret": ""
+      }
+    },
+    "mode": "workbench",
+    "asset_option": {
+      "has_favorited": false
+    },
+    "uid": "4246729963603161",
+    "aigc_flow": {
+      "version": "3.0.2"
+    },
+    "status": 50,
+    "history_group_key_md5": "871dfe8db9b9a8d7b6d1c666b7a880bc",
+    "history_group_key": "现代城市夜景，竖屏手机壁纸",
+    "draft_content": "{\"type\":\"draft\",\"id\":\"face2642-8a2d-498b-a4f8-14d9f9751537\",\"min_version\":\"3.0.2\",\"min_features\":[],\"is_from_tsn\":true,\"version\":\"3.0.2\",\"main_component_id\":\"5cf2e6cc-e7da-40cb-b815-47e5d8b111cb\",\"component_list\":[{\"type\":\"image_base_component\",\"id\":\"5cf2e6cc-e7da-40cb-b815-47e5d8b111cb\",\"min_version\":\"3.0.2\",\"aigc_mode\":\"workbench\",\"gen_type\":1,\"metadata\":{\"type\":\"\",\"id\":\"b3ad4463-5209-4833-9843-b8a9df746a9a\",\"created_platform\":3,\"created_platform_version\":\"\",\"created_time_in_ms\":\"1757653531516\",\"created_did\":\"\"},\"generate_type\":\"generate\",\"abilities\":{\"type\":\"\",\"id\":\"a2bcd852-66d1-45be-b262-2c9fafde7a73\",\"generate\":{\"type\":\"\",\"id\":\"f7e817f6-41a9-4d2a-806d-06139251491a\",\"core_param\":{\"type\":\"\",\"id\":\"9c12cdec-27b6-4f94-a176-ed62d54878da\",\"model\":\"high_aes_general_v40\",\"prompt\":\"现代城市夜景，竖屏手机壁纸\",\"negative_prompt\":\"\",\"seed\":2533158144,\"sample_strength\":0.5,\"image_ratio\":5,\"large_image_info\":{\"type\":\"\",\"id\":\"1a1bbac1-2c43-4370-ac99-2b4604d0aa9c\",\"height\":2560,\"width\":1440,\"resolution_type\":\"2.5k\"},\"intelligent_ratio\":false},\"history_option\":{\"type\":\"\",\"id\":\"e8f5e075-606e-42da-8914-cdcb963563da\"}}}}]}",
+    "fail_code": "0",
+    "submit_id": "b39354e6-bd55-4437-b36c-314b94ac6139",
+    "capflow_id": "b39354e6-bd55-4437-b36c-314b94ac6139",
+    "metrics_extra": "{\"templateId\":\"\",\"generateCount\":1,\"promptSource\":\"custom\",\"templateSource\":\"\",\"lastRequestId\":\"\",\"originRequestId\":\"\"}",
+    "fail_msg": "Success",
+    "generate_id": "202509121305332E2CEFC594FE998B6238",
+    "finish_time": 1757653547,
+    "model_info": {
+      "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789189550&x-signature=qyJeu0MbUK0ECz7wAIV2Uxgu4f4%3D",
+      "model_name_starling_key": "dreamina_image4_title",
+      "model_tip_starling_key": "dreamina_image4_desc",
+      "model_req_key": "high_aes_general_v40",
+      "model_name": "图片 4.0",
+      "video_model_options": null
+    },
+    "forecast_generate_cost": 91,
+    "forecast_queue_cost": 0,
+    "fail_starling_key": "",
+    "fail_starling_message": "",
+    "min_feats": null,
+    "queue_info": {
+      "queue_idx": 0,
+      "priority": 3,
+      "queue_status": 3,
+      "queue_length": 0,
+      "polling_config": {
+        "interval_seconds": 30,
+        "timeout_seconds": 86400
+      },
+      "priority_queue_display_threshold": {
+        "vip_queuing_time_threshold": 300,
+        "waiting_time_threshold": 60
+      }
+    },
+    "agent_history_id": null,
+    "total_image_count": 4,
+    "finished_image_count": 4,
+    "confirm_status": 2,
+    "confirm_token": "",
+    "image_type": 3
+  }
+}

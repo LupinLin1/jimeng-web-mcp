@@ -1,0 +1,2393 @@
+{
+  "timestamp": "2025-09-12T05:40:08.694Z",
+  "requestedModel": "jimeng-4.0",
+  "actualModel": "high_aes_general_v40",
+  "pollResult": [
+    {
+      "common_attr": {
+        "id": "7549073298517151010",
+        "effect_id": "7549073298517151010",
+        "effect_type": 9,
+        "title": "",
+        "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+        "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=k9Zmxdi1o%2BFS3eHfOPVKXnZrKlU%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757655601,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1.7777777777777777,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=r1EgWBbJHSzGLo74wRdO2qPftTY%3D&format=.webp",
+          "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mfi%2BCSVIlTKHVRHGUsPR%2Fanddgc%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=5yWiUUYSBa7%2FNnUKSn2h2cYhrM8%3D&format=.webp",
+          "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=52mbQ9zO5ZaxwMiT7bXpuSkMIog%3D&format=.webp",
+          "2400": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rP37DnnFmZtZP7zMgoweg1SeU8g%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=VjIlDIpbNFyzDrSkB2PvVhL8NUo%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=gtFg2iQJDvATl6io4%2B6JbGkkjS0%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=r1EgWBbJHSzGLo74wRdO2qPftTY%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mfi%2BCSVIlTKHVRHGUsPR%2Fanddgc%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=zKZbORAw5jdldsG37zZ1taG4VHQ%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=8U9ep4aKDf1aGtPFboYALq1jFBs%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=lSlJ5wjexAQanrelhrt2kZJwfu8%3D&format=.webp"
+        },
+        "local_item_id": "7549073298517151010",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285",
+        "smart_crop_loc": null,
+        "cover_height": 1152,
+        "cover_width": 2048
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285",
+            "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=KacYFK1w%2B8CPBg0hjlw8X2zres8%3D&format=.png",
+            "width": 2560,
+            "height": 1440,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 3,
+          "model_config": {
+            "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "sample_steps": 25,
+          "seed": 2583007423,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1440,
+            "width": 2560,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "8c95eeb89cc8e881ff9d019693e4342a237d1b116cc6ddb58b685e0a14c47dc3",
+        "generate_id": "20250912133950F0446FF93122A58C301C",
+        "origin_request_id": "8c95eeb89cc8e881ff9d019693e4342a237d1b116cc6ddb58b685e0a14c47dc3",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7534367535874",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549073287519767842",
+        "effect_id": "7549073287519767842",
+        "effect_type": 9,
+        "title": "",
+        "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+        "cover_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=CvAj2yvQE8qKCoaeHZB6LWSOW5c%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757655601,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1.7777777777777777,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3NvnuoddvrlnnqAbKVazqYsGIAw%3D&format=.webp",
+          "480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=EetR8%2BeT5imrausIIX2Yt3f3Pi0%3D&format=.webp",
+          "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rOpLp0mtuCqGMm2%2Bci0tYDWMTMY%3D&format=.webp",
+          "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=dyVVmULOIQh8jn%2F4e2vIovoReO4%3D&format=.webp",
+          "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=yIcn9xSVRluOrPqWEPyvEjTGikI%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Ibu%2Bi02aUXTIZHYpA96sad8M%2B88%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=6p8v1Z6qfUTZpDTrUbBTeQD01b8%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3NvnuoddvrlnnqAbKVazqYsGIAw%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Q98MEg4wPs40AYZrIUxOJZUMAv8%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=IkLap7Cd9F0ug1ULtQPD4q%2FBt2I%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mQe9wdqIDmZx87XmDlcxOf%2FO%2BGQ%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=pSFnniozIjDiv15bW97d2gfo7vE%3D&format=.webp"
+        },
+        "local_item_id": "7549073287519767842",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6",
+        "smart_crop_loc": null,
+        "cover_height": 1152,
+        "cover_width": 2048
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6",
+            "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=HFZvczx7dibADVjD3KbVF8lEnNc%3D&format=.png",
+            "width": 2560,
+            "height": 1440,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 3,
+          "model_config": {
+            "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "sample_steps": 25,
+          "seed": 2583007423,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1440,
+            "width": 2560,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "99ceff03794493896d6d7ed9846f09c4a3cf6ace013ce5d3f252c7343faf28d7",
+        "generate_id": "20250912133950F0446FF93122A58C301C",
+        "origin_request_id": "99ceff03794493896d6d7ed9846f09c4a3cf6ace013ce5d3f252c7343faf28d7",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7534367535874",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549073291739172130",
+        "effect_id": "7549073291739172130",
+        "effect_type": 9,
+        "title": "",
+        "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+        "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=ifzQ0lvj2%2Fjcmpd1ByxRWWvx%2FYA%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757655601,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1.7777777777777777,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=T4UpkSWxASDN3pd3J2zPCP%2F83Y4%3D&format=.webp",
+          "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=roNGCzt2ViWLsPGbsa2BFIyvAFY%3D&format=.webp",
+          "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=81Qaxf%2FVeHZffp6iTsHqY43f6Dw%3D&format=.webp",
+          "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=QclGofqlQuFCuA6FogrhaF9Yk3Q%3D&format=.webp",
+          "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=lJqRsMaZsAmSyyPsrgnEI37JecA%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3RV5VgU%2F32jGCVfJdqAki33Fwsc%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=1CKwKMfvQFIgquvjfgTiM0Pxkh8%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PsN7TvN368vFL6gOvP3CinIjyYw%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=5cmT0fqmLQi4lyl6CDsPIlDU5Os%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=jP7RqLxav3e4YJvRg8u9bYyBbfg%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=31EbyXxwhvq2aQGSEMevuchFqLw%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=81Qaxf%2FVeHZffp6iTsHqY43f6Dw%3D&format=.webp"
+        },
+        "local_item_id": "7549073291739172130",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e",
+        "smart_crop_loc": null,
+        "cover_height": 1152,
+        "cover_width": 2048
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=lk4QIacKSbic2CQ39JkoGNJFpAI%3D&format=.png",
+            "width": 2560,
+            "height": 1440,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 3,
+          "model_config": {
+            "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "sample_steps": 25,
+          "seed": 2583007423,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1440,
+            "width": 2560,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "8a656bb282196a0e48151078dd0d1c1fdf7f89ab35321e3feec7306dbbd6ad5f",
+        "generate_id": "20250912133950F0446FF93122A58C301C",
+        "origin_request_id": "8a656bb282196a0e48151078dd0d1c1fdf7f89ab35321e3feec7306dbbd6ad5f",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7534367535874",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    },
+    {
+      "common_attr": {
+        "id": "7549073289847639348",
+        "effect_id": "7549073289847639348",
+        "effect_type": 9,
+        "title": "",
+        "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+        "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=NSdj6sftWurkhMg2ljbcR0M%2BUwE%3D&format=.webp",
+        "item_urls": [
+          ""
+        ],
+        "md5": "",
+        "create_time": 1757655601,
+        "status": 144,
+        "review_info": {
+          "review_status": 1,
+          "review_code_list": []
+        },
+        "aspect_ratio": 1.7777777777777777,
+        "publish_source": "user_post_mweb_item",
+        "collection_ids": [],
+        "extra": "",
+        "has_published": false,
+        "cover_url_map": {
+          "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rD%2B%2FtiD7ZZ5ruXqavYFam4Rl4Ho%3D&format=.webp",
+          "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=S%2FDza4kdfbEVb21ULmuvwvD8NSk%3D&format=.webp",
+          "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=UtS0QmDV1knFT4hLFcuJ6ClQCk8%3D&format=.webp",
+          "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=M7jcUAicznzx2LlHSZzCsE8XTt4%3D&format=.webp",
+          "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Qn6P0gl%2BBuKS9ECbNuDDBhRjgis%3D&format=.webp",
+          "smart_crop-w:240-h:320": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=L5ihV5owOQ7aL3T1diGYt3A9U90%3D&format=.webp",
+          "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=HJXAOfMlk4IRzazo8%2FSDl2%2BEBuA%3D&format=.webp",
+          "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Fh0CRbmCxLQtvJKcFvotJ807LOE%3D&format=.webp",
+          "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=S%2FDza4kdfbEVb21ULmuvwvD8NSk%3D&format=.webp",
+          "smart_crop-w:480-h:640": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=cF3Y9jueq1PUXy%2BP8fnuxWgJINA%3D&format=.webp",
+          "smart_crop-w:720-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=IrfWCcM%2BMC2DvMwbhAu%2BaWyfTo0%3D&format=.webp",
+          "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=UtS0QmDV1knFT4hLFcuJ6ClQCk8%3D&format=.webp"
+        },
+        "local_item_id": "7549073289847639348",
+        "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+        "update_time": 0,
+        "cover_uri": "tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672",
+        "smart_crop_loc": null,
+        "cover_height": 1152,
+        "cover_width": 2048
+      },
+      "author": null,
+      "image": {
+        "format": "png",
+        "large_images": [
+          {
+            "image_uri": "tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=wNgoG6Vb%2FzI4%2B39bbDR200zNQOE%3D&format=.png",
+            "width": 2560,
+            "height": 1440,
+            "format": "png",
+            "smart_crop_loc": null
+          }
+        ]
+      },
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 3,
+          "model_config": {
+            "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "sample_steps": 25,
+          "seed": 2583007423,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1440,
+            "width": 2560,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "8a1798894bf9290002471e3ecf2d15763dbb316a682bf77461f79de2d78a08f7",
+        "generate_id": "20250912133950F0446FF93122A58C301C",
+        "origin_request_id": "8a1798894bf9290002471e3ecf2d15763dbb316a682bf77461f79de2d78a08f7",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "statistic": {
+        "feedback_status": 0
+      },
+      "category_id_list": [],
+      "aigc_flow": {
+        "version": "3.0.2"
+      },
+      "aigc_draft": {
+        "version": "3.0.2",
+        "uri": "aigc-draft/7534367535874",
+        "content": "",
+        "update_time": 0,
+        "last_preview_time": 0,
+        "resource_type": "",
+        "public_uri": "",
+        "variables": null,
+        "resource_width": 0,
+        "resource_height": 0,
+        "node_keys": null,
+        "cost": 0
+      },
+      "gen_result_data": {
+        "result_code": 0,
+        "result_msg": "Success"
+      },
+      "extra": {
+        "template_type": "image",
+        "ai_feature": "text_generate_image"
+      },
+      "ai_feature": {
+        "features": [
+          {
+            "type": "text_generate_image"
+          }
+        ],
+        "is_merged": true
+      },
+      "sharing_info": {
+        "share_status": 2
+      },
+      "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+      "has_intention_info": false
+    }
+  ],
+  "originalResult": {
+    "ret": "0",
+    "errmsg": "success",
+    "systime": "1757655590",
+    "logid": "20250912133950F0446FF93122A58C301C",
+    "data": {
+      "aigc_data": {
+        "generate_type": 1,
+        "history_record_id": "25536087587330",
+        "origin_history_record_id": null,
+        "created_time": 1757655590.169,
+        "item_list": [],
+        "origin_item_list": [],
+        "task": {
+          "task_id": "25536087587330",
+          "submit_id": "85ac2c0a-352f-4e27-a20c-12ee6393707d",
+          "aid": 0,
+          "status": 20,
+          "finish_time": 0,
+          "history_id": "25536087587330",
+          "task_payload": null,
+          "original_input": null,
+          "req_first_frame_image": null,
+          "ai_gen_prompt": "",
+          "priority": 0,
+          "lip_sync_info": null,
+          "multi_size_first_frame_image": null,
+          "multi_size_end_frame_image": null,
+          "process_flows": null,
+          "create_time": 0,
+          "aigc_image_params": null,
+          "ref_item": null,
+          "resp_ret": {
+            "ret": ""
+          }
+        },
+        "mode": "workbench",
+        "asset_option": {
+          "has_favorited": false
+        },
+        "uid": "4246729963603161",
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "status": 20,
+        "history_group_key_md5": "5e3a45d5a75a523aba50abde6b7f3dc3",
+        "history_group_key": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+        "draft_content": "{\"type\":\"draft\",\"id\":\"93b1188a-e3d8-407f-a2dc-82a1fd0e7b3d\",\"min_version\":\"3.0.2\",\"min_features\":[],\"is_from_tsn\":true,\"version\":\"3.0.2\",\"main_component_id\":\"a0c06976-f734-455b-9081-1181a6447b96\",\"component_list\":[{\"type\":\"image_base_component\",\"id\":\"a0c06976-f734-455b-9081-1181a6447b96\",\"min_version\":\"3.0.2\",\"aigc_mode\":\"workbench\",\"gen_type\":1,\"metadata\":{\"type\":\"\",\"id\":\"6196ecd0-fbfa-4357-848c-ce5922160da9\",\"created_platform\":3,\"created_platform_version\":\"\",\"created_time_in_ms\":\"1757655587689\",\"created_did\":\"\"},\"generate_type\":\"generate\",\"abilities\":{\"type\":\"\",\"id\":\"da87073e-615c-4e20-a6b9-8178d85d4cbd\",\"generate\":{\"type\":\"\",\"id\":\"763fd59d-2949-4a59-bc42-d0a32840e92a\",\"core_param\":{\"type\":\"\",\"id\":\"f14e02ae-856c-4a08-9eca-8b690fcaafca\",\"model\":\"high_aes_general_v40\",\"prompt\":\"一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面\",\"negative_prompt\":\"\",\"seed\":2583007423,\"sample_strength\":0.5,\"image_ratio\":3,\"large_image_info\":{\"type\":\"\",\"id\":\"188ee3fe-4fa8-4094-81b3-73880a2bfcd0\",\"height\":1440,\"width\":2560,\"resolution_type\":\"2.5k\"},\"intelligent_ratio\":false},\"history_option\":{\"type\":\"\",\"id\":\"74a4ea64-1b06-4be0-aeca-a4f7e20c1101\"}}}}]}",
+        "submit_id": "85ac2c0a-352f-4e27-a20c-12ee6393707d",
+        "capflow_id": "85ac2c0a-352f-4e27-a20c-12ee6393707d",
+        "metrics_extra": "{\"templateId\":\"\",\"generateCount\":1,\"promptSource\":\"custom\",\"templateSource\":\"\",\"lastRequestId\":\"\",\"originRequestId\":\"\"}",
+        "generate_id": "20250912133950F0446FF93122A58C301C",
+        "finish_time": 0,
+        "model_info": {
+          "icon_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191589&x-signature=A%2FTq6EPDEEwYMG6vb0oi9Qu9ZJ8%3D",
+          "model_name_starling_key": "dreamina_image4_title",
+          "model_tip_starling_key": "dreamina_image4_desc",
+          "model_req_key": "high_aes_general_v40",
+          "model_name": "图片 4.0",
+          "video_model_options": null
+        },
+        "forecast_generate_cost": 47,
+        "forecast_queue_cost": 0,
+        "fail_starling_key": "",
+        "fail_starling_message": "",
+        "min_feats": null,
+        "queue_info": {
+          "queue_idx": 1,
+          "priority": 3,
+          "queue_status": 1,
+          "queue_length": 2,
+          "polling_config": {
+            "interval_seconds": 30,
+            "timeout_seconds": 86400
+          },
+          "priority_queue_display_threshold": {
+            "vip_queuing_time_threshold": 300,
+            "waiting_time_threshold": 60
+          }
+        },
+        "agent_history_id": null,
+        "total_image_count": 0,
+        "finished_image_count": 0,
+        "confirm_status": 0,
+        "confirm_token": "",
+        "image_type": 0
+      },
+      "fail_code": "",
+      "fail_starling_key": "",
+      "fail_starling_message": ""
+    }
+  },
+  "recordData": {
+    "generate_type": 1,
+    "history_record_id": "25536087587330",
+    "origin_history_record_id": null,
+    "created_time": 1757655590.169,
+    "item_list": [
+      {
+        "common_attr": {
+          "id": "7549073298517151010",
+          "effect_id": "7549073298517151010",
+          "effect_type": 9,
+          "title": "",
+          "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=k9Zmxdi1o%2BFS3eHfOPVKXnZrKlU%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757655601,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1.7777777777777777,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=r1EgWBbJHSzGLo74wRdO2qPftTY%3D&format=.webp",
+            "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mfi%2BCSVIlTKHVRHGUsPR%2Fanddgc%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=5yWiUUYSBa7%2FNnUKSn2h2cYhrM8%3D&format=.webp",
+            "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=52mbQ9zO5ZaxwMiT7bXpuSkMIog%3D&format=.webp",
+            "2400": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rP37DnnFmZtZP7zMgoweg1SeU8g%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=VjIlDIpbNFyzDrSkB2PvVhL8NUo%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=gtFg2iQJDvATl6io4%2B6JbGkkjS0%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=r1EgWBbJHSzGLo74wRdO2qPftTY%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mfi%2BCSVIlTKHVRHGUsPR%2Fanddgc%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=zKZbORAw5jdldsG37zZ1taG4VHQ%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=8U9ep4aKDf1aGtPFboYALq1jFBs%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=lSlJ5wjexAQanrelhrt2kZJwfu8%3D&format=.webp"
+          },
+          "local_item_id": "7549073298517151010",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285",
+          "smart_crop_loc": null,
+          "cover_height": 1152,
+          "cover_width": 2048
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285",
+              "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/e84bb983a152413d9716db2c0af9b285~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=KacYFK1w%2B8CPBg0hjlw8X2zres8%3D&format=.png",
+              "width": 2560,
+              "height": 1440,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 3,
+            "model_config": {
+              "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+            "sample_steps": 25,
+            "seed": 2583007423,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1440,
+              "width": 2560,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "8c95eeb89cc8e881ff9d019693e4342a237d1b116cc6ddb58b685e0a14c47dc3",
+          "generate_id": "20250912133950F0446FF93122A58C301C",
+          "origin_request_id": "8c95eeb89cc8e881ff9d019693e4342a237d1b116cc6ddb58b685e0a14c47dc3",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7534367535874",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549073287519767842",
+          "effect_id": "7549073287519767842",
+          "effect_type": 9,
+          "title": "",
+          "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "cover_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=CvAj2yvQE8qKCoaeHZB6LWSOW5c%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757655601,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1.7777777777777777,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3NvnuoddvrlnnqAbKVazqYsGIAw%3D&format=.webp",
+            "480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=EetR8%2BeT5imrausIIX2Yt3f3Pi0%3D&format=.webp",
+            "720": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rOpLp0mtuCqGMm2%2Bci0tYDWMTMY%3D&format=.webp",
+            "1080": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=dyVVmULOIQh8jn%2F4e2vIovoReO4%3D&format=.webp",
+            "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=yIcn9xSVRluOrPqWEPyvEjTGikI%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Ibu%2Bi02aUXTIZHYpA96sad8M%2B88%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=6p8v1Z6qfUTZpDTrUbBTeQD01b8%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3NvnuoddvrlnnqAbKVazqYsGIAw%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Q98MEg4wPs40AYZrIUxOJZUMAv8%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=IkLap7Cd9F0ug1ULtQPD4q%2FBt2I%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=mQe9wdqIDmZx87XmDlcxOf%2FO%2BGQ%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=pSFnniozIjDiv15bW97d2gfo7vE%3D&format=.webp"
+          },
+          "local_item_id": "7549073287519767842",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6",
+          "smart_crop_loc": null,
+          "cover_height": 1152,
+          "cover_width": 2048
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6",
+              "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/3951f098b4cc4be398cedf556b4da3e6~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=HFZvczx7dibADVjD3KbVF8lEnNc%3D&format=.png",
+              "width": 2560,
+              "height": 1440,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 3,
+            "model_config": {
+              "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+            "sample_steps": 25,
+            "seed": 2583007423,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1440,
+              "width": 2560,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "99ceff03794493896d6d7ed9846f09c4a3cf6ace013ce5d3f252c7343faf28d7",
+          "generate_id": "20250912133950F0446FF93122A58C301C",
+          "origin_request_id": "99ceff03794493896d6d7ed9846f09c4a3cf6ace013ce5d3f252c7343faf28d7",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7534367535874",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549073291739172130",
+          "effect_id": "7549073291739172130",
+          "effect_type": 9,
+          "title": "",
+          "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=ifzQ0lvj2%2Fjcmpd1ByxRWWvx%2FYA%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757655601,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1.7777777777777777,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=T4UpkSWxASDN3pd3J2zPCP%2F83Y4%3D&format=.webp",
+            "480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=roNGCzt2ViWLsPGbsa2BFIyvAFY%3D&format=.webp",
+            "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=81Qaxf%2FVeHZffp6iTsHqY43f6Dw%3D&format=.webp",
+            "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=QclGofqlQuFCuA6FogrhaF9Yk3Q%3D&format=.webp",
+            "2400": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=lJqRsMaZsAmSyyPsrgnEI37JecA%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=3RV5VgU%2F32jGCVfJdqAki33Fwsc%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=1CKwKMfvQFIgquvjfgTiM0Pxkh8%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PsN7TvN368vFL6gOvP3CinIjyYw%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=5cmT0fqmLQi4lyl6CDsPIlDU5Os%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=jP7RqLxav3e4YJvRg8u9bYyBbfg%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=31EbyXxwhvq2aQGSEMevuchFqLw%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=81Qaxf%2FVeHZffp6iTsHqY43f6Dw%3D&format=.webp"
+          },
+          "local_item_id": "7549073291739172130",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e",
+          "smart_crop_loc": null,
+          "cover_height": 1152,
+          "cover_width": 2048
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e",
+              "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/bc72b998bd9448989b73e7c5428e2b4e~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=lk4QIacKSbic2CQ39JkoGNJFpAI%3D&format=.png",
+              "width": 2560,
+              "height": 1440,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 3,
+            "model_config": {
+              "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+            "sample_steps": 25,
+            "seed": 2583007423,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1440,
+              "width": 2560,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "8a656bb282196a0e48151078dd0d1c1fdf7f89ab35321e3feec7306dbbd6ad5f",
+          "generate_id": "20250912133950F0446FF93122A58C301C",
+          "origin_request_id": "8a656bb282196a0e48151078dd0d1c1fdf7f89ab35321e3feec7306dbbd6ad5f",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7534367535874",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      },
+      {
+        "common_attr": {
+          "id": "7549073289847639348",
+          "effect_id": "7549073289847639348",
+          "effect_type": 9,
+          "title": "",
+          "description": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757660400&x-signature=NSdj6sftWurkhMg2ljbcR0M%2BUwE%3D&format=.webp",
+          "item_urls": [
+            ""
+          ],
+          "md5": "",
+          "create_time": 1757655601,
+          "status": 144,
+          "review_info": {
+            "review_status": 1,
+            "review_code_list": []
+          },
+          "aspect_ratio": 1.7777777777777777,
+          "publish_source": "user_post_mweb_item",
+          "collection_ids": [],
+          "extra": "",
+          "has_published": false,
+          "cover_url_map": {
+            "360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=rD%2B%2FtiD7ZZ5ruXqavYFam4Rl4Ho%3D&format=.webp",
+            "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=S%2FDza4kdfbEVb21ULmuvwvD8NSk%3D&format=.webp",
+            "720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=UtS0QmDV1knFT4hLFcuJ6ClQCk8%3D&format=.webp",
+            "1080": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=M7jcUAicznzx2LlHSZzCsE8XTt4%3D&format=.webp",
+            "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Qn6P0gl%2BBuKS9ECbNuDDBhRjgis%3D&format=.webp",
+            "smart_crop-w:240-h:320": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=L5ihV5owOQ7aL3T1diGYt3A9U90%3D&format=.webp",
+            "smart_crop-w:360-h:240": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=HJXAOfMlk4IRzazo8%2FSDl2%2BEBuA%3D&format=.webp",
+            "smart_crop-w:360-h:360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=Fh0CRbmCxLQtvJKcFvotJ807LOE%3D&format=.webp",
+            "smart_crop-w:480-h:480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=S%2FDza4kdfbEVb21ULmuvwvD8NSk%3D&format=.webp",
+            "smart_crop-w:480-h:640": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=cF3Y9jueq1PUXy%2BP8fnuxWgJINA%3D&format=.webp",
+            "smart_crop-w:720-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=IrfWCcM%2BMC2DvMwbhAu%2BaWyfTo0%3D&format=.webp",
+            "smart_crop-w:720-h:720": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=UtS0QmDV1knFT4hLFcuJ6ClQCk8%3D&format=.webp"
+          },
+          "local_item_id": "7549073289847639348",
+          "web_extra": "{\"mweb_abtags\":[\"high_aes_general_v40s_stream\"]}",
+          "update_time": 0,
+          "cover_uri": "tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672",
+          "smart_crop_loc": null,
+          "cover_height": 1152,
+          "cover_width": 2048
+        },
+        "author": null,
+        "image": {
+          "format": "png",
+          "large_images": [
+            {
+              "image_uri": "tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672",
+              "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/b8b6c30916814ba7b1db07cfa0815672~tplv-tb4s082cfz-aigc_resize_mark:0:0.png?lk3s=43402efa&x-expires=1757660400&x-signature=wNgoG6Vb%2FzI4%2B39bbDR200zNQOE%3D&format=.png",
+              "width": 2560,
+              "height": 1440,
+              "format": "png",
+              "smart_crop_loc": null
+            }
+          ]
+        },
+        "aigc_image_params": {
+          "generate_type": 1,
+          "first_generate_type": 1,
+          "text2video_params": null,
+          "text2image_params": {
+            "image_ratio": 3,
+            "model_config": {
+              "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+              "model_name_starling_key": "dreamina_image4_title",
+              "model_tip_starling_key": "dreamina_image4_desc",
+              "model_req_key": "high_aes_general_v40",
+              "is_new_model": true,
+              "sample_steps": {
+                "steps": 16,
+                "min_steps": 10,
+                "max_steps": 41
+              },
+              "blend_enable": {
+                "face_swap": false,
+                "bg_paint": false,
+                "canny": false,
+                "depth": false,
+                "pose": false
+              },
+              "feats": [
+                "new_model",
+                "default_scene",
+                "t2i",
+                "byte_edit",
+                "refuse_image",
+                "smart_scale",
+                "per_piece",
+                "think_then_draw",
+                "byte_edit_with_empty_prompt",
+                "byte_edit_with_custom_ratio",
+                "etta"
+              ],
+              "model_name": "图片 4.0",
+              "model_tip": "支持多参考图、系列组图生成",
+              "feature_key": "",
+              "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+              "generation_category_name": "图片・4.0",
+              "duration_option": null,
+              "lens_motion_type_option": null,
+              "motion_speed_option": null,
+              "camera_strength_option": null,
+              "video_aspect_ratio_option": null,
+              "fps": 0,
+              "feat_config": {
+                "canny": {
+                  "strength": 0.6
+                },
+                "depth": {
+                  "strength": 0.6
+                },
+                "pose": {
+                  "strength": 0.6
+                },
+                "style_reference": {
+                  "strength": 0.8
+                }
+              },
+              "extra": {
+                "model_source": "by Seedream 4.0",
+                "raw_model_source": "Seedream 4.0"
+              },
+              "feats_cant_combine": [],
+              "model_bg_prompt_starling_key": "",
+              "resolution_map": {
+                "2k": {
+                  "image_ratio_sizes": [
+                    {
+                      "ratio_type": 1,
+                      "width": 2048,
+                      "height": 2048
+                    },
+                    {
+                      "ratio_type": 2,
+                      "width": 1728,
+                      "height": 2304
+                    },
+                    {
+                      "ratio_type": 3,
+                      "width": 2560,
+                      "height": 1440
+                    },
+                    {
+                      "ratio_type": 4,
+                      "width": 2304,
+                      "height": 1728
+                    },
+                    {
+                      "ratio_type": 5,
+                      "width": 1440,
+                      "height": 2560
+                    },
+                    {
+                      "ratio_type": 6,
+                      "width": 1664,
+                      "height": 2496
+                    },
+                    {
+                      "ratio_type": 7,
+                      "width": 2496,
+                      "height": 1664
+                    },
+                    {
+                      "ratio_type": 8,
+                      "width": 3024,
+                      "height": 1296
+                    }
+                  ],
+                  "image_range_config": {
+                    "min_length": 1296,
+                    "max_length": 3024,
+                    "max_pixel_num": 4194304
+                  },
+                  "resolution_name": "高清 2K"
+                }
+              }
+            },
+            "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+            "sample_steps": 25,
+            "seed": 2583007423,
+            "user_negative_prompt": "",
+            "large_image_info": {
+              "height": 1440,
+              "width": 2560,
+              "resolution_type": "2.5k"
+            },
+            "sample_strength": 0.5
+          },
+          "template_id": "0",
+          "request_id": "8a1798894bf9290002471e3ecf2d15763dbb316a682bf77461f79de2d78a08f7",
+          "generate_id": "20250912133950F0446FF93122A58C301C",
+          "origin_request_id": "8a1798894bf9290002471e3ecf2d15763dbb316a682bf77461f79de2d78a08f7",
+          "aigc_cnt_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "aigc_mode": "workbench",
+          "insta_drag_params": {
+            "origin_item_id": null
+          },
+          "hide_ref_images": false
+        },
+        "statistic": {
+          "feedback_status": 0
+        },
+        "category_id_list": [],
+        "aigc_flow": {
+          "version": "3.0.2"
+        },
+        "aigc_draft": {
+          "version": "3.0.2",
+          "uri": "aigc-draft/7534367535874",
+          "content": "",
+          "update_time": 0,
+          "last_preview_time": 0,
+          "resource_type": "",
+          "public_uri": "",
+          "variables": null,
+          "resource_width": 0,
+          "resource_height": 0,
+          "node_keys": null,
+          "cost": 0
+        },
+        "gen_result_data": {
+          "result_code": 0,
+          "result_msg": "Success"
+        },
+        "extra": {
+          "template_type": "image",
+          "ai_feature": "text_generate_image"
+        },
+        "ai_feature": {
+          "features": [
+            {
+              "type": "text_generate_image"
+            }
+          ],
+          "is_merged": true
+        },
+        "sharing_info": {
+          "share_status": 2
+        },
+        "metadata_param": "{\"effect_id\":\"gen_image\",\"effect_type\":\"tool\"}",
+        "has_intention_info": false
+      }
+    ],
+    "origin_item_list": [],
+    "task": {
+      "task_id": "25536087587330",
+      "submit_id": "85ac2c0a-352f-4e27-a20c-12ee6393707d",
+      "aid": 0,
+      "status": 50,
+      "finish_time": 1757655602,
+      "history_id": "25536087587330",
+      "task_payload": null,
+      "original_input": null,
+      "req_first_frame_image": null,
+      "ai_gen_prompt": "",
+      "priority": 0,
+      "lip_sync_info": null,
+      "multi_size_first_frame_image": null,
+      "multi_size_end_frame_image": null,
+      "process_flows": null,
+      "create_time": 0,
+      "aigc_image_params": {
+        "generate_type": 1,
+        "first_generate_type": 1,
+        "text2video_params": null,
+        "text2image_params": {
+          "image_ratio": 3,
+          "model_config": {
+            "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+            "model_name_starling_key": "dreamina_image4_title",
+            "model_tip_starling_key": "dreamina_image4_desc",
+            "model_req_key": "high_aes_general_v40",
+            "is_new_model": true,
+            "sample_steps": {
+              "steps": 16,
+              "min_steps": 10,
+              "max_steps": 41
+            },
+            "blend_enable": {
+              "face_swap": false,
+              "bg_paint": false,
+              "canny": false,
+              "depth": false,
+              "pose": false
+            },
+            "feats": [
+              "new_model",
+              "default_scene",
+              "t2i",
+              "byte_edit",
+              "refuse_image",
+              "smart_scale",
+              "per_piece",
+              "think_then_draw",
+              "byte_edit_with_empty_prompt",
+              "byte_edit_with_custom_ratio",
+              "etta"
+            ],
+            "model_name": "图片 4.0",
+            "model_tip": "支持多参考图、系列组图生成",
+            "feature_key": "",
+            "generation_category_name_starling_key": "dreamina_app_modalswitch_image_4_0",
+            "generation_category_name": "图片・4.0",
+            "duration_option": null,
+            "lens_motion_type_option": null,
+            "motion_speed_option": null,
+            "camera_strength_option": null,
+            "video_aspect_ratio_option": null,
+            "fps": 0,
+            "feat_config": {
+              "canny": {
+                "strength": 0.6
+              },
+              "depth": {
+                "strength": 0.6
+              },
+              "pose": {
+                "strength": 0.6
+              },
+              "style_reference": {
+                "strength": 0.8
+              }
+            },
+            "extra": {
+              "model_source": "by Seedream 4.0",
+              "raw_model_source": "Seedream 4.0"
+            },
+            "feats_cant_combine": [],
+            "model_bg_prompt_starling_key": "",
+            "resolution_map": {
+              "2k": {
+                "image_ratio_sizes": [
+                  {
+                    "ratio_type": 1,
+                    "width": 2048,
+                    "height": 2048
+                  },
+                  {
+                    "ratio_type": 2,
+                    "width": 1728,
+                    "height": 2304
+                  },
+                  {
+                    "ratio_type": 3,
+                    "width": 2560,
+                    "height": 1440
+                  },
+                  {
+                    "ratio_type": 4,
+                    "width": 2304,
+                    "height": 1728
+                  },
+                  {
+                    "ratio_type": 5,
+                    "width": 1440,
+                    "height": 2560
+                  },
+                  {
+                    "ratio_type": 6,
+                    "width": 1664,
+                    "height": 2496
+                  },
+                  {
+                    "ratio_type": 7,
+                    "width": 2496,
+                    "height": 1664
+                  },
+                  {
+                    "ratio_type": 8,
+                    "width": 3024,
+                    "height": 1296
+                  }
+                ],
+                "image_range_config": {
+                  "min_length": 1296,
+                  "max_length": 3024,
+                  "max_pixel_num": 4194304
+                },
+                "resolution_name": "高清 2K"
+              }
+            }
+          },
+          "prompt": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+          "sample_steps": 25,
+          "seed": 2583007423,
+          "user_negative_prompt": "",
+          "large_image_info": {
+            "height": 1440,
+            "width": 2560,
+            "resolution_type": "2.5k"
+          },
+          "sample_strength": 0.5
+        },
+        "template_id": "0",
+        "request_id": "8c95eeb89cc8e881ff9d019693e4342a237d1b116cc6ddb58b685e0a14c47dc3",
+        "generate_id": "20250912133950F0446FF93122A58C301C",
+        "origin_request_id": "8c95eeb89cc8e881ff9d019693e4342a237d1b116cc6ddb58b685e0a14c47dc3",
+        "aigc_cnt_list": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aigc_mode": "workbench",
+        "insta_drag_params": {
+          "origin_item_id": null
+        },
+        "hide_ref_images": false
+      },
+      "ref_item": null,
+      "resp_ret": {
+        "ret": ""
+      }
+    },
+    "mode": "workbench",
+    "asset_option": {
+      "has_favorited": false
+    },
+    "uid": "4246729963603161",
+    "aigc_flow": {
+      "version": "3.0.2"
+    },
+    "status": 50,
+    "history_group_key_md5": "5e3a45d5a75a523aba50abde6b7f3dc3",
+    "history_group_key": "一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面",
+    "draft_content": "{\"type\":\"draft\",\"id\":\"93b1188a-e3d8-407f-a2dc-82a1fd0e7b3d\",\"min_version\":\"3.0.2\",\"min_features\":[],\"is_from_tsn\":true,\"version\":\"3.0.2\",\"main_component_id\":\"a0c06976-f734-455b-9081-1181a6447b96\",\"component_list\":[{\"type\":\"image_base_component\",\"id\":\"a0c06976-f734-455b-9081-1181a6447b96\",\"min_version\":\"3.0.2\",\"aigc_mode\":\"workbench\",\"gen_type\":1,\"metadata\":{\"type\":\"\",\"id\":\"6196ecd0-fbfa-4357-848c-ce5922160da9\",\"created_platform\":3,\"created_platform_version\":\"\",\"created_time_in_ms\":\"1757655587689\",\"created_did\":\"\"},\"generate_type\":\"generate\",\"abilities\":{\"type\":\"\",\"id\":\"da87073e-615c-4e20-a6b9-8178d85d4cbd\",\"generate\":{\"type\":\"\",\"id\":\"763fd59d-2949-4a59-bc42-d0a32840e92a\",\"core_param\":{\"type\":\"\",\"id\":\"f14e02ae-856c-4a08-9eca-8b690fcaafca\",\"model\":\"high_aes_general_v40\",\"prompt\":\"一只可爱的橘猫坐在窗台上，阳光洒在它身上，温馨的画面\",\"negative_prompt\":\"\",\"seed\":2583007423,\"sample_strength\":0.5,\"image_ratio\":3,\"large_image_info\":{\"type\":\"\",\"id\":\"188ee3fe-4fa8-4094-81b3-73880a2bfcd0\",\"height\":1440,\"width\":2560,\"resolution_type\":\"2.5k\"},\"intelligent_ratio\":false},\"history_option\":{\"type\":\"\",\"id\":\"74a4ea64-1b06-4be0-aeca-a4f7e20c1101\"}}}}]}",
+    "fail_code": "0",
+    "submit_id": "85ac2c0a-352f-4e27-a20c-12ee6393707d",
+    "capflow_id": "85ac2c0a-352f-4e27-a20c-12ee6393707d",
+    "metrics_extra": "{\"templateId\":\"\",\"generateCount\":1,\"promptSource\":\"custom\",\"templateSource\":\"\",\"lastRequestId\":\"\",\"originRequestId\":\"\"}",
+    "fail_msg": "Success",
+    "generate_id": "20250912133950F0446FF93122A58C301C",
+    "finish_time": 1757655602,
+    "model_info": {
+      "icon_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model4.png~tplv-tb4s082cfz-resize:300:300.webp?lk3s=8e790bc3&x-expires=1789191609&x-signature=Q5hpBsxAv3IkOQpxloXw7k0f1y0%3D",
+      "model_name_starling_key": "dreamina_image4_title",
+      "model_tip_starling_key": "dreamina_image4_desc",
+      "model_req_key": "high_aes_general_v40",
+      "model_name": "图片 4.0",
+      "video_model_options": null
+    },
+    "forecast_generate_cost": 33,
+    "forecast_queue_cost": 0,
+    "fail_starling_key": "",
+    "fail_starling_message": "",
+    "min_feats": null,
+    "queue_info": {
+      "queue_idx": 0,
+      "priority": 3,
+      "queue_status": 3,
+      "queue_length": 0,
+      "polling_config": {
+        "interval_seconds": 30,
+        "timeout_seconds": 86400
+      },
+      "priority_queue_display_threshold": {
+        "vip_queuing_time_threshold": 300,
+        "waiting_time_threshold": 60
+      }
+    },
+    "agent_history_id": null,
+    "total_image_count": 4,
+    "finished_image_count": 4,
+    "confirm_status": 2,
+    "confirm_token": "",
+    "image_type": 3
+  }
+}

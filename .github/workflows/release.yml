@@ -1,0 +1,40 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.jobs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: Update Changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx standard-version
+          git push --follow-tags origin main
+      - name: Install & Build & Test
+        run: |
+          yarn
+          npm run build --if-present
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish --access public

@@ -1,0 +1,985 @@
+{
+  "timestamp": "2025-09-11T17:02:39.759Z",
+  "analysis": {
+    "itemCount": 1,
+    "firstItemKeys": [
+      "common_attr",
+      "author",
+      "video",
+      "aigc_image_params",
+      "statistic",
+      "category_id_list",
+      "aigc_flow",
+      "aigc_draft",
+      "gen_result_data",
+      "extra",
+      "ai_feature",
+      "sharing_info",
+      "metadata_param"
+    ],
+    "videoExists": true,
+    "videoKeys": [
+      "video_id",
+      "duration",
+      "origin_video",
+      "transcoded_video",
+      "video_size_type",
+      "cover_uri",
+      "transcode_status",
+      "duration_ms",
+      "thumb",
+      "watermark_type",
+      "cover_url",
+      "duration_info",
+      "vda_status",
+      "video_model",
+      "has_audio",
+      "is_mute"
+    ],
+    "transcodedVideoExists": true,
+    "originExists": true,
+    "videoUrlFound": true,
+    "actualVideoUrl": "https://v3-artist.vlabvod.com/7fda3dfc240b1bf5ffbffda20ad911e5/68cc3b36/video/tos/cn/tos-cn-v-148450/oEzgBiQ8IY0QG2DKEADIphiEGYFjAgfY7xJqBR/?a=4066&ch=0&cr=0&dr=0&er=0&lr=display_watermark_aigc&cd=0%7C0%7C0%7C0&br=6755&bt=6755&cs=0&ds=12&ft=5QYTUxhhe6BMyqh8hWkJD12Nzj&mime_type=video_mp4&qs=0&rc=ODo0ZWZnO2Q5OTM2NGg0ZEBpajxqNHU5cjtqNjczNDM7M0BgMGEuYWIwXzYxYV8wMDYtYSMvYWtgMmRzLi5hLS1kNDBzcw%3D%3D&btag=c0000e00008000&dy_q=1757610161&feature_id=7bed9f9dfbb915a044e5d473759ce9df&l=20250912010241F0B2EC07F2C25FA8847E",
+    "alternativeUrls": {
+      "video.video_url": null,
+      "video.origin.video_url": null,
+      "common_attr.cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757617200&x-signature=v00TEDCVMYcNOeZeZ%2FaF3AyeABA%3D&format=.webp",
+      "url": null,
+      "video_url": null
+    }
+  },
+  "fullFirstItem": {
+    "common_attr": {
+      "id": "7548877867287874851",
+      "effect_id": "7548877867287874851",
+      "effect_type": 53,
+      "title": "",
+      "description": "",
+      "cover_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:2048:2048.webp?lk3s=43402efa&x-expires=1757617200&x-signature=v00TEDCVMYcNOeZeZ%2FaF3AyeABA%3D&format=.webp",
+      "item_urls": [
+        ""
+      ],
+      "md5": "",
+      "create_time": 1757610157,
+      "status": 144,
+      "review_info": {
+        "review_status": 1,
+        "review_code_list": []
+      },
+      "aspect_ratio": 0.5641025641025641,
+      "publish_source": "user_post_mweb_item",
+      "collection_ids": [],
+      "extra": "",
+      "has_published": false,
+      "cover_url_map": {
+        "360": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=M6xhsll34x0SyW9qaq7gcprBWjc%3D&format=.webp",
+        "480": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=MT3cWDCnpIua1sKjxtdH8GwKALw%3D&format=.webp",
+        "720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PSvHciprtD%2Fxu5llDWOWYgXEmbQ%3D&format=.webp",
+        "1080": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:1080:1080.webp?lk3s=43402efa&x-expires=1759968000&x-signature=u8EKOtqtRrwWW1%2FKObk%2B0Bqj1ik%3D&format=.webp",
+        "2400": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:2400:2400.webp?lk3s=43402efa&x-expires=1759968000&x-signature=vpJvcRKNTYqijpwc3J4fbQV7p6M%3D&format=.webp",
+        "smart_crop-w:240-h:320": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:240:320.webp?lk3s=43402efa&x-expires=1759968000&x-signature=vxsWkh7%2BA7AdNcHM1XAP18jV7ss%3D&format=.webp",
+        "smart_crop-w:360-h:240": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:360:240.webp?lk3s=43402efa&x-expires=1759968000&x-signature=FU90ak9WfPSU8KWdfYHH%2Bb79%2Bi8%3D&format=.webp",
+        "smart_crop-w:360-h:360": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:360:360.webp?lk3s=43402efa&x-expires=1759968000&x-signature=%2F0H1BDiBFeqAKm0SQyYaaUegko4%3D&format=.webp",
+        "smart_crop-w:480-h:480": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:480:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=52tVBsV9CwHdP1KQo8iq2JzZb80%3D&format=.webp",
+        "smart_crop-w:480-h:640": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:480:640.webp?lk3s=43402efa&x-expires=1759968000&x-signature=fgblaxzggFo2MhqOPAn96F2EO%2BI%3D&format=.webp",
+        "smart_crop-w:720-h:480": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:720:480.webp?lk3s=43402efa&x-expires=1759968000&x-signature=2Yihz9jU0gRzcD1jhT9i3kHtxhw%3D&format=.webp",
+        "smart_crop-w:720-h:720": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109~tplv-tb4s082cfz-aigc_resize_mark:720:720.webp?lk3s=43402efa&x-expires=1759968000&x-signature=PSvHciprtD%2Fxu5llDWOWYgXEmbQ%3D&format=.webp"
+      },
+      "local_item_id": "7548877867287874851",
+      "update_time": 0,
+      "cover_uri": "tos-cn-i-tb4s082cfz/7a0f9766ecc2ad187fa2850864858109",
+      "smart_crop_loc": null,
+      "cover_height": 1248,
+      "cover_width": 704
+    },
+    "author": null,
+    "video": {
+      "video_id": "v03870g10004d31g18vog65rc1ngd92g",
+      "duration": 6,
+      "origin_video": null,
+      "transcoded_video": {
+        "origin": {
+          "vid": "",
+          "fps": 24,
+          "width": 704,
+          "height": 1248,
+          "duration": 0,
+          "video_url": "https://v3-artist.vlabvod.com/7fda3dfc240b1bf5ffbffda20ad911e5/68cc3b36/video/tos/cn/tos-cn-v-148450/oEzgBiQ8IY0QG2DKEADIphiEGYFjAgfY7xJqBR/?a=4066&ch=0&cr=0&dr=0&er=0&lr=display_watermark_aigc&cd=0%7C0%7C0%7C0&br=6755&bt=6755&cs=0&ds=12&ft=5QYTUxhhe6BMyqh8hWkJD12Nzj&mime_type=video_mp4&qs=0&rc=ODo0ZWZnO2Q5OTM2NGg0ZEBpajxqNHU5cjtqNjczNDM7M0BgMGEuYWIwXzYxYV8wMDYtYSMvYWtgMmRzLi5hLS1kNDBzcw%3D%3D&btag=c0000e00008000&dy_q=1757610161&feature_id=7bed9f9dfbb915a044e5d473759ce9df&l=20250912010241F0B2EC07F2C25FA8847E",
+          "cover_url": "",
+          "format": "mp4",
+          "definition": "origin",
+          "logo_type": "display_watermark_aigc",
+          "encryption_key": "",
+          "md5": "1446a34094d731ec94501aa016f1fe87",
+          "size": 4338141,
+          "video_id": ""
+        }
+      },
+      "video_size_type": 2,
+      "cover_uri": "tos-cn-p-148450/okgG20YAYGBiDtigypIAZRJh8AQfFR7DRHYEKB",
+      "transcode_status": 1,
+      "duration_ms": 5042,
+      "thumb": {
+        "detail_infos": [
+          {
+            "frame_count": 5,
+            "image_width": 720,
+            "image_height": 1280,
+            "uri": "tos-cn-p-148450/okYIKFpGgBAY8hGDzFi7QBIigJ7hB7RfDVA08Y",
+            "url": "https://p3-sign.douyinpic.com/tos-cn-p-148450/okYIKFpGgBAY8hGDzFi7QBIigJ7hB7RfDVA08Y~tplv-noop.image?dy_q=1757610161&l=20250912010241F0B2EC07F2C25FA8847E&x-expires=1758214966&x-signature=b08Xm8%2BCebstErwe44dI%2FHxuV%2BA%3D"
+          }
+        ],
+        "thumb_common_info": {
+          "single_frame_width": 180,
+          "single_frame_height": 320,
+          "total_set_num": 5
+        }
+      },
+      "watermark_type": 3,
+      "cover_url": "https://p3-sign.douyinpic.com/tos-cn-p-148450/okgG20YAYGBiDtigypIAZRJh8AQfFR7DRHYEKB~tplv-noop.image?dy_q=1757610161&l=20250912010241F0B2EC07F2C25FA8847E&x-expires=1758214966&x-signature=Vuhj47%2F7pj7pU8ebMcpQaR3HJKI%3D",
+      "duration_info": "{\"play_info_duration\":5.017,\"v_duration\":5.042,\"a_duration\":0}",
+      "vda_status": 10,
+      "video_model": "{\"status\":10,\"message\":\"success\",\"enable_ssl\":true,\"auto_definition\":\"360p\",\"enable_adaptive\":false,\"video_id\":\"v03870g10004d31g18vog65rc1ngd92g\",\"video_duration\":5.017,\"media_type\":\"video\",\"url_expire\":1757613766,\"big_thumbs\":[{\"img_num\":5,\"uri\":\"tos-cn-p-148450/okYIKFpGgBAY8hGDzFi7QBIigJ7hB7RfDVA08Y\",\"img_url\":\"https://p9-sign.douyinpic.com/tos-cn-p-148450/okYIKFpGgBAY8hGDzFi7QBIigJ7hB7RfDVA08Y~tplv-noop.image?cquery=100X&dy_q=1757610161&l=20250912010241F0B2EC07F2C25FA8847E&x-expires=1757613766&x-signature=aa6SLdDPpeSVI6TOwd3e5K6S0Og%3D\",\"img_urls\":[\"https://p9-sign.douyinpic.com/tos-cn-p-148450/okYIKFpGgBAY8hGDzFi7QBIigJ7hB7RfDVA08Y~tplv-noop.image?cquery=100X&dy_q=1757610161&l=20250912010241F0B2EC07F2C25FA8847E&x-expires=1757613766&x-signature=aa6SLdDPpeSVI6TOwd3e5K6S0Og%3D\"],\"img_x_size\":180,\"img_y_size\":320,\"img_x_len\":4,\"img_y_len\":4,\"duration\":5.041667,\"interval\":1,\"fext\":\"jpeg\"}],\"fallback_api\":\"https://vas-lf-x.snssdk.com/video/fplay/1/dd1a508f0b32dde14db08ca537598db6/v03870g10004d31g18vog65rc1ngd92g?aid=0&device_platform=unknown&force_fids=NjdmZA%3D%3D&imp=false&key_seed=%2B0Oq2pcxFGEThwE3MZd9KzURgT%2BJosdVrxgSQMCWEAE%3D&logo_type=default&multi_rate_audios=true&stream_type=normal&vps=6\",\"video_list\":{\"video_1\":{\"definition\":\"origin\",\"quality\":\"normal\",\"vtype\":\"mp4\",\"vwidth\":704,\"vheight\":1248,\"bitrate\":6915708,\"real_bitrate\":6915708,\"fps\":24,\"codec_type\":\"h264\",\"size\":4337014,\"main_url\":\"aHR0cHM6Ly92My1kZWZhdWx0LjM2NXlnLmNvbS9lZmYwYjcwZDQ1NmU0YTUxZjJjZjE1MmNiOWIxNWEzOC82OGMzMGVjNi92aWRlby90b3MvY24vdG9zLWNuLXYtMTQ4NDUwL29vcFlJQkJJRkVpWWc0UmZEUTdER2gwS0F2Z0dZSnJCaUU4QVFwLz9hPTAmY2g9MCZjcj0wJmRyPTAmZXI9MCZscj1kZWZhdWx0JmNkPTAlN0MwJTdDMCU3QzAmYnI9Njc1MyZidD02NzUzJmNzPTAmZHM9MTImZnQ9T2kucGk3N0pXSDZCTTd5N1RfcjBQRDFJTiZtaW1lX3R5cGU9dmlkZW9fbXA0JnFzPTAmcmM9WnpwbVBEdG9aanMyYURWb056WnBQRUJwYWp4cU5IVTVjanRxTmpjek5ETTdNMEJqTTE1all6RXlOVEl4WW1OZ01XRXpZU012WVd0Z01tUnpMaTVoTFMxa05EQnpjdyUzRCUzRCZidGFnPWMwMDAwZTAwMDA4MDAwJmNxdWVyeT0xMDBYJmR5X3E9MTc1NzYxMDE2MSZmZWF0dXJlX2lkPTdiZWQ5ZjlkZmJiOTE1YTA0NGU1ZDQ3Mzc1OWNlOWRmJmw9MjAyNTA5MTIwMTAyNDFGMEIyRUMwN0YyQzI1RkE4ODQ3RQ==\",\"backup_url_1\":\"aHR0cHM6Ly92OS1kZWZhdWx0LjM2NXlnLmNvbS9kYTJhYTk0OGMzMzE2MWYwNWYzODcyNGZjMzg2YmFmMC82OGMzMGVjNi92aWRlby90b3MvY24vdG9zLWNuLXYtMTQ4NDUwL29vcFlJQkJJRkVpWWc0UmZEUTdER2gwS0F2Z0dZSnJCaUU4QVFwLz9hPTAmY2g9MCZjcj0wJmRyPTAmZXI9MCZscj1kZWZhdWx0JmNkPTAlN0MwJTdDMCU3QzAmYnI9Njc1MyZidD02NzUzJmNzPTAmZHM9MTImZnQ9T2kucGk3N0pXSDZCTTd5N1RfcjBQRDFJTiZtaW1lX3R5cGU9dmlkZW9fbXA0JnFzPTAmcmM9WnpwbVBEdG9aanMyYURWb056WnBQRUJwYWp4cU5IVTVjanRxTmpjek5ETTdNMEJqTTE1all6RXlOVEl4WW1OZ01XRXpZU012WVd0Z01tUnpMaTVoTFMxa05EQnpjdyUzRCUzRCZidGFnPWMwMDAwZTAwMDA4MDAwJmNxdWVyeT0xMDBYJmR5X3E9MTc1NzYxMDE2MSZmZWF0dXJlX2lkPTdiZWQ5ZjlkZmJiOTE1YTA0NGU1ZDQ3Mzc1OWNlOWRmJmw9MjAyNTA5MTIwMTAyNDFGMEIyRUMwN0YyQzI1RkE4ODQ3RQ==\",\"file_id\":\"69df43c4fee24e53885c4ef8f9ac67fd\",\"quality_type\":0,\"encryption_method\":\"\",\"audio_channels\":\"0.0\",\"feature_id\":\"7bed9f9dfbb915a044e5d473759ce9df\",\"gear_des_key\":\"0:MP4|1:normal|2:h264|4:origin|5:normal|10000:105\",\"audio_sample_rate\":\"0\",\"url_expire\":1757613766,\"preload_size\":327680,\"preload_interval\":60,\"preload_min_step\":5,\"preload_max_step\":10,\"file_hash\":\"0d12b3e948ff22bfafffc26384caee55\"}},\"popularity_level\":0,\"has_embedded_subtitle\":false,\"poster_url\":\"https://p9-sign.douyinpic.com/tos-cn-p-148450/okgG20YAYGBiDtigypIAZRJh8AQfFR7DRHYEKB~tplv-noop.image?cquery=100X&dy_q=1757610161&l=20250912010241F0B2EC07F2C25FA8847E&x-expires=1757613766&x-signature=E%2FUMImr2dQpTqHc20lY8AwXRX0o%3D\",\"key_seed\":\"+0Oq2pcxFGEThwE3MZd9KzURgT+JosdVrxgSQMCWEAE=\"}",
+      "has_audio": false,
+      "is_mute": false
+    },
+    "aigc_image_params": {
+      "generate_type": 10,
+      "first_generate_type": 10,
+      "text2video_params": {
+        "video_gen_inputs": [
+          {
+            "prompt": "调试用两帧视频测试",
+            "lens_motion_type": "",
+            "motion_speed": "",
+            "vid": "",
+            "ending_control": "",
+            "pre_task_id": "0",
+            "audio_vid": "",
+            "video_mode": 2,
+            "fps": 24,
+            "duration_ms": 5000,
+            "template_id": "0",
+            "multi_frames": [
+              {
+                "idx": 0,
+                "duration_ms": 2000,
+                "prompt": "中国街道行走测试",
+                "media_info": {
+                  "media_type": 1,
+                  "image_info": {
+                    "image_uri": "tos-cn-i-tb4s082cfz/0c52fdcbca2c408e95651398af6e6af1",
+                    "image_url": "",
+                    "width": 864,
+                    "height": 1184,
+                    "format": "",
+                    "smart_crop_loc": null
+                  }
+                }
+              },
+              {
+                "idx": 1,
+                "duration_ms": 3000,
+                "prompt": "日本街道行走测试",
+                "media_info": {
+                  "media_type": 1,
+                  "image_info": {
+                    "image_uri": "tos-cn-i-tb4s082cfz/7cd727aa834d4429abbc52ee1cd951db",
+                    "image_url": "",
+                    "width": 864,
+                    "height": 1184,
+                    "format": "",
+                    "smart_crop_loc": null
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "video_aspect_ratio": "9:16",
+        "seed": 375241913,
+        "task_scene": "",
+        "priority": 0,
+        "video_gen_inputs_extra": [
+          {}
+        ],
+        "model_req_key": "dreamina_ic_generate_video_model_vgfm_3.0",
+        "model_config": {
+          "icon_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model_video_v8_3_0.jpg~tplv-tb4s082cfz-resize:0:0.webp?lk3s=8e790bc3&x-expires=1789146161&x-signature=4VWHCeOF0k9AyLj6hUoiUfCk1WQ%3D",
+          "model_name_starling_key": "video_3",
+          "model_tip_starling_key": "new_default_model_beginner_friendly",
+          "model_req_key": "dreamina_ic_generate_video_model_vgfm_3.0",
+          "is_new_model": false,
+          "sample_steps": null,
+          "blend_enable": null,
+          "feats": [
+            "support_first_image",
+            "support_end_image"
+          ],
+          "model_name": "视频 3.0",
+          "model_tip": "精准响应，支持多镜头和运镜",
+          "feature_key": "",
+          "generation_category_name_starling_key": "",
+          "generation_category_name": "",
+          "duration_option": [
+            5,
+            10
+          ],
+          "lens_motion_type_option": null,
+          "motion_speed_option": null,
+          "camera_strength_option": null,
+          "video_aspect_ratio_option": [
+            "21:9",
+            "16:9",
+            "4:3",
+            "1:1",
+            "3:4",
+            "9:16"
+          ],
+          "commercial_config": {
+            "commerce_info_map": {
+              "basic": {
+                "resource_sub_type": "aigc",
+                "resource_id_type": "str",
+                "resource_id": "generate_video",
+                "benefit_type": "basic_video_operation_vgfm_v_three",
+                "amount": 0
+              },
+              "retry": {
+                "resource_sub_type": "aigc",
+                "resource_id_type": "str",
+                "resource_id": "generate_video",
+                "benefit_type": "basic_video_operation_vgfm_v_three",
+                "amount": 0
+              }
+            },
+            "image_model_commerce_config": null
+          },
+          "fps": 24,
+          "extra": {},
+          "feats_cant_combine": null,
+          "model_bg_prompt_starling_key": ""
+        },
+        "video_model_config": {
+          "icon": {
+            "image_uri": "tos-cn-i-tb4s082cfz/model_video_v8_3_0.jpg",
+            "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/model_video_v8_3_0.jpg~tplv-tb4s082cfz-resize:0:0.webp?lk3s=8e790bc3&x-expires=1789146161&x-signature=4VWHCeOF0k9AyLj6hUoiUfCk1WQ%3D",
+            "width": 0,
+            "height": 0,
+            "format": "webp",
+            "smart_crop_loc": null
+          },
+          "model_name": "视频 3.0",
+          "model_name_starling_key": "video_3",
+          "model_tip": "精准响应，支持多镜头和运镜",
+          "model_tip_starling_key": "new_default_model_beginner_friendly",
+          "feature_key": "",
+          "icon_tag": "new",
+          "options": [
+            {
+              "key": "lens_recipe",
+              "value_type": "lens_recipe",
+              "forbidden_display": false,
+              "lens_motion_val": {
+                "lens_recipe_list": [
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/hitchcock_dolly_in_320p.webp",
+                      "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/hitchcock_dolly_in_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=x5I3b53JyngpyLIr736mYofzswQ%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "hitchcock_dolly_in",
+                    "name": "希区柯克推进",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.4,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "hitchcock_dolly_in"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/hitchcock_dolly_out_320p.webp",
+                      "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/hitchcock_dolly_out_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=y4Ju%2BaSr68ewmqAU0sgr9WJDKFQ%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "hitchcock_dolly_out",
+                    "name": "希区柯克拉远",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "hitchcock_dolly_out"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/robo_arm_320p.webp",
+                      "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/robo_arm_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=zLLDMXVOgtvb4CIgfinGdUd%2FP8w%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "robo_arm",
+                    "name": "机械臂",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "robo_arm"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/dynamic_orbit_320p.webp",
+                      "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/dynamic_orbit_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=Tguz%2BqnFvZFcNpgznLq3ElrW9Fg%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "dynamic_orbit",
+                    "name": "动感环绕",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "dynamic_orbit"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/central_orbit_320p.webp",
+                      "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/central_orbit_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=aaLclaKcQEMR5LSPF%2FYHpi1ksrw%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "central_orbit",
+                    "name": "中心环绕",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.4,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.7,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "central_orbit"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/crane_push_320p.webp",
+                      "image_url": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/crane_push_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=MvDfz1Gueo03tq9mAtQ2NZNn1yI%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "crane_push",
+                    "name": "起重机",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.5,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 0.8,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "crane_push"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/quick_pull_back_320p.webp",
+                      "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/quick_pull_back_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=0mL4qbMkv4iN6RYhYuhagiTdJS4%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "quick_pull_back",
+                    "name": "超级拉远",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.4,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.7,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "quick_pull_back"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/counterclockwise_swivel_320p.webp",
+                      "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/counterclockwise_swivel_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=K4hXuB%2B1V6bBUHsLZW4tHDtIulY%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "counterclockwise_swivel",
+                    "name": "逆时针回旋",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "counterclockwise_swivel"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/clockwise_swivel_320p.webp",
+                      "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/clockwise_swivel_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=a1eHUWvtikkpG7nnvApJcUcIEho%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "clockwise_swivel",
+                    "name": "顺时针回旋",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "clockwise_swivel"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/handheld_320p.webp",
+                      "image_url": "https://p9-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/handheld_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=zHWZ6q3Yqx%2Bn7%2BtycRdf3DHtFyY%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "handheld",
+                    "name": "手持运镜",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.2,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.5,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "handheld"
+                  },
+                  {
+                    "icon": {
+                      "image_uri": "tos-cn-i-tb4s082cfz/rapid_push_pull_320p.webp",
+                      "image_url": "https://p26-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/rapid_push_pull_320p.webp~tplv-tb4s082cfz-resize:0:0.awebp?lk3s=8e790bc3&x-expires=1789146161&x-signature=%2BbVtj7eV6LIBKVXdiXHpRwDY3MQ%3D",
+                      "width": 0,
+                      "height": 0,
+                      "format": "awebp"
+                    },
+                    "key": "rapid_push_pull",
+                    "name": "快速推拉",
+                    "strength_list": [
+                      {
+                        "name": "弱",
+                        "strength": 0.3,
+                        "strength_key": "weak",
+                        "name_starling_key": "gentle"
+                      },
+                      {
+                        "name": "中",
+                        "strength": 0.6,
+                        "strength_key": "medium",
+                        "name_starling_key": "medium"
+                      },
+                      {
+                        "name": "强",
+                        "strength": 1,
+                        "strength_key": "strong",
+                        "name_starling_key": "strong"
+                      }
+                    ],
+                    "default_strength_idx": 1,
+                    "name_starling_key": "rapid_push_pull"
+                  }
+                ],
+                "default_val_idx": -1
+              }
+            },
+            {
+              "key": "resolution",
+              "value_type": "enum",
+              "enum_val": {
+                "enum_type": "string",
+                "string_value": [
+                  "720p",
+                  "1080p"
+                ],
+                "double_value": null,
+                "int_value": null,
+                "default_val_idx": 0
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "input_media_type",
+              "value_type": "enum",
+              "enum_val": {
+                "enum_type": "string",
+                "string_value": [
+                  "prompt",
+                  "first_frame",
+                  "end_frame",
+                  "multi_frame"
+                ],
+                "double_value": null,
+                "int_value": null,
+                "default_val_idx": 0
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "frames",
+              "value_type": "enum",
+              "enum_val": {
+                "enum_type": "int",
+                "string_value": null,
+                "double_value": null,
+                "int_value": [
+                  120,
+                  240
+                ],
+                "default_val_idx": 0
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "fps",
+              "value_type": "enum",
+              "enum_val": {
+                "enum_type": "int",
+                "string_value": null,
+                "double_value": null,
+                "int_value": [
+                  24
+                ],
+                "default_val_idx": 0
+              },
+              "forbidden_display": true,
+              "lens_motion_val": null
+            },
+            {
+              "key": "video_aspect_ratio",
+              "value_type": "enum",
+              "enum_val": {
+                "enum_type": "string",
+                "string_value": [
+                  "21:9",
+                  "16:9",
+                  "4:3",
+                  "1:1",
+                  "3:4",
+                  "9:16"
+                ],
+                "double_value": null,
+                "int_value": null,
+                "default_val_idx": 1
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "multi_frame_duration",
+              "value_type": "slide_bar",
+              "slide_bar_val": {
+                "min": 1,
+                "max": 6,
+                "step": 1,
+                "default": 5
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "multi_frame_media_type",
+              "value_type": "enum",
+              "enum_val": {
+                "enum_type": "int",
+                "string_value": null,
+                "double_value": null,
+                "int_value": [
+                  1
+                ],
+                "default_val_idx": 0
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "multi_frame_media_count",
+              "value_type": "slide_bar",
+              "slide_bar_val": {
+                "min": 2,
+                "max": 10,
+                "step": 1,
+                "default": 2
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            },
+            {
+              "key": "idip_frame",
+              "value_type": "slide_bar",
+              "slide_bar_val": {
+                "min": 1,
+                "max": 4,
+                "step": 0,
+                "default": 0
+              },
+              "forbidden_display": false,
+              "lens_motion_val": null
+            }
+          ],
+          "commercial_config": {
+            "default": {
+              "resource_sub_type": "aigc",
+              "resource_id_type": "str",
+              "resource_id": "generate_video",
+              "benefit_type": "basic_video_operation_vgfm_v_three",
+              "amount": 0
+            },
+            "format": "{resolution}",
+            "format_conf": {
+              "1080p": {
+                "resource_sub_type": "aigc",
+                "resource_id_type": "str",
+                "resource_id": "generate_video",
+                "benefit_type": "basic_video_operation_vgfm_v_three_1080",
+                "amount": 0
+              },
+              "720p": {
+                "resource_sub_type": "aigc",
+                "resource_id_type": "str",
+                "resource_id": "generate_video",
+                "benefit_type": "basic_video_operation_vgfm_v_three",
+                "amount": 0
+              }
+            },
+            "additional_conf": [
+              {
+                "option_key": "lens_recipe",
+                "commerce_info": {
+                  "resource_sub_type": "aigc",
+                  "resource_id_type": "str",
+                  "resource_id": "generate_video",
+                  "benefit_type": "basic_video_operation_vgfm_v_three_recpie_add",
+                  "amount": 0
+                }
+              },
+              {
+                "option_key": "resolution",
+                "condition": {
+                  "operation": "in",
+                  "value": [
+                    "1080p"
+                  ]
+                },
+                "commerce_info": {
+                  "resource_sub_type": "aigc",
+                  "resource_id_type": "str",
+                  "resource_id": "generate_video",
+                  "benefit_type": "basic_video_operation_vgfm_v_three_1080_add",
+                  "amount": 0
+                }
+              }
+            ]
+          },
+          "model_req_key": "dreamina_ic_generate_video_model_vgfm_3.0",
+          "extra": {
+            "pop_icon": {
+              "image_uri": "tos-cn-i-3jr8j4ixpe/vgfm_lite_cover",
+              "image_url": "https://p6-heycan-hgt-sign.byteimg.com/tos-cn-i-3jr8j4ixpe/vgfm_lite_cover~tplv-3jr8j4ixpe-resize:0:0.webp?lk3s=8e790bc3&x-expires=1789146161&x-signature=D6IIZBB4v0aNGi3UpWWNGs%2FrJqI%3D",
+              "width": 0,
+              "height": 0,
+              "format": "webp",
+              "smart_crop_loc": null
+            },
+            "model_source": "by Seedance 1.0 mini",
+            "raw_model_source": ""
+          },
+          "model_status": 0,
+          "mutex_conf": {
+            "mutex_list": [
+              [
+                {
+                  "option_key": "lens_recipe"
+                },
+                {
+                  "option_key": "input_media_type",
+                  "condition": {
+                    "operation": "in",
+                    "value": [
+                      "prompt",
+                      "end_frame",
+                      "multi_frame",
+                      "idip_frame"
+                    ]
+                  }
+                }
+              ],
+              [
+                {
+                  "option_key": "lens_recipe"
+                },
+                {
+                  "option_key": "resolution",
+                  "condition": {
+                    "operation": "in",
+                    "value": [
+                      "1080p"
+                    ]
+                  }
+                }
+              ],
+              [
+                {
+                  "option_key": "resolution",
+                  "condition": {
+                    "operation": "in",
+                    "value": [
+                      "1080p"
+                    ]
+                  }
+                },
+                {
+                  "option_key": "input_media_type",
+                  "condition": {
+                    "operation": "in",
+                    "value": [
+                      "multi_frame",
+                      "idip_frame"
+                    ]
+                  }
+                }
+              ],
+              [
+                {
+                  "option_key": "frames"
+                },
+                {
+                  "option_key": "input_media_type",
+                  "condition": {
+                    "operation": "in",
+                    "value": [
+                      "multi_frame"
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          "generation_category_name": "",
+          "generation_category_name_starling_key": ""
+        }
+      },
+      "template_id": "0",
+      "insta_drag_params": {
+        "origin_item_id": null
+      },
+      "hide_ref_images": false
+    },
+    "statistic": {
+      "feedback_status": 0
+    },
+    "category_id_list": [],
+    "aigc_flow": {
+      "version": "0.1.2"
+    },
+    "aigc_draft": {
+      "version": "3.0.5",
+      "uri": "aigc-draft/7509614936834",
+      "content": "",
+      "update_time": 0,
+      "last_preview_time": 0,
+      "resource_type": "",
+      "public_uri": "",
+      "variables": [],
+      "resource_width": 0,
+      "resource_height": 0,
+      "node_keys": [],
+      "cost": 0,
+      "min_feats": [
+        "AIGC_GenerateType_VideoMultiFrame"
+      ]
+    },
+    "gen_result_data": {
+      "result_code": 0,
+      "result_msg": "Success"
+    },
+    "extra": {
+      "template_type": "video",
+      "ai_feature": "text_generate_video"
+    },
+    "ai_feature": {
+      "features": [
+        {
+          "type": "text_generate_video"
+        },
+        {
+          "type": "intelligent_multiframe"
+        }
+      ],
+      "is_merged": true
+    },
+    "sharing_info": {
+      "share_status": 2
+    },
+    "metadata_param": "{\"effect_id\":\"gen_video\",\"effect_type\":\"tool\"}"
+  }
+}
