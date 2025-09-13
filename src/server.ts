@@ -103,7 +103,8 @@ export const createServer = (): McpServer => {
           model: params.model,
           aspectRatio: params.aspectRatio,
           sample_strength: params.sample_strength,
-          negative_prompt: params.negative_prompt
+          negative_prompt: params.negative_prompt,
+          refresh_token: process.env.JIMENG_API_TOKEN
         });
 
         // 如果没有返回URL数组，返回错误信息
@@ -210,7 +211,7 @@ export const createServer = (): McpServer => {
           fps: params.fps,
           duration_ms: params.duration_ms,
           video_aspect_ratio: params.video_aspect_ratio,
-          refresh_token: params.refresh_token,
+          refresh_token: params.refresh_token || process.env.JIMENG_API_TOKEN,
           req_key: params.req_key
         });
         if (!videoUrl) {
