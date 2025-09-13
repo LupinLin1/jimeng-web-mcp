@@ -1,1 +1,62 @@
+# Dependencies
 node_modules
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build outputs
+lib/
+dist/
+coverage/
+
+# Testing
+*.test.cjs
+test-*.cjs
+test-*.js
+debug-*.js
+
+# Log files
+*.log
+jimeng-request-log-*.json
+debug-jimeng-response-*.json
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test images and assets
+*.png
+*.jpg
+*.jpeg
+*.webp
+ref_*.png
+jimeng-*.png
+
+# Documentation and analysis files
+*-analysis.md
+*-raw-data.md
+captured-requests-raw-data.md
+real-time-monitoring-data.md
+TEST-SUMMARY.md
+
+# JSON test data
+test.json
+test2.json
+单参考图*.json
+多参考图*.json
+无参考图*.json
