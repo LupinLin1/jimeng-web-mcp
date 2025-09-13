@@ -45,8 +45,8 @@ export const createServer = (): McpServer => {
   // 
   // 【核心功能】
   // - 文本到图像生成：基于文字描述生成高质量AI图像
-  // - 参考图混合：使用参考图片与文字描述结合生成新图像
-  // - 多参考图融合：支持多张图片同时作为参考进行创作
+  // - 单参考图混合：使用1张参考图片与文字描述结合生成新图像(##前缀)
+  // - 多参考图融合：支持多张图片(最多4张)同时作为参考进行创作(####前缀)
   // - 多模型选择：支持最新jimeng-4.0到经典jimeng-xl-pro等多个模型
   // 
   // 【模型推荐】
@@ -62,6 +62,11 @@ export const createServer = (): McpServer => {
   //   "猫"
   // 
   // 【参考图混合指南】
+  // • 单参考图模式：filePath: "path/to/image.jpg"
+  //   - 提示词自动添加##前缀，适合风格转换和图像变体
+  // • 多参考图模式：filePath: ["img1.jpg", "img2.jpg", "img3.jpg"]
+  //   - 提示词自动添加####前缀，可融合多个图像特征
+  //   - 最多支持4张参考图，越多图片融合效果越复杂
   // • sample_strength 参数控制：
   //   - 0.3-0.5：强保留原图特征，适合风格转换
   //   - 0.5-0.7：均衡混合，推荐日常使用
@@ -77,8 +82,11 @@ export const createServer = (): McpServer => {
   server.tool(
     "generateImage",
     {
-      description: "🎨 JiMeng AI图像生成工具 - 基于文字描述生成高质量AI图像，支持参考图混合和多种模型。推荐使用jimeng-4.0模型获得最佳效果。支持1:1、16:9、9:16等多种宽高比。可通过sample_strength控制参考图影响程度(0.3-0.9)。",
-      filePath: z.string().optional().describe("参考图片路径或URL（可选）。支持本地文件路径或网络图片URL。提供参考图可实现图像混合、风格转换等功能。支持多张参考图用数组格式传入。"),
+      description: "🎨 JiMeng AI图像生成工具 - 基于文字描述生成高质量AI图像，支持单/多参考图混合和多种模型。推荐jimeng-4.0模型，支持最多4张参考图同时融合。支持1:1、16:9、9:16等多种宽高比。多参考图模式可创造复杂的视觉融合效果。",
+      filePath: z.union([
+        z.string(), 
+        z.array(z.string())
+      ]).optional().describe("参考图片路径或URL（可选）。单参考图：字符串路径；多参考图：字符串数组。支持本地文件和网络URL。单图适合风格转换，多图可实现复杂混合创作。多参考图会在提示词前自动添加####前缀。"),
       prompt: z.string().describe("图像生成的文字描述。详细描述能获得更好效果，建议包含：主体、风格、光线、色彩、质量等要素。如：'一只橘色小猫坐在阳光透过的窗台上，毛发细腻，暖色调，电影级光线，高清细节，8K'"),
       model: z.string().optional().describe("AI模型选择。可选值: jimeng-4.0(最新推荐), jimeng-3.0(艺术风格), jimeng-2.1(平衡性好), jimeng-2.0-pro, jimeng-2.0, jimeng-1.4, jimeng-xl-pro(经典快速)。默认jimeng-4.0"),
       aspectRatio: z.string().optional().default("auto").describe("宽高比预设。选项: auto(智能1024x1024), 1:1(正方形2048x2048), 16:9(宽屏2560x1440), 9:16(竖屏1440x2560), 3:4(肖像1728x2304), 4:3(传统2304x1728), 3:2(摄影2496x1664), 2:3(书籍1664x2496), 21:9(超宽屏3024x1296)"),
