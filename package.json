@@ -1,6 +1,6 @@
 {
   "name": "jimeng-web-mcp",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "description": "MCP服务器项目，集成即梦AI图像生成",
   "type": "module",
   "main": "lib/index.js",
@@ -25,7 +25,7 @@
   ],
   "keywords": [
     "mcp",
-    "model-context-protocol", 
+    "model-context-protocol",
     "ai",
     "image-generation",
     "video-generation",
