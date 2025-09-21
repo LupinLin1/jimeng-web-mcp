@@ -1,13 +1,13 @@
 {
-  "name": "jimeng-mcp",
+  "name": "jimeng-web-mcp",
   "version": "1.10.0",
   "description": "MCP server for JiMeng AI image and video generation with continue generation support",
   "author": "c-rick",
   "license": "MIT",
-  "homepage": "https://github.com/c-rick/jimeng-mcp",
+  "homepage": "https://github.com/LupinLin1/jimeng-web-mcp",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/c-rick/jimeng-mcp.git"
+    "url": "git+https://github.com/LupinLin1/jimeng-web-mcp.git"
   },
   "keywords": [
     "mcp",

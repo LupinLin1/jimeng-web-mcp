@@ -1,5 +1,5 @@
 {
-  "name": "jimeng-mcp",
+  "name": "jimeng-web-mcp",
   "version": "1.10.0",
   "description": "MCP服务器项目，集成即梦AI图像生成",
   "type": "module",
@@ -18,7 +18,7 @@
     }
   },
   "bin": {
-    "jimeng-mcp": "lib/index.js"
+    "jimeng-web-mcp": "lib/index.js"
   },
   "files": [
     "lib"
@@ -35,12 +35,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LupinLin1/jimeng-mcp.git"
+    "url": "git+https://github.com/LupinLin1/jimeng-web-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/LupinLin1/jimeng-mcp/issues"
+    "url": "https://github.com/LupinLin1/jimeng-web-mcp/issues"
   },
-  "homepage": "https://github.com/LupinLin1/jimeng-mcp#readme",
+  "homepage": "https://github.com/LupinLin1/jimeng-web-mcp#readme",
   "author": "rick <1196363729@qq.com>",
   "license": "MIT",
   "scripts": {

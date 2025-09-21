@@ -1,8 +1,8 @@
 {
 	"mcpServers": {
-		"jimeng-mcp": {
+		"jimeng-web-mcp": {
 			"command": "npx",
-			"args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+			"args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
 			"env": {
 				"JIMENG_API_TOKEN": "your_jimeng_session_id_here"
 			}

@@ -1,4 +1,4 @@
-# Jimeng MCP 服务器
+# JiMeng Web MCP 服务器
 
 
 使用TypeScript实现的Model Context Protocol (MCP) 服务器项目，集成了即梦AI图像生成服务，通过逆向工程直接调用即梦官方API。
@@ -26,9 +26,9 @@
 ```json
 {
   "mcpServers": {
-    "jimeng-mcp": {
+    "jimeng-web-mcp": {
       "command": "npx",
-      "args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+      "args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
       "env": {
         "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
       }
@@ -51,11 +51,11 @@ MCPHub是新一代MCP服务器管理平台，提供更好的安装体验：
 # 安装MCPHub CLI
 npm install -g mcphub
 
-# 通过MCPHub安装jimeng-mcp
-mcphub install jimeng-mcp
+# 通过MCPHub安装jimeng-web-mcp
+mcphub install jimeng-web-mcp
 
 # 或者一键安装并配置到Claude Desktop
-mcphub install jimeng-mcp --client claude
+mcphub install jimeng-web-mcp --client claude
 ```
 
 ### 手动安装
@@ -82,7 +82,7 @@ npm install
 mcphub config set JIMENG_API_TOKEN your_jimeng_session_id_here
 
 # 查看配置状态
-mcphub status jimeng-mcp
+mcphub status jimeng-web-mcp
 ```
 
 ### 手动安装配置
@@ -92,9 +92,9 @@ mcphub status jimeng-mcp
 ```json
 {
   "mcpServers": {
-    "jimeng-mcp": {
+    "jimeng-web-mcp": {
       "command": "node",
-      "args": ["path/to/jimeng-mcp/lib/index.js"],
+      "args": ["path/to/jimeng-web-mcp/lib/index.js"],
       "env": {
         "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
       }
@@ -146,9 +146,9 @@ yarn test
 ```json
 {
   "mcpServers": {
-    "jimeng-mcp": {
+    "jimeng-web-mcp": {
       "command": "npx",
-      "args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+      "args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
       "env": {
         "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
       }
@@ -164,9 +164,9 @@ yarn test
 ```json
 {
   "mcpServers": {
-    "jimeng-mcp": {
+    "jimeng-web-mcp": {
       "command": "node",
-      "args": ["/path/to/jimeng-mcp/lib/index.js"],
+      "args": ["/path/to/jimeng-web-mcp/lib/index.js"],
       "env": {
         "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
       }

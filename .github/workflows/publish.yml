@@ -46,16 +46,16 @@ jobs:
             
             ## Installation
             ```bash
-            npx jimeng-mcp
+            npx jimeng-web-mcp
             ```
             
             ## MCP Configuration
             ```json
             {
               "mcpServers": {
-                "jimeng-mcp": {
+                "jimeng-web-mcp": {
                   "command": "npx",
-                  "args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+                  "args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
                   "env": {
                     "JIMENG_API_TOKEN": "your_session_id_here"
                   }
