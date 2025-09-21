@@ -1,0 +1,67 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: true
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Release ${{ github.ref }}
+            
+            ## Installation
+            ```bash
+            npx jimeng-mcp
+            ```
+            
+            ## MCP Configuration
+            ```json
+            {
+              "mcpServers": {
+                "jimeng-mcp": {
+                  "command": "npx",
+                  "args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+                  "env": {
+                    "JIMENG_API_TOKEN": "your_session_id_here"
+                  }
+                }
+              }
+            }
+            ```
+          draft: false
+          prerelease: false

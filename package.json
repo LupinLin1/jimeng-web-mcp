@@ -17,10 +17,30 @@
       "require": "./lib/server.cjs"
     }
   },
+  "bin": {
+    "jimeng-mcp": "lib/index.js"
+  },
   "files": [
     "lib"
   ],
-  "repository": "git@github.com:c-rick/jimeng-mcp.git",
+  "keywords": [
+    "mcp",
+    "model-context-protocol", 
+    "ai",
+    "image-generation",
+    "video-generation",
+    "jimeng",
+    "claude",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LupinLin1/jimeng-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LupinLin1/jimeng-mcp/issues"
+  },
+  "homepage": "https://github.com/LupinLin1/jimeng-mcp#readme",
   "author": "rick <1196363729@qq.com>",
   "license": "MIT",
   "scripts": {
@@ -33,7 +53,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:mcp": "npx @modelcontextprotocol/inspector node -r dotenv/config ./lib/index.js",
-    "start:api": "dotenv -e .env --  tsx ./script/start"
+    "start:api": "dotenv -e .env --  tsx ./script/start",
+    "prepublishOnly": "npm run build",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

@@ -19,7 +19,31 @@
 
 ## 安装
 
-### 通过MCPHub安装（推荐）
+### 通过npx自动安装（推荐）
+
+**零安装配置** - 只需在Claude Desktop中配置MCP，无需手动安装：
+
+```json
+{
+  "mcpServers": {
+    "jimeng-mcp": {
+      "command": "npx",
+      "args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+      "env": {
+        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
+      }
+    }
+  }
+}
+```
+
+**优势：**
+- ✅ 完全自动安装，无需手动步骤
+- ✅ 始终获取最新版本
+- ✅ 跨平台兼容
+- ✅ 零维护成本
+
+### 通过MCPHub安装
 
 MCPHub是新一代MCP服务器管理平台，提供更好的安装体验：
 
@@ -45,6 +69,10 @@ npm install
 
 ## 环境配置
 
+### npx自动安装配置
+
+使用npx方式无需额外配置，已包含在MCP配置中。只需获取JIMENG_API_TOKEN（见下方说明）。
+
 ### MCPHub配置
 
 使用MCPHub安装后，只需设置环境变量：
@@ -57,7 +85,7 @@ mcphub config set JIMENG_API_TOKEN your_jimeng_session_id_here
 mcphub status jimeng-mcp
 ```
 
-### 手动配置
+### 手动安装配置
 
 对于手动安装，您可以直接配置Claude Desktop：
 
@@ -111,12 +139,32 @@ yarn test
 
 ## Claude Desktop 配置示例
 
-以下是在Claude Desktop中配置此MCP服务器的完整示例:
+### 推荐配置（npx自动安装）
+
+**零配置安装** - 推荐使用此配置，无需手动安装任何依赖：
 
 ```json
 {
   "mcpServers": {
-    "jimeng": {
+    "jimeng-mcp": {
+      "command": "npx",
+      "args": ["-y", "--package=jimeng-mcp", "jimeng-mcp"],
+      "env": {
+        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
+      }
+    }
+  }
+}
+```
+
+### 手动安装配置
+
+如果您选择手动安装，可以使用以下配置：
+
+```json
+{
+  "mcpServers": {
+    "jimeng-mcp": {
       "command": "node",
       "args": ["/path/to/jimeng-mcp/lib/index.js"],
       "env": {
@@ -276,12 +324,21 @@ API将返回生成的图像URL数组，可以直接在各类客户端中显示�
 
 在Cursor或Claude中，你可以这样使用Jimeng图像生成服务：
 
-1. 确保已经配置了MCP服务器
-2. 提示Claude/Cursor生成图像，例如：
+1. **配置MCP服务器**（推荐使用npx自动安装方式，见上方配置示例）
+2. **获取API Token**（在即梦官网登录后从cookies获取sessionid）
+3. **开始使用**，例如：
    ```
    请生成一张写实风格的日落下的山脉图片
    ```
-3. Claude/Cursor会调用Jimeng MCP服务器生成图像并显示
+   ```
+   生成8张不同角度的可爱橘猫图片
+   ```
+4. Claude/Cursor会自动调用Jimeng MCP服务器生成图像并显示
+
+**优势：** 
+- npx方式无需手动安装，配置后即可使用
+- 支持继续生成功能，可以一次生成多张图片
+- 支持多种模型和参数调整
 
 ## 常见问题
 

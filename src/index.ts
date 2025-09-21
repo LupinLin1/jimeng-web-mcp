@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { startServer } from './server.js';
 // 加载环境变量
 import dotenv from 'dotenv';
