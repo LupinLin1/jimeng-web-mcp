@@ -1,11 +1,12 @@
 {
-	"mcpServers": {
-		"jimeng-web-mcp": {
-			"command": "npx",
-			"args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
-			"env": {
-				"JIMENG_API_TOKEN": "your_jimeng_session_id_here"
-			}
-		}
-	}
+  "mcpServers": {
+    "jimeng-web-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
+      "env": {
+        "JIMENG_API_TOKEN": "165fe506411b95d771e619b7d509bb28"
+      }
+    }
+  }
 }

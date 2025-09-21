@@ -96,7 +96,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* update smithery ([525e369](https://github.com/c-rick/jimeng-mcp/commit/525e369d1b10b2c67155771d7064041b70cd5df6))
+* update configuration ([525e369](https://github.com/c-rick/jimeng-mcp/commit/525e369d1b10b2c67155771d7064041b70cd5df6))
 
 ### [1.2.1](https://github.com/c-rick/jimeng-mcp/compare/v1.2.0...v1.2.1) (2025-05-07)
 

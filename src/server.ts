@@ -2,13 +2,14 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { generateImage, generateVideo, videoPostProcess } from "./api.js";
+import { logger } from './utils/logger.js';
 
-// 🚀 [MCP DEBUG] Server startup logging
-console.error('🚀 [MCP DEBUG] server.ts loaded at:', new Date().toISOString());
-console.error('🚀 [MCP DEBUG] Node.js version:', process.version);
-console.error('🚀 [MCP DEBUG] Working directory:', process.cwd());
-console.error('🚀 [MCP DEBUG] Environment token available:', !!process.env.JIMENG_API_TOKEN);
-console.error('🚀 [MCP DEBUG] Environment token length:', process.env.JIMENG_API_TOKEN?.length || 'N/A');
+// 服务器启动调试信息
+logger.debug('server.ts loaded at:', new Date().toISOString());
+logger.debug('Node.js version:', process.version);
+logger.debug('Working directory:', process.cwd());
+logger.debug('Environment token available:', !!process.env.JIMENG_API_TOKEN);
+logger.debug('Environment token length:', process.env.JIMENG_API_TOKEN?.length || 'N/A');
 
 // 定义服务器返回类型接口
 export interface ServerInstance {
@@ -18,14 +19,14 @@ export interface ServerInstance {
 
 // 创建MCP服务器
 export const createServer = (): McpServer => {
-  console.error('🚀 [MCP DEBUG] Creating MCP server instance...');
+  logger.debug('Creating MCP server instance...');
   
   const server = new McpServer({
     name: "Jimeng MCP Server",
     version: "1.0.0"
   });
   
-  console.error('🚀 [MCP DEBUG] MCP server instance created successfully');
+  logger.debug('MCP server instance created successfully');
 
   // 🔧 测试连接工具
   // 功能：测试MCP连接是否正常，验证服务器基本功能
@@ -77,7 +78,7 @@ export const createServer = (): McpServer => {
   // • 横屏内容：16:9 (视频缩略图), 21:9 (电影感)
   // • 传统摄影：3:2 (相机比例), 4:3 (经典构图)
   // • 竖屏设计：3:4 (肖像), 2:3 (书籍封面)
-  console.error('🚀 [MCP DEBUG] Registering generateImage tool...');
+  logger.debug('Registering generateImage tool...');
   
   server.tool(
     "generateImage",
@@ -93,11 +94,11 @@ export const createServer = (): McpServer => {
     },
     async (params) => {
       // 🔥 [MCP DEBUG] Tool call entry point - this is the CRITICAL debugging point
-      console.error('🔥 [MCP DEBUG] =================================');
-      console.error('🔥 [MCP DEBUG] generateImage tool called!');
-      console.error('🔥 [MCP DEBUG] Timestamp:', new Date().toISOString());
-      console.error('🔥 [MCP DEBUG] Raw params received:', JSON.stringify(params, null, 2));
-      console.error('🔥 [MCP DEBUG] =================================');
+      logger.debug('=================================');
+      logger.debug('generateImage tool called!');
+      logger.debug('Timestamp:', new Date().toISOString());
+      logger.debug('Raw params received:', JSON.stringify(params, null, 2));
+      logger.debug('=================================');
       try {
         // 🔍 Debug logging - 记录MCP接收到的原始参数
         console.log('🔍 [MCP Server] Received raw parameters:', JSON.stringify(params, null, 2));
@@ -185,7 +186,7 @@ export const createServer = (): McpServer => {
     }
   );
   
-  console.error('🚀 [MCP DEBUG] generateImage tool registered successfully');
+  logger.debug('generateImage tool registered successfully');
 
   // 添加即梦AI视频生成工具
   // 功能：生成AI视频，支持传统模式（首尾帧）和智能多帧模式
@@ -476,15 +477,17 @@ export const createServer = (): McpServer => {
 };
 
 // 启动服务器
-export const startServer = async (): Promise<ServerInstance> => {
+export const startServer = async (): Promise<void> => {
   const server = createServer();
   const transport = new StdioServerTransport();
-
-  console.log("Jimeng MCP Server 正在启动...");
-
+  
+  logger.debug("Jimeng MCP Server 正在启动...");
+  logger.debug("stdin.isTTY:", process.stdin.isTTY);
+  logger.debug("stdout.isTTY:", process.stdout.isTTY);
+  
+  // 正确等待连接 - 这会阻塞直到连接关闭
   await server.connect(transport);
-
-  console.log("Jimeng MCP Server 已启动");
-
-  return { server, transport };
+  
+  // 正常情况下，只有在连接关闭时才会执行到这里
+  logger.debug("MCP服务器连接已关闭");
 }; 

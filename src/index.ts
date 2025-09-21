@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { startServer } from './server.js';
+import { logger } from './utils/logger.js';
 // 加载环境变量
 import dotenv from 'dotenv';
 dotenv.config();
@@ -35,14 +36,17 @@ const main = async () => {
       throw new Error('JIMENG_API_TOKEN is required!')
     }
 
+    // 正确等待服务器启动和连接
     await startServer();
+    
+    // 正常情况下，只有在MCP连接关闭时才会执行到这里
+    logger.debug('MCP服务器已正常关闭');
+    
   } catch (error) {
     console.error('启动服务器时出错:', error);
     process.exit(1);
   }
 };
 
-// 只有在直接运行时才启动服务器
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
-} 
+// 启动服务器（作为MCP服务器运行）
+main(); 
