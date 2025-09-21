@@ -11,11 +11,28 @@
 - 实现了MCP协议，支持标准的stdio通信
 - 直接调用即梦AI图像生成服务，无需第三方API
 - 提供多种即梦模型的图像生成工具
+- **支持继续生成功能**：当需要生成超过4张图片时自动触发，一次性返回所有图片
 - 支持多种图像参数调整，如尺寸、精细度、负面提示词等
-- 支持图片混合/参考图生成（通过filePath参数，支持本地图片和网络图片）
-- 支持视频生成，支持添加参考图片（首尾帧通过filePath参数设置）
+- 支持多参考图混合生成（通过filePath参数，支持本地图片和网络图片）
+- 支持视频生成，包括智能多帧模式和传统首尾帧模式
+- 支持视频后处理：帧插值、超分辨率、音效生成
 
 ## 安装
+
+### 通过MCPHub安装（推荐）
+
+MCPHub是新一代MCP服务器管理平台，提供更好的安装体验：
+
+```bash
+# 安装MCPHub CLI
+npm install -g mcphub
+
+# 通过MCPHub安装jimeng-mcp
+mcphub install jimeng-mcp
+
+# 或者一键安装并配置到Claude Desktop
+mcphub install jimeng-mcp --client claude
+```
 
 ### 通过Smithery安装
 
@@ -36,7 +53,19 @@ npm install
 
 ## 环境配置
 
-在MCP客户端配置（如Claude Desktop）中设置以下环境变量：
+### MCPHub配置
+
+使用MCPHub安装后，只需设置环境变量：
+
+```bash
+# 设置JiMeng API Token
+mcphub config set JIMENG_API_TOKEN your_jimeng_session_id_here
+
+# 查看配置状态
+mcphub status jimeng-mcp
+```
+
+### Smithery配置
 
 进入[Smithery托管项目](https://smithery.ai/server/@c-rick/jimeng-mcp)，点击json, 填入JIMENG_API_TOKEN， 点击connect, 生成下面mcpServers config json
 
@@ -116,14 +145,14 @@ yarn test
 
 本MCP服务器直接调用即梦AI图像生成API，提供图像生成工具：
 
-`generateImage` - 提交图像生成请求并返回图像URL列表
+`generateImage` - 提交图像生成请求并返回图像URL列表，支持继续生成功能
 - 参数：
-  - `prompt`：生成图像的文本描述（必填）
-  - `filePath`：本地图片路径或图片URL（可选，若填写则为图片混合/参考图生成功能）
-  - `model`：模型名称，可选值: jimeng-3.0, jimeng-2.1, jimeng-2.0-pro, jimeng-2.0, jimeng-1.4, jimeng-xl-pro（可选，默认为jimeng-2.1，图片混合时自动切换为jimeng-2.0-pro）
-  - `width`：图像宽度，默认值：1024（可选）
-  - `height`：图像高度，默认值：1024（可选）
-  - `sample_strength`：精细度，默认值：0.5，范围0-1（可选）
+  - `prompt`：生成图像的文本描述（必填）**提示：在提示词中明确指定需要多张图片可触发继续生成**
+  - `filePath`：多参考图路径数组，支持本地图片和网络URL（可选）
+  - `model`：模型名称，可选值: jimeng-4.0, jimeng-3.0, jimeng-2.1, jimeng-2.0-pro, jimeng-2.0, jimeng-1.4, jimeng-xl-pro（可选，默认为jimeng-4.0）
+  - `aspectRatio`：图像宽高比，支持auto, 1:1, 16:9, 9:16, 3:4, 4:3, 3:2, 2:3, 21:9（可选，默认auto）
+  - `sample_strength`：参考图影响强度，默认值：0.5，范围0-1（可选）
+  - `reference_strength`：多参考图独立强度数组，与filePath对应（可选）
   - `negative_prompt`：反向提示词，告诉模型不要生成什么内容（可选）
 
 > **注意：**
@@ -131,7 +160,25 @@ yarn test
 > - 若指定 `filePath`，将自动进入图片混合/参考图生成模式，底层模型自动切换为 `jimeng-2.0-pro`。
 > - 网络图片需保证可公开访问。
 
-### 图片混合/参考图生成功能
+### 继续生成功能 ✨
+
+当您在提示词中明确要求生成多张图片时（如"生成8张不同角度的图片"、"制作10个阶段的系列图"），系统会自动检测并触发继续生成：
+
+- **自动触发**：当API返回`total_image_count > 4`时自动激活
+- **单次执行**：只发送一次继续生成请求，避免重复调用
+- **完整等待**：等待所有图片生成完成后一次性返回
+- **无缝体验**：对用户透明，无需额外配置
+
+#### 示例提示词：
+```
+生成8张不同角度的可爱橘猫：正面、侧面、背面、俯视、仰视、左卧、右玩、奔跑
+```
+
+```  
+创作12种风格的头像：写实、卡通、水彩、油画、素描、3D、像素、日系、欧美、国画、波普、科幻
+```
+
+### 多参考图混合生成功能
 
 如需基于图片进行混合生成，只需传入`filePath`参数（支持本地路径或图片URL），即可实现图片风格融合、参考图生成等高级玩法。
 
