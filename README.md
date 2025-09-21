@@ -34,14 +34,6 @@ mcphub install jimeng-mcp
 mcphub install jimeng-mcp --client claude
 ```
 
-### 通过Smithery安装
-
-要通过 [Smithery](https://smithery.ai/server/@c-rick/jimeng-mcp) 自动为Claude Desktop安装jimeng-mcp，请执行以下命令：
-
-```bash
-npx -y @smithery/cli install @c-rick/jimeng-mcp --client claude
-```
-
 ### 手动安装
 ```bash
 # 使用yarn安装依赖
@@ -65,25 +57,19 @@ mcphub config set JIMENG_API_TOKEN your_jimeng_session_id_here
 mcphub status jimeng-mcp
 ```
 
-### Smithery配置
+### 手动配置
 
-进入[Smithery托管项目](https://smithery.ai/server/@c-rick/jimeng-mcp)，点击json, 填入JIMENG_API_TOKEN， 点击connect, 生成下面mcpServers config json
+对于手动安装，您可以直接配置Claude Desktop：
 
 ```json
 {
   "mcpServers": {
     "jimeng-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@smithery/cli@latest",
-        "run",
-        "@c-rick/jimeng-mcp",
-        "--key",
-        "[Smithery生成]",
-        "--profile",
-        "[Smithery生成]"
-      ]
+      "command": "node",
+      "args": ["path/to/jimeng-mcp/lib/index.js"],
+      "env": {
+        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
+      }
     }
   }
 }
