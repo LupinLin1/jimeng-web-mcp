@@ -4,7 +4,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // 导出API函数供测试使用
-export { generateImage, generateVideo, ASPECT_RATIO_PRESETS, ImageDimensionCalculator } from './api.js';
+export { 
+  generateImage, 
+  generateVideo, 
+  videoPostProcess,
+  frameInterpolation,
+  superResolution,
+  generateAudioEffect,
+  ASPECT_RATIO_PRESETS, 
+  ImageDimensionCalculator 
+} from './api.js';
 
 // 处理未捕获的异常
 process.on('uncaughtException', (error) => {

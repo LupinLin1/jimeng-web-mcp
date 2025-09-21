@@ -8,7 +8,7 @@ export const imageGenerationSchema = z.object({
   width: z.number().positive().optional(),
   height: z.number().positive().optional(),
   negative_prompt: z.string().optional(),
-  filePath: z.union([z.string(), z.array(z.string())]).optional(),
+  filePath: z.array(z.string()).optional(),
   fileStrengths: z.array(z.number().min(0).max(1)).optional(),
   sample_strength: z.number().min(0).max(1).optional()
 });
@@ -57,8 +57,7 @@ export class ValidationService {
 
     // Validate fileStrengths length matches filePath length if both provided
     if (params.filePath && params.fileStrengths) {
-      const filePathArray = Array.isArray(params.filePath) ? params.filePath : [params.filePath];
-      if (filePathArray.length !== params.fileStrengths.length) {
+      if (params.filePath.length !== params.fileStrengths.length) {
         throw new Error('fileStrengths array length must match filePath array length');
       }
     }

@@ -135,7 +135,7 @@ export interface LogoInfo {
  * 图像生成参数
  */
 export interface ImageGenerationParams {
-  filePath?: string | string[]; // 单个图片路径或多个参考图片路径数组
+  filePath?: string[]; // 参考图片绝对路径数组
   model?: string; // 模型名称，默认使用 DEFAULT_MODEL
   prompt: string; // 提示词
   aspectRatio?: string; // 宽高比预设，如 '16:9', '9:16', 'auto' 等
@@ -208,4 +208,34 @@ export interface SuperResolutionParams extends VideoPostProcessParams {
   targetHeight: number; // 目标高度，范围768-2560像素
   originWidth: number; // 原始宽度
   originHeight: number; // 原始高度
+}
+
+/**
+ * 音效生成参数
+ */
+export interface AudioEffectGenerationParams extends VideoPostProcessParams {
+  // 继承基础参数，音效生成不需要额外特定参数
+}
+
+/**
+ * 统一视频后处理参数
+ */
+export interface VideoPostProcessUnifiedParams {
+  operation: 'frame_interpolation' | 'super_resolution' | 'audio_effect';
+  videoId: string; // 视频ID
+  originHistoryId: string; // 原始生成历史ID
+  refresh_token?: string; // 即梦API令牌（可选，通常从环境变量读取）
+  
+  // 帧插值参数（operation = 'frame_interpolation' 时使用）
+  targetFps?: 30 | 60; // 目标帧率：30或60fps
+  originFps?: number; // 原始帧率
+  
+  // 超分辨率参数（operation = 'super_resolution' 时使用）
+  targetWidth?: number; // 目标宽度，范围768-2560像素
+  targetHeight?: number; // 目标高度，范围768-2560像素
+  originWidth?: number; // 原始宽度
+  originHeight?: number; // 原始高度
+  
+  // 通用参数
+  duration?: number; // 视频时长（毫秒），可选
 }

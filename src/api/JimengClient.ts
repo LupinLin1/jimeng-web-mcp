@@ -11,6 +11,8 @@ import {
   VideoGenerationParams, 
   FrameInterpolationParams, 
   SuperResolutionParams,
+  AudioEffectGenerationParams,
+  VideoPostProcessUnifiedParams,
   DraftResponse,
   AigcMode,
   AbilityItem
@@ -90,19 +92,13 @@ export class JimengClient extends CreditService {
     let uploadResults: Array<{uri: string, width: number, height: number, format: string}> = [];
     
     if (params?.filePath) {
-      if (Array.isArray(params.filePath)) {
-        // 多文件上传 - 增强blend模式
-        console.log(`🔍 多文件上传模式，共${params.filePath.length}个文件`);
-        for (const filePath of params.filePath) {
-          const result = await this.uploadCoverFile(filePath);
-          uploadResults.push(result);
-        }
-        uploadResult = uploadResults[0]; // 兼容现有逻辑
-      } else {
-        // 单文件上传 - 传统模式
-        uploadResult = await this.uploadCoverFile(params.filePath);
-        uploadResults = [uploadResult];
+      // filePath 现在只支持数组格式
+      console.log(`🔍 文件上传模式，共${params.filePath.length}个文件`);
+      for (const filePath of params.filePath) {
+        const result = await this.uploadCoverFile(filePath);
+        uploadResults.push(result);
       }
+      uploadResult = uploadResults[0]; // 兼容现有逻辑
     }
     
     // 获取实际模型
@@ -165,7 +161,7 @@ export class JimengClient extends CreditService {
     
     // 传统轮询逻辑
     console.log('🔍 使用传统轮询逻辑');
-    return await this.pollTraditionalResult(result);
+    return await this.pollTraditionalResult(result, params, actualModel, modelName, hasFilePath, uploadResult, uploadResults);
   }
 
   // ============== 视频生成功能 ==============
@@ -204,7 +200,9 @@ export class JimengClient extends CreditService {
     modelName: string,
     hasFilePath: boolean,
     uploadResult: any,
-    uploadResults: any[]
+    uploadResults: any[],
+    historyId?: string,
+    isContinuation: boolean = false
   ) {
     // 生成组件ID
     const componentId = generateUuid();
@@ -232,7 +230,7 @@ export class JimengClient extends CreditService {
     const submitId = generateUuid();
     
     // 构建请求数据
-    const baseData = {
+    const baseData: any = {
       "extend": {
         "root_model": actualModel
       },
@@ -279,6 +277,12 @@ export class JimengClient extends CreditService {
       }
     };
 
+    // 如果是继续生成请求，添加特有字段
+    if (isContinuation && historyId) {
+      baseData.action = 2;
+      baseData.history_id = historyId;
+    }
+
     return { rqData: baseData, rqParams: this.generateRequestParams() };
   }
 
@@ -310,7 +314,7 @@ export class JimengClient extends CreditService {
           },
           "intelligent_ratio": false
         },
-        "ability_list": uploadResults.map(result => ({
+        "ability_list": uploadResults.map((result, index) => ({
           "type": "",
           "id": generateUuid(),
           "name": "byte_edit",
@@ -327,7 +331,7 @@ export class JimengClient extends CreditService {
             "format": result.format,
             "uri": result.uri
           }],
-          "strength": params.sample_strength || 0.5
+          "strength": this.getReferenceStrength(params, index)
         })),
         "prompt_placeholder_info_list": uploadResults.map((_, index) => ({
           "type": "",
@@ -348,6 +352,20 @@ export class JimengClient extends CreditService {
     }
 
     return blendData;
+  }
+
+  /**
+   * 获取指定索引参考图的强度值
+   * 优先级：reference_strength[index] > sample_strength > 默认值0.5
+   */
+  private getReferenceStrength(params: ImageGenerationParams, index: number): number {
+    // 如果提供了 reference_strength 数组且索引有效，使用数组中的值
+    if (params.reference_strength && params.reference_strength.length > index) {
+      return params.reference_strength[index];
+    }
+    
+    // 否则使用 sample_strength 或默认值
+    return params.sample_strength || 0.5;
   }
 
   /**
@@ -378,6 +396,68 @@ export class JimengClient extends CreditService {
         }
       }
     };
+  }
+
+  // ============== 继续生成相关方法 ==============
+  
+  /**
+   * 判断是否需要继续生成
+   * 简化逻辑：只有当total_image_count > 4时才需要继续生成
+   */
+  private shouldContinueGeneration(recordData: any): boolean {
+    if (!recordData) {
+      console.log('🔍 无recordData，停止继续生成');
+      return false;
+    }
+    
+    const totalCount = recordData.total_image_count || 0;
+    const needsContinuation = totalCount > 4;
+    
+    if (needsContinuation) {
+      console.log(`🔍 需要继续生成: 目标${totalCount}张(>4张)`);
+    } else {
+      console.log(`🔍 标准生成: 总数${totalCount}张(<=4张)，无需继续生成`);
+    }
+    
+    return needsContinuation;
+  }
+
+  /**
+   * 执行继续生成请求
+   * 只执行一次，不循环
+   */
+  private async performContinuationGeneration(
+    params: ImageGenerationParams,
+    actualModel: string,
+    modelName: string,
+    hasFilePath: boolean,
+    uploadResult: any,
+    uploadResults: any[],
+    historyId: string
+  ): Promise<void> {
+    console.log('🔍 开始执行继续生成请求...');
+    
+    // 构建继续生成请求数据
+    const { rqData, rqParams } = this.buildGenerationRequestData(
+      params, actualModel, modelName, hasFilePath, uploadResult, uploadResults, historyId, true
+    );
+
+    console.log('🔍 继续生成请求参数:', JSON.stringify({ 
+      action: rqData.action,
+      history_id: rqData.history_id,
+      requestedModel: modelName,
+      actualModel
+    }, null, 2));
+
+    // 发送继续生成请求
+    const result = await this.request(
+      'POST',
+      '/mweb/v1/aigc_draft/generate',
+      rqData,
+      rqParams
+    );
+
+    console.log('🔍 继续生成请求已发送，响应:', JSON.stringify(result, null, 2));
   }
 
   // ============== 轮询相关方法（简化版本） ==============
@@ -439,7 +519,7 @@ export class JimengClient extends CreditService {
     throw new Error('Draft轮询超时，未能获取结果');
   }
 
-  private async pollTraditionalResult(result: any): Promise<string[]> {
+  private async pollTraditionalResult(result: any, params?: ImageGenerationParams, actualModel?: string, modelName?: string, hasFilePath?: boolean, uploadResult?: any, uploadResults?: any[]): Promise<string[]> {
     console.log('🔍 开始传统轮询');
     console.log('🔍 初始响应:', JSON.stringify(result, null, 2));
     
@@ -456,25 +536,22 @@ export class JimengClient extends CreditService {
     // 轮询获取结果
     let status = 20;
     let failCode = null;
-    let itemList: any[] = [];
     let pollCount = 0;
-    const maxPollCount = 20; // 最多轮询20次
+    let continuationSent = false; // 标记是否已发送继续生成请求
+    const maxPollCount = 30; // 增加最大轮询次数以支持继续生成
 
     console.log('🔍 开始轮询，historyId:', historyId);
     
-    while ((status === 20 || status === 45 || status === 42) && pollCount < maxPollCount) {
+    while (pollCount < maxPollCount) {
       pollCount++;
       // 根据状态码调整等待时间
       let waitTime;
       if (status === 45) {
-        // status=45可能是排队或处理中，需要更长等待时间
-        waitTime = pollCount === 1 ? 30000 : 10000; // 第一次30秒，后续10秒
+        waitTime = pollCount === 1 ? 30000 : 10000;
       } else if (status === 42) {
-        // status=42可能是错误或特殊处理状态，适中的等待时间
-        waitTime = pollCount === 1 ? 15000 : 8000; // 第一次15秒，后续8秒
+        waitTime = pollCount === 1 ? 15000 : 8000;
       } else {
-        // status=20正常处理中
-        waitTime = pollCount === 1 ? 20000 : 5000; // 第一次20秒，后续5秒
+        waitTime = pollCount === 1 ? 20000 : 5000;
       }
       
       console.log(`🔍 轮询第 ${pollCount} 次，状态=${status}，等待 ${waitTime/1000} 秒...`);
@@ -519,7 +596,9 @@ export class JimengClient extends CreditService {
       status = record.status;
       failCode = record.fail_code;
 
-      console.log(`🔍 轮询状态: status=${status}, failCode=${failCode}, itemList长度=${record.item_list?.length || 0}`);
+      const finishedCount = record.finished_image_count || 0;
+      const totalCount = record.total_image_count || 0;
+      console.log(`🔍 轮询状态: status=${status}, failCode=${failCode}, itemList长度=${record.item_list?.length || 0}, finished_count=${finishedCount}, total_count=${totalCount}`);
 
       if (status === 30) {
         if (failCode === '2038') {
@@ -527,48 +606,51 @@ export class JimengClient extends CreditService {
         }
         throw new Error('生成失败');
       }
+
+      // 检查是否需要发送继续生成请求（只发送一次）
+      if (!continuationSent && params && actualModel && modelName !== undefined && hasFilePath !== undefined && this.shouldContinueGeneration(record)) {
+        console.log('🔍 检测到需要继续生成，发送继续生成请求');
+        try {
+          await this.performContinuationGeneration(params, actualModel, modelName, hasFilePath, uploadResult, uploadResults || [], historyId);
+          continuationSent = true;
+        } catch (error) {
+          console.error('🔍 继续生成请求失败:', error);
+        }
+      }
       
       // 检查是否完成
       if (record.item_list && record.item_list.length > 0) {
         const currentItemList = record.item_list as any[];
-        const finishedCount = record.finished_image_count || 0;
-        const totalCount = record.total_image_count || 0;
-        
-        console.log(`🔍 当前状态检查: item_list长度=${currentItemList.length}, finished_count=${finishedCount}, total_count=${totalCount}, status=${status}`);
         
         // 检测是否为视频生成
         const isVideoGeneration = finishedCount === 0 && totalCount === 0 && currentItemList.length > 0;
         
         if (isVideoGeneration) {
           console.log(`🔍 检测到视频生成模式: status=${status}, itemList长度=${currentItemList.length}`);
-        }
-        
-        // 判断是否完成
-        const isComplete = 
-          // 视频生成完成条件：status=50且有itemList项目
-          (isVideoGeneration && status === 50 && currentItemList.length > 0) ||
-          // 条件1: 达到了一个批次的大小（4张图片），且状态稳定
-          (currentItemList.length >= 4 && status !== 20 && status !== 45 && status !== 42) ||
-          // 条件2: finished_image_count达到了total_image_count（全部完成）
-          (totalCount > 0 && finishedCount >= totalCount) ||
-          // 条件3: 对于小批次（<=4张），等待所有状态指示完成
-          (totalCount > 0 && totalCount <= 4 && finishedCount >= totalCount && status !== 20);
-          
-        if (isComplete) {
-          console.log('🔍 传统轮询生成完成，返回结果');
-          return this.extractImageUrls(currentItemList);
+          if (status === 50 && currentItemList.length > 0) {
+            console.log('🔍 视频生成完成，返回结果');
+            return this.extractImageUrls(currentItemList);
+          }
+        } else {
+          // 图像生成逻辑：等待所有图片完成
+          if (totalCount > 0 && finishedCount >= totalCount) {
+            console.log('🔍 所有图片生成完成，返回结果');
+            return this.extractImageUrls(currentItemList);
+          } else if (totalCount <= 4 && currentItemList.length >= 4 && status !== 20 && status !== 45 && status !== 42) {
+            // 对于小批次（<=4张），达到批次大小且状态稳定时完成
+            console.log('🔍 小批次图片生成完成，返回结果');
+            return this.extractImageUrls(currentItemList);
+          }
         }
       }
       
-      // 如果状态不再是处理中，但也没有结果，可能需要继续轮询其他状态
-      if (status !== 20 && status !== 45) {
+      // 只在处理状态下继续轮询
+      if (status !== 20 && status !== 45 && status !== 42) {
         console.log(`🔍 遇到新状态 ${status}，继续轮询...`);
       }
     }
     
-    if (pollCount >= maxPollCount) {
-      console.log('🔍 轮询超时，返回空数组');
-    }
+    console.log('🔍 轮询超时，返回空数组');
     return [];
   }
 
@@ -1856,6 +1938,254 @@ export class JimengClient extends CreditService {
 
     console.log('🎨 分辨率提升完成:', videoUrl);
     return videoUrl || '';
+  }
+
+  /**
+   * 视频音效生成方法 - 为已生成的视频添加AI背景音效
+   */
+  public async generateAudioEffect(params: AudioEffectGenerationParams): Promise<string> {
+    console.log('🎵 开始视频音效生成处理...');
+    console.log(`📋 为视频 ${params.videoId} 生成音效`);
+    
+    // 检查积分
+    const creditInfo = await this.getCredit();
+    if (creditInfo.totalCredit <= 0) {
+      await this.receiveCredit();
+    }
+
+    // 生成基础参数
+    const submitId = generateUuid();
+    const modelKey = this.getModel('jimeng-video-multiframe'); 
+    const metricsExtra = JSON.stringify({
+      promptSource: "custom",
+      isDefaultSeed: 1,
+      originSubmitId: submitId,
+      enterFrom: "click",
+      isRegenerate: true
+    });
+
+    // 构建父组件ID和主组件ID
+    const parentComponentId = generateUuid();
+    const mainComponentId = generateUuid();
+
+    const draftContent = {
+      type: "draft",
+      id: generateUuid(),
+      min_version: "3.1.2",
+      min_features: [],
+      is_from_tsn: true,
+      version: "3.2.9",
+      main_component_id: mainComponentId,
+      component_list: [
+        // 父组件：video_base_component
+        {
+          type: "video_base_component",
+          id: parentComponentId,
+          min_version: "1.0.0",
+          aigc_mode: "workbench",
+          gen_type: 10,
+          metadata: {
+            type: "",
+            id: generateUuid(),
+            created_platform: 3,
+            created_platform_version: "",
+            created_time_in_ms: Date.now().toString(),
+            created_did: ""
+          },
+          generate_type: "gen_video",
+          abilities: {
+            type: "",
+            id: generateUuid(),
+            gen_video: {
+              type: "",
+              id: generateUuid(),
+              text_to_video_params: {
+                type: "",
+                id: generateUuid(),
+                video_gen_inputs: [{
+                  type: "",
+                  id: generateUuid(),
+                  min_version: "3.0.5",
+                  prompt: "测试多参考图功能",
+                  first_frame_image: {
+                    type: "image",
+                    id: generateUuid(),
+                    source_from: "upload",
+                    platform_type: 1,
+                    name: "",
+                    image_uri: "tos-cn-i-tb4s082cfz/25f77f2bcaf64b6786562c4e168ac310",
+                    width: 1728,
+                    height: 2304,
+                    format: "png",
+                    uri: "tos-cn-i-tb4s082cfz/25f77f2bcaf64b6786562c4e168ac310"
+                  },
+                  end_frame_image: {
+                    type: "image", 
+                    id: generateUuid(),
+                    source_from: "upload",
+                    platform_type: 1,
+                    name: "",
+                    image_uri: "tos-cn-i-tb4s082cfz/0ff0b4ce831444738d8a0add5b53e4b4",
+                    width: 1728,
+                    height: 2304,
+                    format: "png",
+                    uri: "tos-cn-i-tb4s082cfz/0ff0b4ce831444738d8a0add5b53e4b4"
+                  },
+                  video_mode: 2,
+                  fps: 24,
+                  duration_ms: 5000,
+                  resolution: "720p"
+                }],
+                video_aspect_ratio: "1:1",
+                seed: Math.floor(Math.random() * 100000000) + 2500000000,
+                model_req_key: modelKey,
+                priority: 0
+              },
+              video_task_extra: metricsExtra
+            }
+          }
+        },
+        // 主组件：音效生成组件
+        {
+          type: "video_base_component",
+          id: mainComponentId,
+          min_version: "1.0.0",
+          parent_id: parentComponentId,
+          aigc_mode: "workbench",
+          metadata: {
+            type: "",
+            id: generateUuid(),
+            created_platform: 3,
+            created_platform_version: "",
+            created_time_in_ms: Date.now().toString(),
+            created_did: ""
+          },
+          generate_type: "video_audio_effect",
+          abilities: {
+            type: "",
+            id: generateUuid(),
+            video_audio_effect: {
+              type: "",
+              id: generateUuid(),
+              min_version: "3.1.2",
+              origin_history_id: parseInt(params.originHistoryId),
+              origin_item_id: parseInt(params.videoId.replace('v', '')),
+              video_ref_params: {
+                type: "",
+                id: generateUuid(),
+                generate_type: 0,
+                item_id: parseInt(params.videoId.replace('v', '')),
+                origin_history_id: parseInt(params.originHistoryId)
+              },
+              video_resource: {
+                type: "video",
+                id: generateUuid(),
+                source_from: "upload",
+                name: "",
+                vid: params.videoId,
+                fps: 0,
+                width: 832,
+                height: 1120,
+                duration: 5000,
+                cover_image_url: ""
+              }
+            }
+          },
+          process_type: 12
+        }
+      ]
+    };
+
+    const requestData = {
+      extend: {
+        root_model: modelKey,
+        m_video_commerce_info: {
+          benefit_type: "video_audio_effect_generation",
+          resource_id: "generate_video",
+          resource_id_type: "str",
+          resource_sub_type: "aigc"
+        },
+        m_video_commerce_info_list: [{
+          benefit_type: "video_audio_effect_generation",
+          resource_id: "generate_video",
+          resource_id_type: "str",
+          resource_sub_type: "aigc"
+        }]
+      },
+      submit_id: submitId,
+      metrics_extra: metricsExtra,
+      draft_content: JSON.stringify(draftContent),
+      http_common_info: { aid: 513695 }
+    };
+
+    // 构建请求参数
+    const rqParams: any = this.generateRequestParams();
+
+    // 发送音效生成请求
+    const result = await this.request(
+      'POST',
+      '/mweb/v1/aigc_draft/generate',
+      requestData,
+      rqParams
+    );
+
+    console.log('🔍 开始轮询音效生成结果...');
+    const imageUrls = await this.pollTraditionalResult(result);
+    
+    // 提取视频URL
+    let videoUrl;
+    if (imageUrls && imageUrls.length > 0) {
+      videoUrl = imageUrls[0];
+    }
+
+    console.log('🎵 音效生成完成:', videoUrl);
+    return videoUrl || '';
+  }
+
+  /**
+   * 统一视频后处理方法 - 整合补帧、分辨率提升和音效生成
+   */
+  public async videoPostProcess(params: VideoPostProcessUnifiedParams): Promise<string> {
+    console.log(`🎬 开始视频后处理: ${params.operation}`);
+    
+    switch (params.operation) {
+      case 'frame_interpolation':
+        if (!params.targetFps || !params.originFps) {
+          throw new Error('补帧操作需要提供 targetFps 和 originFps 参数');
+        }
+        return await this.frameInterpolation({
+          videoId: params.videoId,
+          originHistoryId: params.originHistoryId,
+          targetFps: params.targetFps,
+          originFps: params.originFps,
+          duration: params.duration,
+          refresh_token: params.refresh_token
+        });
+      
+      case 'super_resolution':
+        if (!params.targetWidth || !params.targetHeight || !params.originWidth || !params.originHeight) {
+          throw new Error('分辨率提升操作需要提供 targetWidth, targetHeight, originWidth, originHeight 参数');
+        }
+        return await this.superResolution({
+          videoId: params.videoId,
+          originHistoryId: params.originHistoryId,
+          targetWidth: params.targetWidth,
+          targetHeight: params.targetHeight,
+          originWidth: params.originWidth,
+          originHeight: params.originHeight,
+          refresh_token: params.refresh_token
+        });
+      
+      case 'audio_effect':
+        return await this.generateAudioEffect({
+          videoId: params.videoId,
+          originHistoryId: params.originHistoryId,
+          refresh_token: params.refresh_token
+        });
+      
+      default:
+        throw new Error(`不支持的操作类型: ${params.operation}`);
+    }
   }
 
   // ============== 请求日志功能 ==============

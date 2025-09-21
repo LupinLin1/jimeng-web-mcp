@@ -29,6 +29,8 @@ import {
   VideoGenerationParams, 
   FrameInterpolationParams, 
   SuperResolutionParams,
+  AudioEffectGenerationParams,
+  VideoPostProcessUnifiedParams,
   LogoInfo 
 } from './types/api.types.js';
 
@@ -50,7 +52,7 @@ const getApiClient = (token?: string): JimengClient => {
  */
 export const generateImage = (params: ImageGenerationParams): Promise<string[]> => {
   console.log('🔍 [重构后API] generateImage 被调用');
-  console.log('🔍 [参数] 文件数量:', Array.isArray(params?.filePath) ? params.filePath.length : (params?.filePath ? 1 : 0));
+  console.log('🔍 [参数] 文件数量:', params?.filePath ? params.filePath.length : 0);
   console.log('🔍 [参数] 模型:', params.model || 'jimeng-4.0 (默认)');
 
   if (!params.refresh_token) {
@@ -89,25 +91,56 @@ export const generateVideo = (params: VideoGenerationParams): Promise<string> =>
     });
 };
 
-/**
- * 帧插值后处理 - 功能开发中
- * 📝 注意：此功能需要从原始文件中继续提取实现
- */
-export const frameInterpolation = (params: FrameInterpolationParams): Promise<string> => {
-  console.log('🔍 [重构后API] frameInterpolation 被调用');
-  console.warn('⚠️ 帧插值功能正在重构中');
-  throw new Error('帧插值功能正在重构中，请暂时使用 api-original-backup.ts 中的原始实现');
-};
+// ============== 后处理功能 ==============
 
-/**
- * 超分辨率后处理 - 功能开发中
- * 📝 注意：此功能需要从原始文件中继续提取实现
- */
-export const superResolution = (params: SuperResolutionParams): Promise<string> => {
+export async function frameInterpolation(params: FrameInterpolationParams): Promise<string> {
+  console.log('🔍 [重构后API] frameInterpolation 被调用');
+  
+  const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+  
+  const client = new JimengClient(token);
+  return await client.frameInterpolation(params);
+}
+
+export async function superResolution(params: SuperResolutionParams): Promise<string> {
   console.log('🔍 [重构后API] superResolution 被调用');
-  console.warn('⚠️ 超分辨率功能正在重构中');
-  throw new Error('超分辨率功能正在重构中，请暂时使用 api-original-backup.ts 中的原始实现');
-};
+  
+  const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+  
+  const client = new JimengClient(token);
+  return await client.superResolution(params);
+}
+
+export async function generateAudioEffect(params: AudioEffectGenerationParams): Promise<string> {
+  console.log('🔍 [重构后API] generateAudioEffect 被调用');
+  
+  const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+  
+  const client = new JimengClient(token);
+  return await client.generateAudioEffect(params);
+}
+
+export async function videoPostProcess(params: VideoPostProcessUnifiedParams): Promise<string> {
+  console.log('🔍 [重构后API] videoPostProcess 被调用');
+  console.log('🔍 [参数] 操作类型:', params.operation);
+  
+  const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+  
+  const client = new JimengClient(token);
+  return await client.videoPostProcess(params);
+}
 
 // ============== 类型导出（保持兼容性） ==============
 export type { 
@@ -115,6 +148,8 @@ export type {
   VideoGenerationParams, 
   FrameInterpolationParams, 
   SuperResolutionParams,
+  AudioEffectGenerationParams,
+  VideoPostProcessUnifiedParams,
   LogoInfo 
 };
 
