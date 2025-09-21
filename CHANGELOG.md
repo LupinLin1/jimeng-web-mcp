@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0] - 2025-01-21
+
+### Added
+- **Continue Generation Feature**: Automatically triggers when generating more than 4 images
+  - Detects when `total_image_count > 4` and sends continuation request
+  - Single execution to avoid duplicate requests
+  - Waits for all images to complete before returning results
+  - Seamless user experience with no additional configuration
+- **MCPHub Support**: Added comprehensive MCPHub configuration
+  - Complete tool definitions with input schemas
+  - Resource descriptions and environment setup
+  - Feature highlights and installation instructions
+- **Enhanced Documentation**: 
+  - Added MCPHub installation as recommended method
+  - Detailed continue generation examples and usage
+  - Updated feature list with new capabilities
+  - Improved API parameter descriptions
+
+### Changed
+- Updated `generateImage` API to support continue generation workflow
+- Enhanced `pollTraditionalResult` method with continuation logic
+- Improved error handling and status checking
+- Updated default model to `jimeng-4.0` with better performance
+
+### Fixed
+- Resolved TypeScript compilation issues in continuation logic
+- Fixed module import paths in test files
+- Improved request data construction for continuation requests
+
+### Technical
+- Added `shouldContinueGeneration()` method for smart detection
+- Added `performContinuationGeneration()` method for execution
+- Integrated continuation logic into existing polling workflow
+- Maintained 100% backward compatibility with existing API
+
 ## [1.9.0](https://github.com/c-rick/jimeng-mcp/compare/v1.8.0...v1.9.0) (2025-07-16)
 
 
