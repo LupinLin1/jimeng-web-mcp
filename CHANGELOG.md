@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0] - 2025-01-25
+
+### 🔧 Major Fixes
+- **Fixed MCP Connection Issues**: Resolved emoji characters causing JSON parsing errors in MCP protocol communication
+- **Fixed Server Entry Point**: Fixed CommonJS module main entry detection logic ensuring proper server startup
+- **Fixed Polling Result Extraction**: Fixed critical result extraction logic bug that caused "图像生成失败：未能获取图像URL" errors
+- **Enhanced Continue Generation**: Optimized continue generation logic for better success rate with 7+ image generation
+
+### 📚 Project Improvements
+- **Enhanced Documentation**: Comprehensive CLAUDE.md with detailed architecture documentation and development guidelines
+- **Task Master Integration**: Added Task Master AI integration support for better project workflow
+- **Updated MCP Configuration**: Support for both local development and global deployment scenarios
+- **Code Cleanup**: Removed temporary files and debug code, maintaining clean project structure
+
+### ✅ Testing & Verification
+- **Batch Image Generation**: Successfully tested generating 7 weekly motivational posters
+- **MCP Server Health**: Verified MCP server connection status shows ✓ Connected
+- **Global Installation**: Confirmed global installation and registration functionality works correctly
+
+### 🏗️ Technical Changes
+- Enhanced polling mechanisms with better error handling and timeout management
+- Improved logging system with structured log formats for better debugging
+- Added comprehensive async test suite for API integration testing
+- Updated build configuration for dual CJS/ESM output support
+
 ## [1.10.0] - 2025-01-21
 
 ### Added
