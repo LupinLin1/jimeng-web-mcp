@@ -16,8 +16,6 @@ export const imageGenerationSchema = z.object({
 export const videoGenerationSchema = z.object({
   prompt: z.string().min(1, 'Prompt is required'),
   model: z.string().optional(),
-  width: z.number().positive().optional(),
-  height: z.number().positive().optional(),
   fps: z.number().min(12).max(30).optional(),
   duration_ms: z.number().min(3000).max(15000).optional(),
   resolution: z.string().optional(),

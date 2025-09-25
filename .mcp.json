@@ -2,7 +2,7 @@
   "mcpServers": {
     "jimeng-web-mcp": {
       "command": "node",
-      "args": ["lib/server.cjs"],
+      "args": ["-r", "dotenv/config", "lib/index.js"],
       "env": {
         "JIMENG_API_TOKEN": "165fe506411b95d771e619b7d509bb28"
       }

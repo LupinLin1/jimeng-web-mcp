@@ -170,8 +170,6 @@ export interface VideoGenerationParams {
   
   // 传统模式参数
   resolution?: string; // 分辨率，可选720p或1080p，默认720p
-  width?: number; // 视频宽度，范围512-2560，默认1024
-  height?: number; // 视频高度，范围512-2560，默认1024
   
   // 多帧模式参数
   multiFrames?: MultiFrameConfig[]; // 智能多帧配置，支持多个关键帧（最多10帧）
