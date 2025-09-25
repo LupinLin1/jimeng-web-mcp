@@ -480,7 +480,7 @@ export const createServer = (): McpServer => {
 export const startServer = async (): Promise<void> => {
   const server = createServer();
   const transport = new StdioServerTransport();
-  
+
   logger.debug("Jimeng MCP Server 正在启动...");
   logger.debug("stdin.isTTY:", process.stdin.isTTY);
   logger.debug("stdout.isTTY:", process.stdout.isTTY);
@@ -490,4 +490,42 @@ export const startServer = async (): Promise<void> => {
   
   // 正常情况下，只有在连接关闭时才会执行到这里
   logger.debug("MCP服务器连接已关闭");
-}; 
+};
+
+// 如果直接运行此文件，则启动服务器
+// 使用可靠的文件名检测，支持ESM和CommonJS环境
+const isMainModule = (() => {
+  try {
+    // 优先使用文件名检查 - 在所有环境中都可靠工作
+    const scriptPath = process.argv[1];
+    if (scriptPath && (
+      scriptPath.endsWith('server.cjs') ||
+      scriptPath.endsWith('server.js') ||
+      scriptPath.endsWith('server.ts')
+    )) {
+      return true;
+    }
+
+    // 备用：检查require.main（在某些环境中可能不可靠）
+    if (typeof require !== 'undefined' && require.main === module) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    // 错误时只依赖文件名检查
+    const scriptPath = process.argv[1];
+    return scriptPath && (
+      scriptPath.endsWith('server.cjs') ||
+      scriptPath.endsWith('server.js') ||
+      scriptPath.endsWith('server.ts')
+    );
+  }
+})();
+
+if (isMainModule) {
+  startServer().catch((error) => {
+    logger.error("启动MCP服务器失败:", error);
+    process.exit(1);
+  });
+} 

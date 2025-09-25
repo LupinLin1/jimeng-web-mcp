@@ -69,8 +69,8 @@ export class JimengClient extends CreditService {
    * 即梦AI图像生成（支持批量生成和多参考图）
    */
   public async generateImage(params: ImageGenerationParams): Promise<string[]> {
-    console.log('🔍 [API Client] generateImage method called');
-    console.log('🔍 [API Client] Token in this instance:', this.refreshToken ? '[PROVIDED]' : '[MISSING]');
+    console.log('[DEBUG] [API Client] generateImage method called');
+    console.log('[DEBUG] [API Client] Token in this instance:', this.refreshToken ? '[PROVIDED]' : '[MISSING]');
     
     return await this.generateImageWithBatch(params);
   }
@@ -79,7 +79,7 @@ export class JimengClient extends CreditService {
    * 批量生成图像，支持自动继续生成和多参考图
    */
   private async generateImageWithBatch(params: ImageGenerationParams): Promise<string[]> {
-    console.log('🔍 [API Client] generateImageWithBatch called');
+    console.log('[DEBUG] [API Client] generateImageWithBatch called');
     
     // 参数验证
     if (!params.prompt || typeof params.prompt !== 'string') {
@@ -93,7 +93,7 @@ export class JimengClient extends CreditService {
     
     if (params?.filePath) {
       // filePath 现在只支持数组格式
-      console.log(`🔍 文件上传模式，共${params.filePath.length}个文件`);
+      console.log(`[DEBUG] 文件上传模式，共${params.filePath.length}个文件`);
       for (const filePath of params.filePath) {
         const result = await this.uploadCoverFile(filePath);
         uploadResults.push(result);
@@ -134,8 +134,8 @@ export class JimengClient extends CreditService {
       params, actualModel, modelName, hasFilePath, uploadResult, uploadResults
     );
     
-    console.log('🔍 发送的请求数据:', JSON.stringify(rqData, null, 2));
-    console.log('🔍 发送的请求参数:', JSON.stringify(rqParams, null, 2));
+    console.log('[DEBUG] 发送的请求数据:', JSON.stringify(rqData, null, 2));
+    console.log('[DEBUG] 发送的请求参数:', JSON.stringify(rqParams, null, 2));
     
     // 保存请求日志到文件
     this.saveRequestLog({
@@ -154,13 +154,13 @@ export class JimengClient extends CreditService {
     // 检查是否为Draft-based响应（新AIGC模式）
     const draftId = result?.data?.draft_id || result?.data?.aigc_data?.draft_id;
     if (draftId) {
-      console.log('🔍 检测到Draft-based响应，使用新轮询逻辑');
+      console.log('[DEBUG] 检测到Draft-based响应，使用新轮询逻辑');
       const draftResponse = await this.pollDraftResult(draftId);
       return this.extractImageUrlsFromDraft(draftResponse);
     }
     
     // 传统轮询逻辑
-    console.log('🔍 使用传统轮询逻辑');
+    console.log('[DEBUG] 使用传统轮询逻辑');
     return await this.pollTraditionalResult(result, params, actualModel, modelName, hasFilePath, uploadResult, uploadResults);
   }
 
@@ -402,24 +402,27 @@ export class JimengClient extends CreditService {
   
   /**
    * 判断是否需要继续生成
-   * 简化逻辑：只有当total_image_count > 4时才需要继续生成
+   * 新逻辑：等待首批图片开始完成后再发送继续生成请求
    */
-  private shouldContinueGeneration(recordData: any): boolean {
-    if (!recordData) {
-      console.log('🔍 无recordData，停止继续生成');
+  private shouldContinueGeneration(totalCount: number, finishedCount: number, currentStatus: number): boolean {
+    console.log(`[DEBUG] [继续生成检查] 接收参数: totalCount=${totalCount}, finishedCount=${finishedCount}, status=${currentStatus}`);
+
+    // 基本条件：需要超过4张图片
+    if (totalCount <= 4) {
+      console.log(`[DEBUG] 标准生成: 总数${totalCount}张(<=4张)，无需继续生成`);
       return false;
     }
-    
-    const totalCount = recordData.total_image_count || 0;
-    const needsContinuation = totalCount > 4;
-    
-    if (needsContinuation) {
-      console.log(`🔍 需要继续生成: 目标${totalCount}张(>4张)`);
+
+    // 精确条件：只有当已完成数量恰好等于4张时发送继续生成请求
+    const readyForContinuation = finishedCount === 4;
+
+    if (readyForContinuation) {
+      console.log(`[DEBUG] 需要继续生成: 目标${totalCount}张，已完成${finishedCount}张，精确时机到达`);
+      return true;
     } else {
-      console.log(`🔍 标准生成: 总数${totalCount}张(<=4张)，无需继续生成`);
+      console.log(`[DEBUG] 等待继续生成条件: 目标${totalCount}张，已完成${finishedCount}张，等待完成4张`);
+      return false;
     }
-    
-    return needsContinuation;
   }
 
   /**
@@ -435,14 +438,14 @@ export class JimengClient extends CreditService {
     uploadResults: any[],
     historyId: string
   ): Promise<void> {
-    console.log('🔍 开始执行继续生成请求...');
+    console.log('[DEBUG] 开始执行继续生成请求...');
     
     // 构建继续生成请求数据
     const { rqData, rqParams } = this.buildGenerationRequestData(
       params, actualModel, modelName, hasFilePath, uploadResult, uploadResults, historyId, true
     );
 
-    console.log('🔍 继续生成请求参数:', JSON.stringify({ 
+    console.log('[DEBUG] 继续生成请求参数:', JSON.stringify({ 
       action: rqData.action,
       history_id: rqData.history_id,
       requestedModel: modelName,
@@ -457,7 +460,135 @@ export class JimengClient extends CreditService {
       rqParams
     );
 
-    console.log('🔍 继续生成请求已发送，响应:', JSON.stringify(result, null, 2));
+    console.log('[DEBUG] 继续生成请求已发送，响应:', JSON.stringify(result, null, 2));
+  }
+
+  // ============== 轮询日志格式化函数 ==============
+
+  /**
+   * 格式化轮询开始日志
+   */
+  private logPollStart(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, maxPollCount: number,
+                      status: number | string, waitTime: number, elapsedTotal: number,
+                      networkErrorCount: number, maxNetworkErrors: number, id: string): void {
+    console.log(`[${type}-START] Poll=${pollCount}/${maxPollCount}, Status=${status}, Wait=${waitTime/1000}s, Elapsed=${elapsedTotal}s, NetErr=${networkErrorCount}/${maxNetworkErrors}, ID=${id}`);
+  }
+
+  /**
+   * 格式化轮询数据日志
+   */
+  private logPollData(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, apiCallDuration: number,
+                     status: number | string, prevStatus?: number | string, failCode?: string,
+                     finishedCount?: number, totalCount?: number, itemListLength?: number,
+                     progress?: string, errorMessage?: string): void {
+
+    let message = `[DATA] [${type}-DATA] 轮询=${pollCount}, API耗时=${apiCallDuration}ms`;
+
+    if (prevStatus !== undefined) {
+      message += `, 状态变化=${prevStatus}→${status}`;
+    } else {
+      message += `, 状态=${status}`;
+    }
+
+    message += `, 失败码=${failCode || 'null'}`;
+
+    if (finishedCount !== undefined && totalCount !== undefined) {
+      message += `, 完成度=${finishedCount}/${totalCount}`;
+    }
+
+    if (itemListLength !== undefined) {
+      message += `, 结果数=${itemListLength}`;
+    }
+
+    if (progress !== undefined) {
+      message += `, 进度=${progress}`;
+    }
+
+    if (errorMessage !== undefined) {
+      message += `, 错误=${errorMessage}`;
+    }
+
+    console.log(message);
+  }
+
+  /**
+   * 格式化轮询错误日志
+   */
+  private logPollError(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, networkErrorCount: number,
+                      maxNetworkErrors: number, errorDuration: number, error: any): void {
+    console.error(`[${type}-ERROR] Poll=${pollCount}, NetErr=${networkErrorCount}/${maxNetworkErrors}, Duration=${errorDuration}ms, Error=${error}`);
+  }
+
+  /**
+   * 格式化轮询状态检查日志
+   */
+  private logPollStatusCheck(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number,
+                           isCompletionState: boolean, isProcessingState: boolean,
+                           currentStatus: number | string, hasResults?: boolean, resultCount?: number): void {
+
+    let message = `[DATA] [${type}-STATUS] 轮询=${pollCount}, 状态检查={完成状态:${isCompletionState}, 处理中:${isProcessingState}, 当前状态:${currentStatus}`;
+
+    if (hasResults !== undefined) {
+      message += `, 有结果:${hasResults}`;
+    }
+
+    if (resultCount !== undefined) {
+      message += `, 结果数:${resultCount}`;
+    }
+
+    message += '}';
+    console.log(message);
+  }
+
+  /**
+   * 格式化轮询进度日志
+   */
+  private logPollProgress(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, maxPollCount: number,
+                         status: number | string, elapsedTime: number, networkErrorCount: number,
+                         finishedCount?: number, totalCount?: number, progress?: string): void {
+
+    let message = `[DATA] [${type}-PROGRESS] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 已用时=${elapsedTime}s, 网络错误=${networkErrorCount}`;
+
+    if (finishedCount !== undefined && totalCount !== undefined) {
+      message += `, 完成度=${finishedCount}/${totalCount}`;
+    }
+
+    if (progress !== undefined) {
+      message += `, 进度=${progress}`;
+    }
+
+    console.log(message);
+  }
+
+  /**
+   * 格式化轮询结束日志
+   */
+  private logPollEnd(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, maxPollCount: number,
+                    status: number | string, totalElapsedSec: number, networkErrorCount: number,
+                    id: string, timeoutReason?: 'MAX_POLLS' | 'OVERALL_TIMEOUT' | 'UNKNOWN'): void {
+
+    console.log(`[END] [${type}-END] 轮询结束, 总轮询=${pollCount}/${maxPollCount}, 最终状态=${status}, 总耗时=${totalElapsedSec}s, 网络错误=${networkErrorCount}, ID=${id}`);
+
+    // 记录超时原因
+    if (timeoutReason === 'MAX_POLLS') {
+      console.warn(`[TIMEOUT] [${type}-TIMEOUT] 达到最大轮询次数限制, 轮询超时`);
+    } else if (timeoutReason === 'OVERALL_TIMEOUT') {
+      console.warn(`[TIMEOUT] [${type}-TIMEOUT] 达到总体时间限制, 轮询超时`);
+    } else if (timeoutReason === 'UNKNOWN') {
+      console.warn(`[UNKNOWN] [${type}-UNKNOWN] 未知原因导致轮询结束`);
+    }
+  }
+
+  /**
+   * 格式化轮询完成日志
+   */
+  private logPollComplete(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, status: number | string,
+                         resultCount: number, completionType?: 'SUCCESS' | 'FAIL'): void {
+    if (completionType === 'FAIL') {
+      console.error(`[ERROR] [${type}-FAIL] 轮询=${pollCount}, 生成失败, 状态=${status}`);
+    } else {
+      console.log(`[SUCCESS] [${type}-COMPLETE] 轮询=${pollCount}, 生成完成, 状态=${status}, 返回${resultCount}个结果`);
+    }
   }
 
   // ============== 轮询相关方法（简化版本） ==============
@@ -465,14 +596,30 @@ export class JimengClient extends CreditService {
   private async pollDraftResult(draftId: string): Promise<DraftResponse> {
     let pollCount = 0;
     const maxPollCount = 30; // 最多轮询30次，约5分钟
+    let networkErrorCount = 0; // 🛡️ 网络错误计数器
+    const maxNetworkErrors = 3; // 🛡️ 最大网络错误重试次数
     
-    console.log('🔍 开始Draft轮询，draftId:', draftId);
+    // 🛡️ 安全防护：设置总体超时
+    const overallStartTime = Date.now();
+    const overallTimeoutMs = 300000; // 5分钟总体超时
+    
+    console.log('[DEBUG] 开始Draft轮询，draftId:', draftId);
     
     while (pollCount < maxPollCount) {
-      pollCount++;
-      const waitTime = pollCount === 1 ? 10000 : 3000; // 首次10秒，后续3秒
+      // 🛡️ 安全防护：检查总体超时
+      if (Date.now() - overallStartTime > overallTimeoutMs) {
+        console.error('[FATAL] Draft轮询总体超时，强制终止');
+        break;
+      }
       
-      console.log(`🔍 Draft轮询第 ${pollCount} 次，等待 ${waitTime/1000} 秒...`);
+      pollCount++;
+      const waitTime = pollCount === 1 ? 5000 : 3000; // 首次5秒，后续3秒
+
+      // [DATA] Draft轮询日志 - 轮询开始
+      const pollStartTime = Date.now();
+      const elapsedTotal = Math.round((pollStartTime - overallStartTime) / 1000);
+      console.log(`[DATA] [DRAFT-START] 轮询=${pollCount}/${maxPollCount}, 等待=${waitTime/1000}s, 总耗时=${elapsedTotal}s, 网络错误=${networkErrorCount}/${maxNetworkErrors}, Draft ID=${draftId}`);
+
       await new Promise(resolve => setTimeout(resolve, waitTime));
 
       try {
@@ -486,6 +633,13 @@ export class JimengClient extends CreditService {
           }
         );
 
+        // [DATA] Draft轮询日志 - API响应处理
+        const apiResponseTime = Date.now();
+        const apiCallDuration = apiResponseTime - pollStartTime;
+
+        // 🛡️ 安全防护：网络请求成功，重置网络错误计数器
+        networkErrorCount = 0;
+
         if (result?.data) {
           const draftResponse: DraftResponse = {
             draft_id: draftId,
@@ -497,31 +651,82 @@ export class JimengClient extends CreditService {
             updated_at: result.data.updated_at || Date.now()
           };
 
-          console.log(`🔍 Draft状态: ${draftResponse.status}, 组件数量: ${draftResponse.component_list.length}`);
+          // [DATA] Draft轮询日志 - 状态数据详情
+          console.log(`[DATA] [DRAFT-DATA] 轮询=${pollCount}, API耗时=${apiCallDuration}ms, 状态=${draftResponse.status}, 组件数=${draftResponse.component_list.length}, 进度=${draftResponse.progress || 'N/A'}, 错误=${draftResponse.error_message || 'N/A'}`);
+
+          // [DATA] Draft轮询日志 - 状态验证
+          const knownStatuses = new Set(['processing', 'completed', 'failed', 'pending', 'success', 'error']);
+          const isKnownStatus = knownStatuses.has(draftResponse.status);
+          const isCompleted = draftResponse.status === 'completed' || draftResponse.status === 'success';
+          const isFailed = draftResponse.status === 'failed' || draftResponse.status === 'error';
+
+          console.log(`[DATA] [DRAFT-CHECK] 轮询=${pollCount}, 状态验证={已知状态:${isKnownStatus}, 已完成:${isCompleted}, 已失败:${isFailed}}`);
+
+          // 🛡️ 安全防护：检查状态有效性（放宽状态检查）
+          if (!isKnownStatus) {
+            console.warn(`[WARN] [DRAFT-WARN] 轮询=${pollCount}, 未知Draft状态=${draftResponse.status}, 继续轮询`);
+            // 不要break，继续轮询以适应可能的新状态
+          }
 
           // 检查是否完成
-          if (draftResponse.status === 'completed') {
-            console.log('✅ Draft生成完成');
+          if (isCompleted) {
+            console.log(`[SUCCESS] [DRAFT-COMPLETE] 轮询=${pollCount}, Draft生成完成, 状态=${draftResponse.status}, 组件数=${draftResponse.component_list.length}`);
             return draftResponse;
-          } else if (draftResponse.status === 'failed') {
+          } else if (isFailed) {
+            console.error(`[ERROR] [DRAFT-FAIL] 轮询=${pollCount}, Draft生成失败, 状态=${draftResponse.status}, 错误=${draftResponse.error_message || 'N/A'}`);
             throw new Error(draftResponse.error_message || 'Draft生成失败');
+          }
+
+          // [DATA] Draft轮询日志 - 进度报告
+          if (pollCount % 5 === 0) {
+            const currentElapsed = Math.round((Date.now() - overallStartTime) / 1000);
+            console.log(`[DATA] [DRAFT-PROGRESS] 轮询=${pollCount}/${maxPollCount}, 状态=${draftResponse.status}, 已用时=${currentElapsed}s, 进度=${draftResponse.progress || 'N/A'}, 网络错误=${networkErrorCount}`);
           }
         }
       } catch (error) {
-        console.error(`❌ Draft轮询错误:`, error);
-        // 如果是网络错误，继续重试
+        // [DATA] Draft轮询日志 - 错误处理
+        const errorTime = Date.now();
+        const errorDuration = errorTime - pollStartTime;
+        networkErrorCount++;
+
+        console.error(`[ERROR] [DRAFT-ERROR] 轮询=${pollCount}, 网络错误=${networkErrorCount}/${maxNetworkErrors}, API耗时=${errorDuration}ms, 错误=${error}`);
+
+        if (networkErrorCount >= maxNetworkErrors) {
+          console.error(`[FATAL] [DRAFT-FATAL] 轮询=${pollCount}, 网络错误超过最大重试次数, 终止轮询`);
+          throw new Error(`Draft轮询网络错误超过最大重试次数: ${error}`);
+        }
+
+        // 🛡️ 安全防护：网络错误也要增加轮询计数，避免无限重试
         if (pollCount >= maxPollCount) {
+          console.error(`[FATAL] [DRAFT-TIMEOUT] 轮询=${pollCount}, 达到最大轮询次数, 网络错误导致轮询超时`);
           throw new Error(`Draft轮询超时: ${error}`);
         }
+
+        console.log(`[RETRY] [DRAFT-RETRY] 轮询=${pollCount}, 网络错误重试, 继续轮询`);
+        continue;
       }
     }
     
+    // [DATA] Draft轮询日志 - 结束统计
+    const elapsedTime = Date.now() - overallStartTime;
+    const finalElapsedSec = Math.round(elapsedTime / 1000);
+    console.log(`[END] [DRAFT-END] 轮询结束, 总轮询=${pollCount}/${maxPollCount}, 总耗时=${finalElapsedSec}s, 网络错误=${networkErrorCount}, Draft ID=${draftId}`);
+
+    // 判断结束原因
+    if (pollCount >= maxPollCount) {
+      console.warn(`[TIMEOUT] [DRAFT-TIMEOUT] 达到最大轮询次数限制, Draft轮询超时`);
+    } else if (Date.now() - overallStartTime > overallTimeoutMs) {
+      console.warn(`[TIMEOUT] [DRAFT-TIMEOUT] 达到总体时间限制, Draft轮询超时`);
+    } else {
+      console.warn(`[UNKNOWN] [DRAFT-UNKNOWN] 未知原因导致Draft轮询结束`);
+    }
+
     throw new Error('Draft轮询超时，未能获取结果');
   }
 
   private async pollTraditionalResult(result: any, params?: ImageGenerationParams, actualModel?: string, modelName?: string, hasFilePath?: boolean, uploadResult?: any, uploadResults?: any[]): Promise<string[]> {
-    console.log('🔍 开始传统轮询');
-    console.log('🔍 初始响应:', JSON.stringify(result, null, 2));
+    console.log('[DEBUG] 开始传统轮询');
+    console.log('[DEBUG] 初始响应:', JSON.stringify(result, null, 2));
     
     // 获取历史记录ID
     const historyId = result?.data?.aigc_data?.history_record_id;
@@ -533,17 +738,38 @@ export class JimengClient extends CreditService {
       }
     }
 
+    // 🛡️ 安全防护：定义已知状态码集合
+    const PROCESSING_STATES = new Set([20, 42, 45]); // 处理中状态
+    const KNOWN_STATES = new Set([20, 30, 42, 45, 50]); // 所有已知状态
+    const COMPLETION_STATES = new Set([30, 50]); // 完成或失败状态
+
     // 轮询获取结果
     let status = 20;
     let failCode = null;
     let pollCount = 0;
     let continuationSent = false; // 标记是否已发送继续生成请求
+    let networkErrorCount = 0; // 网络错误计数器
     const maxPollCount = 30; // 增加最大轮询次数以支持继续生成
+    const maxNetworkErrors = 3; // 最大网络错误重试次数
 
-    console.log('🔍 开始轮询，historyId:', historyId);
-    
+    // 🛡️ 安全防护：设置总体超时
+    const overallStartTime = Date.now();
+    const overallTimeoutMs = 300000; // 5分钟总体超时
+
+    console.log('[DEBUG] 开始轮询，historyId:', historyId);
+
+    // 🔧 修复：保存最后的记录以便在轮询结束后提取结果
+    let finalRecord: any = null;
+
     while (pollCount < maxPollCount) {
+      // 🛡️ 安全防护：检查总体超时
+      if (Date.now() - overallStartTime > overallTimeoutMs) {
+        console.error('[FATAL] 轮询总体超时，强制终止');
+        break;
+      }
+
       pollCount++;
+      
       // 根据状态码调整等待时间
       let waitTime;
       if (status === 45) {
@@ -554,103 +780,195 @@ export class JimengClient extends CreditService {
         waitTime = pollCount === 1 ? 20000 : 5000;
       }
       
-      console.log(`🔍 轮询第 ${pollCount} 次，状态=${status}，等待 ${waitTime/1000} 秒...`);
+      // [DATA] 轮询日志 - 轮询开始
+      const pollStartTime = Date.now();
+      const elapsedTotal = Math.round((pollStartTime - overallStartTime) / 1000);
+      console.log(`[DATA] [POLL-START] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 等待=${waitTime/1000}s, 总耗时=${elapsedTotal}s, 网络错误=${networkErrorCount}/${maxNetworkErrors}, 继续生成=${continuationSent ? '已发送' : '未发送'}`);
+
       await new Promise(resolve => setTimeout(resolve, waitTime));
 
-      const pollResult = await this.request(
-        'POST',
-        '/mweb/v1/get_history_by_ids',
-        {
-          "history_ids": [historyId],
-          "image_info": {
-            "width": 2048,
-            "height": 2048,
-            "format": "webp",
-            "image_scene_list": [
-              { "scene": "smart_crop", "width": 360, "height": 360, "uniq_key": "smart_crop-w:360-h:360", "format": "webp" },
-              { "scene": "smart_crop", "width": 480, "height": 480, "uniq_key": "smart_crop-w:480-h:480", "format": "webp" },
-              { "scene": "smart_crop", "width": 720, "height": 720, "uniq_key": "smart_crop-w:720-h:720", "format": "webp" },
-              { "scene": "smart_crop", "width": 720, "height": 480, "uniq_key": "smart_crop-w:720-h:480", "format": "webp" },
-              { "scene": "smart_crop", "width": 360, "height": 240, "uniq_key": "smart_crop-w:360-h:240", "format": "webp" },
-              { "scene": "smart_crop", "width": 240, "height": 320, "uniq_key": "smart_crop-w:240-h:320", "format": "webp" },
-              { "scene": "smart_crop", "width": 480, "height": 640, "uniq_key": "smart_crop-w:480-h:640", "format": "webp" },
-              { "scene": "normal", "width": 2400, "height": 2400, "uniq_key": "2400", "format": "webp" },
-              { "scene": "normal", "width": 1080, "height": 1080, "uniq_key": "1080", "format": "webp" },
-              { "scene": "normal", "width": 720, "height": 720, "uniq_key": "720", "format": "webp" },
-              { "scene": "normal", "width": 480, "height": 480, "uniq_key": "480", "format": "webp" },
-              { "scene": "normal", "width": 360, "height": 360, "uniq_key": "360", "format": "webp" }
-            ]
-          },
-          "http_common_info": {
-            "aid": parseInt("513695")
+      let pollResult;
+      try {
+        pollResult = await this.request(
+          'POST',
+          '/mweb/v1/get_history_by_ids',
+          {
+            "history_ids": [historyId],
+            "image_info": {
+              "width": 2048,
+              "height": 2048,
+              "format": "webp",
+              "image_scene_list": [
+                { "scene": "smart_crop", "width": 360, "height": 360, "uniq_key": "smart_crop-w:360-h:360", "format": "webp" },
+                { "scene": "smart_crop", "width": 480, "height": 480, "uniq_key": "smart_crop-w:480-h:480", "format": "webp" },
+                { "scene": "smart_crop", "width": 720, "height": 720, "uniq_key": "smart_crop-w:720-h:720", "format": "webp" },
+                { "scene": "smart_crop", "width": 720, "height": 480, "uniq_key": "smart_crop-w:720-h:480", "format": "webp" },
+                { "scene": "smart_crop", "width": 360, "height": 240, "uniq_key": "smart_crop-w:360-h:240", "format": "webp" },
+                { "scene": "smart_crop", "width": 240, "height": 320, "uniq_key": "smart_crop-w:240-h:320", "format": "webp" },
+                { "scene": "smart_crop", "width": 480, "height": 640, "uniq_key": "smart_crop-w:480-h:640", "format": "webp" },
+                { "scene": "normal", "width": 2400, "height": 2400, "uniq_key": "2400", "format": "webp" },
+                { "scene": "normal", "width": 1080, "height": 1080, "uniq_key": "1080", "format": "webp" },
+                { "scene": "normal", "width": 720, "height": 720, "uniq_key": "720", "format": "webp" },
+                { "scene": "normal", "width": 480, "height": 480, "uniq_key": "480", "format": "webp" },
+                { "scene": "normal", "width": 360, "height": 360, "uniq_key": "360", "format": "webp" }
+              ]
+            },
+            "http_common_info": {
+              "aid": parseInt("513695")
+            }
           }
+        );
+        // 🛡️ 安全防护：网络请求成功，重置网络错误计数器
+        networkErrorCount = 0;
+      } catch (error) {
+        // 🛡️ 安全防护：增强网络错误处理
+        networkErrorCount++;
+        console.error(`[ERROR] 网络请求错误 (${networkErrorCount}/${maxNetworkErrors}):`, error);
+        
+        if (networkErrorCount >= maxNetworkErrors) {
+          throw new Error(`网络错误超过最大重试次数: ${error}`);
         }
-      );
+        
+        // 🛡️ 安全防护：网络错误也要增加轮询计数，避免无限重试
+        console.log(`[DEBUG] 网络错误，继续轮询...`);
+        continue;
+      }
       
-      console.log('🔍 轮询响应:', JSON.stringify(pollResult, null, 2));
+      // [DATA] 轮询日志 - API响应处理
+      const apiResponseTime = Date.now();
+      const apiCallDuration = apiResponseTime - pollStartTime;
 
       const record = pollResult?.data?.[historyId];
       if (!record) {
+        console.error(`[ERROR] [POLL-ERROR] 轮询=${pollCount}, API响应时间=${apiCallDuration}ms, 错误=记录不存在`);
         throw new Error('记录不存在');
       }
+
+      // 🔧 修复：每次轮询都更新最终记录
+      finalRecord = record;
+
+      const prevStatus = status;
       status = record.status;
       failCode = record.fail_code;
-
       const finishedCount = record.finished_image_count || 0;
       const totalCount = record.total_image_count || 0;
-      console.log(`🔍 轮询状态: status=${status}, failCode=${failCode}, itemList长度=${record.item_list?.length || 0}, finished_count=${finishedCount}, total_count=${totalCount}`);
+      const itemListLength = record.item_list?.length || 0;
 
-      if (status === 30) {
-        if (failCode === '2038') {
-          throw new Error('内容被过滤');
-        }
-        throw new Error('生成失败');
+      // [DATA] 轮询日志 - 状态数据详情
+      console.log(`[DATA] [POLL-DATA] 轮询=${pollCount}, API耗时=${apiCallDuration}ms, 状态变化=${prevStatus}→${status}, 失败码=${failCode || 'null'}, 完成度=${finishedCount}/${totalCount}, 结果数=${itemListLength}`);
+
+      // 🛡️ 安全防护：检查状态码有效性
+      if (!KNOWN_STATES.has(status)) {
+        console.warn(`[WARN] [POLL-WARN] 轮询=${pollCount}, 未知状态码=${status}, 终止轮询`);
+        break;
       }
 
-      // 检查是否需要发送继续生成请求（只发送一次）
-      if (!continuationSent && params && actualModel && modelName !== undefined && hasFilePath !== undefined && this.shouldContinueGeneration(record)) {
-        console.log('🔍 检测到需要继续生成，发送继续生成请求');
+      // [DATA] 轮询日志 - 继续生成检查
+      const shouldContinue = !continuationSent && params && actualModel && modelName !== undefined && hasFilePath !== undefined && this.shouldContinueGeneration(totalCount, finishedCount, status);
+      console.log(`[DATA] [POLL-CONTINUE] 轮询=${pollCount}, 继续生成检查={已发送:${continuationSent}, 应继续:${shouldContinue}, 完成度:${finishedCount}/${totalCount}}`);
+
+      // 🛡️ 安全防护：安全的继续生成机制 - 提前到状态判断之前
+      if (shouldContinue) {
+        const continueStartTime = Date.now();
+        console.log(`[DEBUG] [CONTINUE-START] 轮询=${pollCount}, 开始继续生成请求`);
         try {
           await this.performContinuationGeneration(params, actualModel, modelName, hasFilePath, uploadResult, uploadResults || [], historyId);
           continuationSent = true;
+          const continueDuration = Date.now() - continueStartTime;
+          console.log(`[SUCCESS] [CONTINUE-SUCCESS] 轮询=${pollCount}, 继续生成成功, 耗时=${continueDuration}ms`);
         } catch (error) {
-          console.error('🔍 继续生成请求失败:', error);
+          const continueDuration = Date.now() - continueStartTime;
+          console.error(`[ERROR] [CONTINUE-ERROR] 轮询=${pollCount}, 继续生成失败, 耗时=${continueDuration}ms, 错误:${error}`);
+          // 🛡️ 安全防护：即使失败也标记为已尝试，避免重复尝试
+          continuationSent = true;
+          throw error; // 重新抛出错误，让上层处理
         }
       }
+
+      // [DATA] 轮询日志 - 完成状态检查
+      const isCompletionState = COMPLETION_STATES.has(status);
+      const isProcessingState = PROCESSING_STATES.has(status);
+      console.log(`[DATA] [POLL-STATUS] 轮询=${pollCount}, 状态检查={完成状态:${isCompletionState}, 处理中:${isProcessingState}, 当前状态:${status}}`);
+
+      // 🛡️ 安全防护：如果是完成状态，立即退出轮询
+      if (isCompletionState) {
+        if (status === 30) {
+          console.error(`[ERROR] [POLL-FAIL] 轮询=${pollCount}, 生成失败, 状态=${status}, 失败码=${failCode}`);
+          if (failCode === '2038') {
+            throw new Error('内容被过滤');
+          }
+          throw new Error('生成失败');
+        }
+        console.log(`[SUCCESS] [POLL-COMPLETE] 轮询=${pollCount}, 检测到完成状态=${status}, 准备提取结果`);
+        break;
+      }
+
+      // 🛡️ 安全防护：如果不在处理中状态，检查是否可以完成
+      if (!isProcessingState) {
+        console.log(`[DEBUG] [POLL-EXIT] 轮询=${pollCount}, 状态=${status}不在处理中, 检查完成条件`);
+        break;
+      }
       
-      // 检查是否完成
-      if (record.item_list && record.item_list.length > 0) {
+      // [DATA] 轮询日志 - 完成条件判断
+      const hasItemList = record.item_list && record.item_list.length > 0;
+      console.log(`[DATA] [POLL-CHECK] 轮询=${pollCount}, 完成检查={有结果:${hasItemList}, 结果数:${itemListLength}}`);
+
+      // 🛡️ 安全防护：检查是否完成（增强的逻辑）
+      if (hasItemList) {
         const currentItemList = record.item_list as any[];
-        
+
         // 检测是否为视频生成
         const isVideoGeneration = finishedCount === 0 && totalCount === 0 && currentItemList.length > 0;
-        
+        console.log(`[DATA] [POLL-TYPE] 轮询=${pollCount}, 生成类型={视频生成:${isVideoGeneration}, 完成度:${finishedCount}/${totalCount}}`);
+
         if (isVideoGeneration) {
-          console.log(`🔍 检测到视频生成模式: status=${status}, itemList长度=${currentItemList.length}`);
-          if (status === 50 && currentItemList.length > 0) {
-            console.log('🔍 视频生成完成，返回结果');
+          const canCompleteVideo = (status === 50 || currentItemList.length > 0) && currentItemList.length > 0;
+          console.log(`[DATA] [VIDEO-CHECK] 轮询=${pollCount}, 视频完成检查={状态:${status}, 结果数:${currentItemList.length}, 可完成:${canCompleteVideo}}`);
+
+          if (canCompleteVideo) {
+            console.log(`[SUCCESS] [VIDEO-DONE] 轮询=${pollCount}, 视频生成完成, 返回${currentItemList.length}个结果`);
             return this.extractImageUrls(currentItemList);
           }
         } else {
-          // 图像生成逻辑：等待所有图片完成
-          if (totalCount > 0 && finishedCount >= totalCount) {
-            console.log('🔍 所有图片生成完成，返回结果');
-            return this.extractImageUrls(currentItemList);
-          } else if (totalCount <= 4 && currentItemList.length >= 4 && status !== 20 && status !== 45 && status !== 42) {
-            // 对于小批次（<=4张），达到批次大小且状态稳定时完成
-            console.log('🔍 小批次图片生成完成，返回结果');
+          // 图像生成逻辑：纯数量判断，不依赖status状态
+          const canCompleteImage = totalCount > 0 && finishedCount >= totalCount && currentItemList.length > 0;
+          console.log(`[DATA] [IMAGE-CHECK] 轮询=${pollCount}, 图像完成检查={总数:${totalCount}, 完成:${finishedCount}, 结果数:${currentItemList.length}, 可完成:${canCompleteImage}}`);
+
+          if (canCompleteImage) {
+            console.log(`[SUCCESS] [IMAGE-DONE] 轮询=${pollCount}, 图像生成完成, 返回${currentItemList.length}个结果`);
             return this.extractImageUrls(currentItemList);
           }
         }
       }
       
-      // 只在处理状态下继续轮询
-      if (status !== 20 && status !== 45 && status !== 42) {
-        console.log(`🔍 遇到新状态 ${status}，继续轮询...`);
+      // [DATA] 轮询日志 - 进度报告
+      if (pollCount % 5 === 0) {
+        const currentElapsed = Math.round((Date.now() - overallStartTime) / 1000);
+        console.log(`[DATA] [POLL-PROGRESS] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 已用时=${currentElapsed}s, 完成度=${finishedCount}/${totalCount}, 网络错误=${networkErrorCount}`);
       }
     }
-    
-    console.log('🔍 轮询超时，返回空数组');
+
+    // [DATA] 轮询日志 - 结束统计
+    const elapsedTime = Date.now() - overallStartTime;
+    const finalElapsedSec = Math.round(elapsedTime / 1000);
+    console.log(`[END] [POLL-END] 轮询结束, 总轮询=${pollCount}/${maxPollCount}, 最终状态=${status}, 总耗时=${finalElapsedSec}s, 网络错误=${networkErrorCount}, 继续生成=${continuationSent ? '已发送' : '未发送'}`);
+
+    // 🔧 修复：在轮询结束后检查是否有最终结果可以提取
+    if (finalRecord && finalRecord.item_list && finalRecord.item_list.length > 0) {
+      console.log(`[FINAL] [FINAL-EXTRACT] 轮询结束，提取最终结果，状态=${status}，结果数=${finalRecord.item_list.length}`);
+      return this.extractImageUrls(finalRecord.item_list);
+    }
+
+    // 判断结束原因
+    if (pollCount >= maxPollCount) {
+      console.warn(`[TIMEOUT] [POLL-TIMEOUT] 达到最大轮询次数限制, 轮询超时`);
+    } else if (Date.now() - overallStartTime > overallTimeoutMs) {
+      console.warn(`[TIMEOUT] [POLL-TIMEOUT] 达到总体时间限制, 轮询超时`);
+    } else {
+      console.warn(`[UNKNOWN] [POLL-UNKNOWN] 未知原因导致轮询结束`);
+    }
+
+    console.log('[DEBUG] 轮询超时，返回空数组');
     return [];
   }
 
@@ -672,11 +990,11 @@ export class JimengClient extends CreditService {
    * 从itemList中提取图片URL
    */
   private extractImageUrls(itemList: any[]): string[] {
-    console.log('🔍 itemList 项目数量:', itemList?.length || 0);
+    console.log('[DEBUG] itemList 项目数量:', itemList?.length || 0);
 
     // 提取图片URL - 尝试多种可能的路径
     const resultList = (itemList || []).map((item, index) => {
-      console.log(`🔍 处理第${index}项:`, JSON.stringify(item, null, 2));
+      console.log(`[DEBUG] 处理第${index}项:`, JSON.stringify(item, null, 2));
       
       // 尝试多种可能的URL路径
       let imageUrl = item?.image?.large_images?.[0]?.image_url 
@@ -696,11 +1014,11 @@ export class JimengClient extends CreditService {
         }
       }
       
-      console.log(`🔍 提取到的URL:`, imageUrl);
+      console.log(`[DEBUG] 提取到的URL:`, imageUrl);
       return imageUrl;
     }).filter(Boolean)
     
-    console.log('🔍 本轮提取的图片结果:', resultList)
+    console.log('[DEBUG] 本轮提取的图片结果:', resultList)
     return resultList
   }
 
@@ -708,7 +1026,7 @@ export class JimengClient extends CreditService {
    * 专门用于视频生成的轮询方法
    */
   private async pollTraditionalResultForVideo(result: any): Promise<string[]> {
-    console.log('🔍 开始视频轮询');
+    console.log('[DEBUG] 开始视频轮询');
     
     // 获取历史记录ID
     const historyId = result?.data?.aigc_data?.history_record_id;
@@ -720,16 +1038,34 @@ export class JimengClient extends CreditService {
       }
     }
 
+    // 🛡️ 安全防护：定义已知状态码集合
+    const PROCESSING_STATES = new Set([20, 42, 45]); // 处理中状态
+    const KNOWN_STATES = new Set([20, 30, 42, 45, 50]); // 所有已知状态
+    const COMPLETION_STATES = new Set([30, 50]); // 完成或失败状态
+
     // 轮询获取结果
     let status = 20;
     let failCode = null;
     let pollCount = 0;
-    const maxPollCount = 20; // 最多轮询20次
+    let networkErrorCount = 0; // 网络错误计数器
+    const maxPollCount = 30; // 增加最大轮询次数
+    const maxNetworkErrors = 3; // 最大网络错误重试次数
 
-    console.log('🔍 开始视频轮询，historyId:', historyId);
+    // 🛡️ 安全防护：设置总体超时
+    const overallStartTime = Date.now();
+    const overallTimeoutMs = 300000; // 5分钟总体超时
+
+    console.log('[DEBUG] 开始视频轮询，historyId:', historyId);
     
-    while ((status === 20 || status === 45 || status === 42) && pollCount < maxPollCount) {
+    while (pollCount < maxPollCount) {
+      // 🛡️ 安全防护：检查总体超时
+      if (Date.now() - overallStartTime > overallTimeoutMs) {
+        console.error('[FATAL] 视频轮询总体超时，强制终止');
+        break;
+      }
+
       pollCount++;
+
       // 根据状态码调整等待时间
       let waitTime;
       if (status === 45) {
@@ -739,53 +1075,144 @@ export class JimengClient extends CreditService {
       } else {
         waitTime = pollCount === 1 ? 20000 : 5000;
       }
-      
-      console.log(`🔍 视频轮询第 ${pollCount} 次，状态=${status}，等待 ${waitTime/1000} 秒...`);
+
+      // [DATA] 视频轮询日志 - 轮询开始
+      const pollStartTime = Date.now();
+      const elapsedTotal = Math.round((pollStartTime - overallStartTime) / 1000);
+      console.log(`[DATA] [VIDEO-START] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 等待=${waitTime/1000}s, 总耗时=${elapsedTotal}s, 网络错误=${networkErrorCount}/${maxNetworkErrors}, History ID=${historyId}`);
+
       await new Promise(resolve => setTimeout(resolve, waitTime));
 
-      const pollResult = await this.request(
-        'POST',
-        '/mweb/v1/get_history_by_ids',
-        {
-          "history_ids": [historyId],
-          "http_common_info": {
-            "aid": parseInt("513695")
+      let pollResult;
+      try {
+        pollResult = await this.request(
+          'POST',
+          '/mweb/v1/get_history_by_ids',
+          {
+            "history_ids": [historyId],
+            "http_common_info": {
+              "aid": parseInt("513695")
+            }
           }
+        );
+        // [DATA] 视频轮询日志 - API响应处理
+        const apiResponseTime = Date.now();
+        const apiCallDuration = apiResponseTime - pollStartTime;
+
+        // 🛡️ 安全防护：网络请求成功，重置网络错误计数器
+        networkErrorCount = 0;
+      } catch (error) {
+        // [DATA] 视频轮询日志 - 错误处理
+        const errorTime = Date.now();
+        const errorDuration = errorTime - pollStartTime;
+        networkErrorCount++;
+
+        console.error(`[ERROR] [VIDEO-ERROR] 轮询=${pollCount}, 网络错误=${networkErrorCount}/${maxNetworkErrors}, API耗时=${errorDuration}ms, 错误=${error}`);
+
+        if (networkErrorCount >= maxNetworkErrors) {
+          console.error(`[FATAL] [VIDEO-FATAL] 轮询=${pollCount}, 网络错误超过最大重试次数, 终止视频轮询`);
+          throw new Error(`视频轮询网络错误超过最大重试次数: ${error}`);
         }
-      );
+
+        // 🛡️ 安全防护：网络错误也要增加轮询计数，避免无限重试
+        console.log(`[RETRY] [VIDEO-RETRY] 轮询=${pollCount}, 视频轮询网络错误重试, 继续轮询`);
+        continue;
+      }
 
       const record = pollResult?.data?.[historyId];
       if (!record) {
+        const errorDuration = Date.now() - pollStartTime;
+        console.error(`[ERROR] [VIDEO-ERROR] 轮询=${pollCount}, API响应时间=${errorDuration}ms, 错误=记录不存在`);
         throw new Error('记录不存在');
       }
+
+      const prevStatus = status;
       status = record.status;
       failCode = record.fail_code;
+      const finishedCount = record.finished_image_count || 0;
+      const totalCount = record.total_image_count || 0;
+      const itemListLength = record.item_list?.length || 0;
 
-      console.log(`🔍 视频轮询状态: status=${status}, failCode=${failCode}, itemList长度=${record.item_list?.length || 0}`);
+      // [DATA] 视频轮询日志 - 状态数据详情
+      const apiCallDuration = Date.now() - pollStartTime;
+      console.log(`[DATA] [VIDEO-DATA] 轮询=${pollCount}, API耗时=${apiCallDuration}ms, 状态变化=${prevStatus}→${status}, 失败码=${failCode || 'null'}, 完成度=${finishedCount}/${totalCount}, 结果数=${itemListLength}`);
 
-      if (status === 30) {
-        if (failCode === '2038') {
-          throw new Error('内容被过滤');
-        }
-        throw new Error('生成失败');
+      // 🛡️ 安全防护：检查状态码有效性
+      if (!KNOWN_STATES.has(status)) {
+        console.warn(`[WARN] [VIDEO-WARN] 轮询=${pollCount}, 未知状态码=${status}, 终止视频轮询`);
+        break;
       }
-      
-      // 检查视频是否完成
-      if (record.item_list && record.item_list.length > 0) {
+
+      // [DATA] 视频轮询日志 - 完成状态检查
+      const isCompletionState = COMPLETION_STATES.has(status);
+      const isProcessingState = PROCESSING_STATES.has(status);
+      console.log(`[DATA] [VIDEO-STATUS] 轮询=${pollCount}, 状态检查={完成状态:${isCompletionState}, 处理中:${isProcessingState}, 当前状态:${status}}`);
+
+      // 🛡️ 安全防护：如果是完成状态，立即退出轮询
+      if (isCompletionState) {
+        if (status === 30) {
+          console.error(`[ERROR] [VIDEO-FAIL] 轮询=${pollCount}, 视频生成失败, 状态=${status}, 失败码=${failCode}`);
+          if (failCode === '2038') {
+            throw new Error('内容被过滤');
+          }
+          throw new Error('生成失败');
+        }
+        console.log(`[SUCCESS] [VIDEO-COMPLETE] 轮询=${pollCount}, 检测到完成状态=${status}, 准备提取结果`);
+        break;
+      }
+
+      // 🛡️ 安全防护：如果不在处理中状态，检查是否可以完成
+      if (!isProcessingState) {
+        console.log(`[DEBUG] [VIDEO-EXIT] 轮询=${pollCount}, 状态=${status}不在处理中, 检查完成条件`);
+        break;
+      }
+
+      // [DATA] 视频轮询日志 - 完成条件判断
+      const hasItemList = record.item_list && record.item_list.length > 0;
+      console.log(`[DATA] [VIDEO-CHECK] 轮询=${pollCount}, 完成检查={有结果:${hasItemList}, 结果数:${itemListLength}}`);
+
+      // 🛡️ 安全防护：检查视频是否完成（增强的逻辑）
+      if (hasItemList) {
         const currentItemList = record.item_list as any[];
-        const finishedCount = record.finished_image_count || 0;
-        const totalCount = record.total_image_count || 0;
-        
+
         // 检测是否为视频生成
         const isVideoGeneration = finishedCount === 0 && totalCount === 0 && currentItemList.length > 0;
-        
-        if (isVideoGeneration && status === 50 && currentItemList.length > 0) {
-          console.log('🔍 视频生成完成，提取视频URL');
-          return this.extractVideoUrls(currentItemList);
+        console.log(`[DATA] [VIDEO-TYPE] 轮询=${pollCount}, 生成类型={视频生成:${isVideoGeneration}, 完成度:${finishedCount}/${totalCount}}`);
+
+        if (isVideoGeneration) {
+          const canCompleteVideo = currentItemList.length > 0;
+          console.log(`[DATA] [VIDEO-FINAL-CHECK] 轮询=${pollCount}, 视频完成检查={状态:${status}, 结果数:${currentItemList.length}, 可完成:${canCompleteVideo}}`);
+
+          // 🛡️ 安全防护：视频生成完成条件放宽 - 任意状态只要有结果就认为完成
+          if (canCompleteVideo) {
+            console.log(`[SUCCESS] [VIDEO-DONE] 轮询=${pollCount}, 视频生成完成, 返回${currentItemList.length}个结果`);
+            return this.extractVideoUrls(currentItemList);
+          }
         }
       }
+      
+      // [DATA] 视频轮询日志 - 进度报告
+      if (pollCount % 5 === 0) {
+        const currentElapsed = Math.round((Date.now() - overallStartTime) / 1000);
+        console.log(`[DATA] [VIDEO-PROGRESS] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 已用时=${currentElapsed}s, 完成度=${finishedCount}/${totalCount}, 网络错误=${networkErrorCount}`);
+      }
     }
-    
+
+    // [DATA] 视频轮询日志 - 结束统计
+    const elapsedTime = Date.now() - overallStartTime;
+    const finalElapsedSec = Math.round(elapsedTime / 1000);
+    console.log(`[END] [VIDEO-END] 视频轮询结束, 总轮询=${pollCount}/${maxPollCount}, 最终状态=${status}, 总耗时=${finalElapsedSec}s, 网络错误=${networkErrorCount}, History ID=${historyId}`);
+
+    // 判断结束原因
+    if (pollCount >= maxPollCount) {
+      console.warn(`[TIMEOUT] [VIDEO-TIMEOUT] 达到最大轮询次数限制, 视频轮询超时`);
+    } else if (Date.now() - overallStartTime > overallTimeoutMs) {
+      console.warn(`[TIMEOUT] [VIDEO-TIMEOUT] 达到总体时间限制, 视频轮询超时`);
+    } else {
+      console.warn(`[UNKNOWN] [VIDEO-UNKNOWN] 未知原因导致视频轮询结束`);
+    }
+
+    console.log('[DEBUG] 视频轮询超时，返回空数组');
     return [];
   }
 
@@ -793,10 +1220,10 @@ export class JimengClient extends CreditService {
    * 从itemList中提取视频URL
    */
   private extractVideoUrls(itemList: any[]): string[] {
-    console.log('🔍 提取视频URL，itemList长度:', itemList?.length || 0);
+    console.log('[DEBUG] 提取视频URL，itemList长度:', itemList?.length || 0);
 
     const resultList = (itemList || []).map((item, index) => {
-      console.log(`🔍 处理视频第${index}项:`, Object.keys(item || {}));
+      console.log(`[DEBUG] 处理视频第${index}项:`, Object.keys(item || {}));
       
       // 尝试多种可能的视频URL路径
       let videoUrl = item?.video?.transcoded_video?.origin?.video_url ||
@@ -807,18 +1234,18 @@ export class JimengClient extends CreditService {
                     item?.url ||
                     item?.video_url;
       
-      console.log(`🔍 提取到的视频URL:`, videoUrl);
+      console.log(`[DEBUG] 提取到的视频URL:`, videoUrl);
       return videoUrl;
     }).filter(Boolean)
     
-    console.log('🔍 本轮提取的视频结果:', resultList)
+    console.log('[DEBUG] 本轮提取的视频结果:', resultList)
     return resultList
   }
 
   // ============== 占位符方法（需要从原文件继续提取） ==============
   
   private async generateMultiFrameVideo(params: VideoGenerationParams, actualModel: string): Promise<string> {
-    console.log('🔍 开始智能多帧视频生成...');
+    console.log('[DEBUG] 开始智能多帧视频生成...');
     
     // 验证多帧参数
     if (!params.multiFrames || params.multiFrames.length === 0) {
@@ -969,14 +1396,14 @@ export class JimengClient extends CreditService {
     if (imageUrls && imageUrls.length > 0) {
       // 对于视频生成，URL可能在不同的路径中
       videoUrl = imageUrls[0];
-      console.log('🔍 多帧视频生成结果:', videoUrl);
+      console.log('[DEBUG] 多帧视频生成结果:', videoUrl);
     }
     
     return videoUrl || '';
   }
 
   private async generateTraditionalVideo(params: VideoGenerationParams, actualModel: string): Promise<string> {
-    console.log('🔍 开始传统视频生成...');
+    console.log('[DEBUG] 开始传统视频生成...');
     
     // 传统单帧/首尾帧模式的处理逻辑
     let first_frame_image = undefined
@@ -1117,7 +1544,7 @@ export class JimengClient extends CreditService {
       videoUrl = videoUrls[0];
     }
 
-    console.log('🔍 传统视频生成结果:', videoUrl);
+    console.log('[DEBUG] 传统视频生成结果:', videoUrl);
     return videoUrl || '';
   }
 
@@ -1780,7 +2207,7 @@ export class JimengClient extends CreditService {
       rqParams
     );
 
-    console.log('🔍 开始轮询补帧结果...');
+    console.log('[DEBUG] 开始轮询补帧结果...');
     const imageUrls = await this.pollTraditionalResult(result);
     
     // 提取视频URL
@@ -1927,7 +2354,7 @@ export class JimengClient extends CreditService {
       rqParams
     );
 
-    console.log('🔍 开始轮询分辨率提升结果...');
+    console.log('[DEBUG] 开始轮询分辨率提升结果...');
     const imageUrls = await this.pollTraditionalResult(result);
     
     // 提取视频URL
@@ -2129,7 +2556,7 @@ export class JimengClient extends CreditService {
       rqParams
     );
 
-    console.log('🔍 开始轮询音效生成结果...');
+    console.log('[DEBUG] 开始轮询音效生成结果...');
     const imageUrls = await this.pollTraditionalResult(result);
     
     // 提取视频URL
@@ -2221,7 +2648,7 @@ export class JimengClient extends CreditService {
           existingLogs = JSON.parse(fileContent);
         }
       } catch (readError) {
-        console.log('🔍 创建新的日志文件:', logFilePath);
+        console.log('[DEBUG] 创建新的日志文件:', logFilePath);
       }
       
       // 添加新的日志条目
@@ -2231,10 +2658,10 @@ export class JimengClient extends CreditService {
       fs.writeFileSync(logFilePath, JSON.stringify(existingLogs, null, 2), 'utf8');
       
       console.log('📝 请求日志已保存:', logFilePath);
-      console.log('📊 当前日志条目数:', existingLogs.length);
+      console.log('[DATA] 当前日志条目数:', existingLogs.length);
       
     } catch (error) {
-      console.error('❌ 保存请求日志失败:', error);
+      console.error('[ERROR] 保存请求日志失败:', error);
     }
   }
   

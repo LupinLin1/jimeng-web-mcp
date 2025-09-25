@@ -1,0 +1,113 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Extend `generateImage` Zod Schema with `async` Parameter",
+        "description": "Update the Zod validation schema for the existing `generateImage` tool to include the new optional `async` boolean parameter. This ensures backward compatibility by setting a default value of `false`.",
+        "details": "Locate the Zod schema definition for the `generateImage` tool (likely in a file like `src/tools/image/schemas.ts`). Add the field `async: z.boolean().optional().default(false)` to the schema object. This change is foundational for implementing the asynchronous logic.",
+        "testStrategy": "Verify that the updated schema correctly validates inputs with and without the `async` parameter. Check that the default value is applied when `async` is omitted.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Create Zod Schema for the New `getImageResult` Tool",
+        "description": "Define a new Zod validation schema for the `getImageResult` tool. This schema will enforce the presence of a `historyId` string parameter, which is required to query the status of an asynchronous job.",
+        "details": "In the same schema file (`src/tools/image/schemas.ts` or a similar location), create a new exported constant, for example `getImageResultSchema`. Define it as `z.object({ historyId: z.string().min(1) })` to ensure the `historyId` is a non-empty string.",
+        "testStrategy": "Unit test the new schema to ensure it accepts valid input (an object with a `historyId` string) and rejects invalid inputs (missing `historyId`, wrong type, etc.).",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Implement External API Service Wrappers for Async Operations",
+        "description": "Create two new methods in the service layer that communicates with the external image generation API. One method will call the asynchronous generation endpoint, and the other will call the result-fetching endpoint.",
+        "details": "In the relevant service file (e.g., `src/services/external-api.ts`), implement: 1. `generateImageAsync(params)`: This function will make a POST request to the external async endpoint and return the `historyId` from the response. 2. `fetchImageResult(historyId)`: This function will make a GET request to the external result endpoint using the `historyId` and forward the entire response, including status (e.g., 'pending', 'completed', 'failed') and result data (e.g., image URL).",
+        "testStrategy": "Mock the external API endpoints and write unit tests for both service methods. Verify that they construct the correct requests and correctly parse the responses (both success and error cases).",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Update `generateImage` Tool Handler for Conditional Logic",
+        "description": "Modify the handler function of the `generateImage` tool to support both synchronous and asynchronous execution based on the `async` parameter.",
+        "details": "In the `generateImage` tool file (e.g., `src/tools/image/generateImage.ts`), update the handler. Add a conditional check: `if (input.async)`. If true, call the new `generateImageAsync` service method (from Task 3) and return an object like `{ historyId: '...' }`. If false, maintain the existing logic of calling the synchronous service method and returning `{ imageUrl: '...' }`. The tool's return type may need to be updated to `Promise<{ historyId: string } | { imageUrl: string }>`.",
+        "testStrategy": "Write unit tests for the handler. One test should pass `async: true` and assert that the async service method is called and a `historyId` is returned. Another test should omit `async` and assert the original synchronous flow is executed.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          3
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement the New `getImageResult` Tool",
+        "description": "Create the new `getImageResult` tool, including its definition and handler function, to allow users to poll for the result of an asynchronous task.",
+        "details": "Create a new file, e.g., `src/tools/image/getImageResult.ts`. Define the tool object, referencing the `getImageResultSchema` (from Task 2). The handler function will accept the input, extract the `historyId`, call the `fetchImageResult` service method (from Task 3), and return its result directly. This follows the 'pure-forwarding' principle.",
+        "testStrategy": "Unit test the tool's handler. Mock the service layer and verify that the handler correctly passes the `historyId` to the `fetchImageResult` service method and returns its response.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Register the `getImageResult` Tool with MCP Server",
+        "description": "Integrate the newly created `getImageResult` tool into the MCP server by adding it to the list of available tools.",
+        "details": "Locate the main application entry point where the MCP server is initialized and tools are registered (e.g., `src/index.ts` or `src/main.ts`). Import the `getImageResult` tool object (from Task 5) and add it to the array of tools passed to the MCP instance.",
+        "testStrategy": "After starting the server, use a tool like Postman or cURL to inspect the server's capabilities or schema endpoint. Verify that `getImageResult` is listed as an available tool with the correct input parameters.",
+        "priority": "low",
+        "dependencies": [
+          5
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Standardize Error Handling for Async and Result Endpoints",
+        "description": "Ensure that errors from the external API for both the async submission and result-fetching calls are consistently handled and forwarded to the client as per existing project conventions.",
+        "details": "Review the `try...catch` blocks in the new service methods (`generateImageAsync`, `fetchImageResult`) and the tool handlers (`generateImage`, `getImageResult`). Ensure that API errors (e.g., 4xx, 5xx status codes, invalid `historyId`) are caught and re-thrown or formatted in a way that is consistent with the existing error handling mechanism of the MCP server.",
+        "testStrategy": "Extend the unit tests from Tasks 3, 4, and 5 to include error scenarios. Mock API failures (e.g., a 404 for a non-existent `historyId`) and assert that the tool handlers throw the expected, properly formatted exceptions.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "End-to-End Testing of the Asynchronous Flow",
+        "description": "Perform end-to-end testing to validate the entire asynchronous workflow, from task submission to result retrieval, and ensure backward compatibility of the synchronous mode.",
+        "details": "1. **Async Flow**: Call `generateImage` with `async: true`. Capture the returned `historyId`. Poll the `getImageResult` tool with this `historyId` until a final status ('completed' or 'failed') is received. Verify the final result. 2. **Sync Flow**: Call `generateImage` with `async: false` or without the `async` parameter. Verify that it immediately returns an image URL as before. 3. **Invalid ID**: Call `getImageResult` with a fake `historyId` and verify that a proper error is returned.",
+        "testStrategy": "This task is primarily manual or can be automated with an integration test suite (e.g., using Jest or Vitest with Supertest). The tests should simulate a real user flow against a running instance of the service.",
+        "priority": "medium",
+        "dependencies": [
+          6,
+          7
+        ],
+        "status": "done",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-09-23T16:37:29.025Z",
+      "updated": "2025-09-23T16:48:01.098Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

@@ -35,7 +35,7 @@ export interface DraftComponent {
  */
 export interface DraftResponse {
   draft_id: string;
-  status: 'processing' | 'completed' | 'failed';
+  status: 'processing' | 'completed' | 'failed' | 'pending' | 'success' | 'error';
   component_list: DraftComponent[];
   progress?: number;
   error_message?: string;
