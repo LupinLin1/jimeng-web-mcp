@@ -248,7 +248,7 @@ export class JimengClient extends CreditService {
         "min_version": DRAFT_VERSION,
         "min_features": [],
         "is_from_tsn": true,
-        "version": "3.2.9",
+        "version": "3.3.2",
         "main_component_id": componentId,
         "component_list": [{
           "type": "image_base_component",
@@ -1195,9 +1195,9 @@ export class JimengClient extends CreditService {
       throw new Error('多帧模式需要提供multiFrames参数');
     }
 
-    // 验证帧数量限制
-    if (params.multiFrames.length > 10) {
-      throw new Error(`智能多帧最多支持10帧，当前提供了${params.multiFrames.length}帧`);
+    // 验证帧数量限制（实际用户提供的帧数，系统会自动添加结束帧）
+    if (params.multiFrames.length > 9) {
+      throw new Error(`智能多帧最多支持9个内容帧（系统会自动添加结束帧），当前提供了${params.multiFrames.length}帧`);
     }
 
     // 验证每个帧的参数
@@ -1206,6 +1206,10 @@ export class JimengClient extends CreditService {
         throw new Error(`帧${frame.idx}的duration_ms必须在1000-5000ms范围内（1-5秒）`);
       }
     }
+
+    // 计算总时长（所有用户提供帧的累计时长）
+    const totalDuration = params.multiFrames.reduce((sum, frame) => sum + frame.duration_ms, 0);
+    console.log(`[DEBUG] 计算总时长: ${totalDuration}ms (${params.multiFrames.length}个内容帧)`);
 
     // 处理多帧图片上传
     const processedFrames = [];
@@ -1236,6 +1240,37 @@ export class JimengClient extends CreditService {
         }
       });
     }
+
+    // 添加最后一个结束帧（duration_ms: 0, prompt: ""）
+    // 根据实际API调用分析，最后一帧需要是结束状态
+    const lastFrame = params.multiFrames[params.multiFrames.length - 1];
+    const lastUploadResult = await this.uploadCoverFile(lastFrame.image_path);
+    processedFrames.push({
+      type: "",
+      id: generateUuid(),
+      idx: params.multiFrames.length, // 下一个idx
+      duration_ms: 0, // 结束帧时长为0
+      prompt: "", // 结束帧prompt为空
+      media_info: {
+        type: "",
+        id: generateUuid(),
+        media_type: 1,
+        image_info: {
+          type: "image",
+          id: generateUuid(),
+          source_from: "upload",
+          platform_type: 1,
+          name: "",
+          image_uri: lastUploadResult.uri,
+          width: lastUploadResult.width,
+          height: lastUploadResult.height,
+          format: lastUploadResult.format,
+          uri: lastUploadResult.uri
+        }
+      }
+    });
+
+    console.log(`[DEBUG] 处理后的帧数量: ${processedFrames.length} (${params.multiFrames.length}内容帧 + 1结束帧)`);
 
     const componentId = generateUuid();
     const metricsExtra = JSON.stringify({
@@ -1270,7 +1305,7 @@ export class JimengClient extends CreditService {
         "min_version": "3.0.5",
         "min_features": ["AIGC_GenerateType_VideoMultiFrame"],
         "is_from_tsn": true,
-        "version": "3.2.9",
+        "version": "3.3.2",
         "main_component_id": componentId,
         "component_list": [{
           "type": "video_base_component",
@@ -1302,9 +1337,10 @@ export class JimengClient extends CreditService {
                   "prompt": params.prompt || "",
                   "video_mode": 2,
                   "fps": params.fps || 24,
-                  "duration_ms": params.duration_ms || 5000,
+                  "duration_ms": totalDuration,
                   "resolution": params.resolution || "720p",
-                  "multi_frames": processedFrames
+                  "multi_frames": processedFrames,
+                  "idip_meta_list": []
                 }],
                 "video_aspect_ratio": params.video_aspect_ratio || "3:4",
                 "seed": Math.floor(Math.random() * 100000000) + 2500000000,
@@ -1313,7 +1349,8 @@ export class JimengClient extends CreditService {
               },
               "video_task_extra": metricsExtra
             }
-          }
+          },
+          "process_type": 1
         }]
       }),
       "http_common_info": {
@@ -1331,17 +1368,16 @@ export class JimengClient extends CreditService {
       rqParams
     );
 
-    // 使用传统轮询获取结果
-    const imageUrls = await this.pollTraditionalResult(result);
-    
-    // 尝试多种可能的视频URL路径
+    // 使用视频专用轮询获取结果
+    const videoUrls = await this.pollTraditionalResultForVideo(result);
+
+    // 提取视频URL
     let videoUrl;
-    if (imageUrls && imageUrls.length > 0) {
-      // 对于视频生成，URL可能在不同的路径中
-      videoUrl = imageUrls[0];
+    if (videoUrls && videoUrls.length > 0) {
+      videoUrl = videoUrls[0];
       console.log('[DEBUG] 多帧视频生成结果:', videoUrl);
     }
-    
+
     return videoUrl || '';
   }
 
