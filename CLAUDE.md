@@ -9,7 +9,8 @@ This is a **JiMeng Web MCP Server** - a TypeScript-based Model Context Protocol 
 ### Key Features
 - **Continue Generation**: Automatically triggers when requesting >4 images, returns all images in a single response
 - **Multi-reference Image Generation**: Supports up to 4 reference images for style mixing and fusion
-- **Video Generation**: Both traditional first/last frame mode and intelligent multi-frame mode
+- **Video Generation**: Traditional first/last frame mode, intelligent multi-frame mode, and **main reference mode**
+- **Main Reference Video**: NEW! Combines subjects from multiple images (2-4) into one scene using `[图0]`, `[图1]` syntax
 - **Video Post-processing**: Frame interpolation, super-resolution, and audio effect generation
 - **Zero-install Deployment**: Supports npx auto-installation for Claude Desktop
 
@@ -102,8 +103,9 @@ Supports complex image mixing through:
 - **`generateImage`**: Main image generation with continue generation support
 - **`hello`**: Connection testing and server health check
 
-### Video Generation Tools  
+### Video Generation Tools
 - **`generateVideo`**: Video generation with traditional and multi-frame modes
+- **`generateMainReferenceVideo`**: **NEW!** Main reference video generation - combines subjects from multiple images
 - **`videoPostProcess`**: Unified video post-processing (frame interpolation, super-resolution, audio effects)
 
 ### Resource Tools
@@ -196,6 +198,117 @@ JIMENG_API_TOKEN=your_session_id_from_jimeng_cookies
 - **Security**: Never commit API tokens or sensitive information
 - **Performance**: The singleton pattern prevents duplicate client instances
 - **Error Handling**: Comprehensive error handling with user-friendly messages
+
+## Main Reference Video Generation (NEW Feature)
+
+### Overview
+
+**Main Reference Video** is a NEW video generation mode that allows combining subjects from multiple images (2-4) into a single scene. It enables precise control over which elements from each reference image to use.
+
+### Key Capabilities
+
+- **Multi-Image Subject Fusion**: Extract subjects from different images and place them in one scene
+- **Precise Reference Control**: Use `[图0]`, `[图1]`, `[图2]`, `[图3]` syntax to reference specific images
+- **Flexible Composition**: Mix characters, objects, and environments from different sources
+- **Natural Language Prompts**: Describe the desired scene using natural language with image references
+
+### Usage Examples
+
+#### Example 1: Character in Different Environment
+```typescript
+// Combine a cat from image 1 with a floor from image 2
+{
+  referenceImages: ["/path/to/cat.jpg", "/path/to/floor.jpg"],
+  prompt: "[图0]中的猫在[图1]的地板上跑",
+  // Translation: "The cat from [image 0] running on the floor from [image 1]"
+}
+```
+
+#### Example 2: Multiple Subject Composition
+```typescript
+{
+  referenceImages: [
+    "/path/to/person.jpg",
+    "/path/to/car.jpg",
+    "/path/to/beach.jpg"
+  ],
+  prompt: "[图0]中的人坐在[图1]的车里，背景是[图2]的海滩",
+  // "Person from image 0 sitting in car from image 1, with beach from image 2 as background"
+}
+```
+
+#### Example 3: Object Replacement
+```typescript
+{
+  referenceImages: ["/path/to/room.jpg", "/path/to/furniture.jpg"],
+  prompt: "[图0]的房间里放着[图1]的家具",
+  // "Room from image 0 with furniture from image 1"
+}
+```
+
+### Parameter Reference
+
+```typescript
+interface MainReferenceVideoParams {
+  referenceImages: string[];          // 2-4 image file paths (absolute paths)
+  prompt: string;                     // Prompt with [图N] syntax to reference images
+  model?: string;                     // Default: "jimeng-video-3.0"
+  resolution?: '720p' | '1080p';      // Default: '720p'
+  videoAspectRatio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16';  // Default: '16:9'
+  fps?: number;                       // Frame rate 12-30, default: 24
+  duration?: number;                  // Duration in ms, 3000-15000, default: 5000
+}
+```
+
+### Important Notes
+
+1. **Image Count**: Requires 2-4 reference images (less than 2 or more than 4 will fail)
+2. **Prompt Requirements**: Must include at least one image reference using `[图N]` syntax
+3. **Valid Indices**: Image indices must be valid (0-based, within range of provided images)
+4. **Model Support**: Requires jimeng-video-3.0 or later models
+5. **Processing Time**: May take longer than traditional video generation due to multi-image processing
+
+### Technical Details
+
+#### Architecture
+- **Location**: `src/api/video/MainReferenceVideoGenerator.ts`
+- **Inheritance**: Extends `JimengClient` to reuse upload and request capabilities
+- **Independence**: Fully independent implementation, no modifications to existing code
+
+#### Implementation Features
+- Automatic prompt parsing to extract image references and text segments
+- Converts `[图N]` syntax to API's `idip_meta_list` structure
+- Uploads all reference images before generation
+- Polls video generation status with exponential backoff
+- Comprehensive parameter validation
+
+#### API Mapping
+The tool translates user-friendly syntax into JiMeng's internal format:
+- `video_mode: 2` - Identifies main reference mode
+- `idip_frames` - Uploaded reference images
+- `idip_meta_list` - Structured prompt with image references and text segments
+- `functionMode: "main_reference"` - Tracking metadata
+
+### Error Handling
+
+Common errors and solutions:
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "至少需要2张参考图片" | Less than 2 images provided | Provide 2-4 images |
+| "最多支持4张参考图片" | More than 4 images provided | Reduce to 4 or fewer |
+| "必须包含至少一个图片引用" | No `[图N]` in prompt | Add image references like `[图0]` |
+| "图片引用[图N]超出范围" | Index exceeds image count | Use valid indices (0 to imageCount-1) |
+| "上传失败" | Image file not found/accessible | Check file paths are absolute and valid |
+
+### MCP Tool Registration
+
+The feature is registered as `generateMainReferenceVideo` in MCP server:
+```typescript
+server.tool("generateMainReferenceVideo", ...)
+```
+
+Available in Claude Desktop once MCP server is configured.
 
 ## Task Master AI Instructions
 **Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**

@@ -2,6 +2,7 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { generateImage, generateVideo, videoPostProcess } from "./api.js";
+import { MainReferenceVideoGenerator } from "./api/video/MainReferenceVideoGenerator.js";
 import { logger } from './utils/logger.js';
 
 // 服务器启动调试信息
@@ -196,6 +197,60 @@ export const createServer = (): McpServer => {
         const errorMessage = error instanceof Error ? error.message : String(error);
         return {
           content: [{ type: "text", text: `视频生成失败: ${errorMessage}` }],
+          isError: true
+        };
+      }
+    }
+  );
+
+  server.tool(
+    "generateMainReferenceVideo",
+    "🎬 主体参考视频生成 - 组合多图主体到一个场景，支持[图0]、[图1]语法引用",
+    {
+      referenceImages: z.array(z.string()).min(2).max(4).describe("参考图片绝对路径数组，2-4张"),
+      prompt: z.string().describe("提示词，用[图N]引用图片，如：[图0]中的猫在[图1]的地板上跑"),
+      model: z.string().optional().describe("模型名称，默认jimeng-video-3.0"),
+      resolution: z.enum(["720p", "1080p"]).optional().describe("分辨率，默认720p"),
+      videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().describe("视频比例，默认16:9"),
+      fps: z.number().min(12).max(30).optional().describe("帧率，默认24"),
+      duration: z.number().min(3000).max(15000).optional().describe("时长(毫秒)，默认5000")
+    },
+    async (params) => {
+      try {
+        // 获取sessionId（从环境变量）
+        const sessionId = process.env.JIMENG_API_TOKEN;
+        if (!sessionId) {
+          return {
+            content: [{ type: "text", text: "错误：未设置JIMENG_API_TOKEN环境变量" }],
+            isError: true
+          };
+        }
+
+        const generator = new MainReferenceVideoGenerator(sessionId);
+        const videoUrl = await generator.generate({
+          referenceImages: params.referenceImages,
+          prompt: params.prompt,
+          model: params.model,
+          resolution: params.resolution,
+          videoAspectRatio: params.videoAspectRatio,
+          fps: params.fps,
+          duration: params.duration
+        });
+
+        if (!videoUrl) {
+          return {
+            content: [{ type: "text", text: "主体参考视频生成失败：未能获取视频URL" }],
+            isError: true
+          };
+        }
+
+        return {
+          content: [{ type: "text", text: videoUrl }]
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return {
+          content: [{ type: "text", text: `主体参考视频生成失败: ${errorMessage}` }],
           isError: true
         };
       }
