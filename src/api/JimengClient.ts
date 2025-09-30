@@ -726,8 +726,8 @@ export class JimengClient extends CreditService {
 
   private async pollTraditionalResult(result: any, params?: ImageGenerationParams, actualModel?: string, modelName?: string, hasFilePath?: boolean, uploadResult?: any, uploadResults?: any[]): Promise<string[]> {
     console.log('[DEBUG] 开始传统轮询');
-    console.log('[DEBUG] 初始响应:', JSON.stringify(result, null, 2));
-    
+    console.log('[DEBUG] 初始响应: historyId=', result?.data?.aigc_data?.history_record_id, 'status=', result?.data?.status);
+
     // 获取历史记录ID
     const historyId = result?.data?.aigc_data?.history_record_id;
     if (!historyId) {
@@ -994,7 +994,7 @@ export class JimengClient extends CreditService {
 
     // 提取图片URL - 尝试多种可能的路径
     const resultList = (itemList || []).map((item, index) => {
-      console.log(`[DEBUG] 处理第${index}项:`, JSON.stringify(item, null, 2));
+      console.log(`[DEBUG] 处理第${index}项: status=${item?.common_attr?.status}, has_url=${!!item?.image?.large_images?.[0]?.image_url}`);
       
       // 尝试多种可能的URL路径
       let imageUrl = item?.image?.large_images?.[0]?.image_url 
@@ -1027,7 +1027,7 @@ export class JimengClient extends CreditService {
    */
   private async pollTraditionalResultForVideo(result: any): Promise<string[]> {
     console.log('[DEBUG] 开始视频轮询');
-    console.log('[DEBUG] 视频生成响应结构:', JSON.stringify(result, null, 2));
+    console.log('[DEBUG] 视频生成响应: submitId=', result?.data?.aigc_data?.task?.submit_id, 'historyId=', result?.data?.aigc_data?.history_record_id);
 
     // 获取正确的ID用于轮询 - 实际需要使用submit_id
     const submitId = result?.data?.aigc_data?.task?.submit_id ||
@@ -1038,7 +1038,7 @@ export class JimengClient extends CreditService {
     const historyId = result?.data?.aigc_data?.history_record_id;
 
     if (!submitId) {
-      console.error('[ERROR] 未找到有效的submit_id，响应结构:', JSON.stringify(result, null, 2));
+      console.error('[ERROR] 未找到有效的submit_id: submitId=', submitId, 'errmsg=', result?.errmsg);
       if (result?.errmsg) {
         throw new Error(result.errmsg);
       } else {
@@ -1096,8 +1096,7 @@ export class JimengClient extends CreditService {
       }
 
       if (!pollResult?.data || !pollResult.data[submitId]) {
-        console.error(`[ERROR] 轮询响应无效，submitId=${submitId}`);
-        console.log(`[DEBUG] API响应结构:`, JSON.stringify(pollResult, null, 2));
+        console.error(`[ERROR] 轮询响应无效，submitId=${submitId}`, 'hasData=', !!pollResult?.data, 'hasSubmitId=', !!pollResult?.data?.[submitId]);
         continue;
       }
 
