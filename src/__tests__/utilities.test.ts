@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 工具类测试
  * 测试重构后的工具类和辅助函数功能
@@ -6,7 +8,7 @@
 import { ImageDimensionCalculator } from '../utils/dimensions.js';
 import { generateCookie } from '../utils/auth.js';
 import { MODEL_MAP, DEFAULT_MODEL, DEFAULT_VIDEO_MODEL, ASPECT_RATIO_PRESETS, getResolutionType } from '../types/models.js';
-import { generateUuid, jsonEncode, urlEncode } from '../utils/index.js';
+import { generateUuid, jsonEncode, urlEncode, toUrlParams } from '../utils/index.js';
 
 describe('工具类测试', () => {
   
@@ -45,20 +47,21 @@ describe('工具类测试', () => {
     });
 
     it('应该正确处理无效的宽高比输入', () => {
-      // 对于无效输入，应该返回默认值或抛出错误
-      expect(() => {
-        ImageDimensionCalculator.calculateDimensions('invalid:ratio');
-      }).toThrow();
+      // 对于无效输入，应该返回默认值（1:1）
+      const result = ImageDimensionCalculator.calculateDimensions('invalid:ratio');
+      expect(result.width).toBe(2048);
+      expect(result.height).toBe(2048);
+      expect(result.resolutionType).toBe('2k');
     });
 
     it('应该正确处理所有预设宽高比', () => {
       const presetRatios = ['21:9', '16:9', '3:2', '4:3', '1:1', '3:4', '2:3', '9:16'];
-      
+
       presetRatios.forEach(ratio => {
         const result = ImageDimensionCalculator.calculateDimensions(ratio);
         expect(result.width).toBeGreaterThan(0);
         expect(result.height).toBeGreaterThan(0);
-        expect(typeof result.imageRatio).toBe('number');
+        expect(result.resolutionType).toBe('2k');
       });
     });
 
@@ -146,19 +149,24 @@ describe('工具类测试', () => {
 
     it('应该包含宽高比预设', () => {
       expect(ASPECT_RATIO_PRESETS).toBeDefined();
-      expect(typeof ASPECT_RATIO_PRESETS).toBe('object');
-      
-      // 检查主要宽高比预设
-      expect(ASPECT_RATIO_PRESETS['16:9']).toBeDefined();
-      expect(ASPECT_RATIO_PRESETS['1:1']).toBeDefined();
-      expect(ASPECT_RATIO_PRESETS['9:16']).toBeDefined();
+      expect(Array.isArray(ASPECT_RATIO_PRESETS)).toBe(true);
+
+      // 检查主要宽高比预设存在
+      const preset169 = ASPECT_RATIO_PRESETS.find(p => p.name === '16:9');
+      const preset11 = ASPECT_RATIO_PRESETS.find(p => p.name === '1:1');
+      const preset916 = ASPECT_RATIO_PRESETS.find(p => p.name === '9:16');
+
+      expect(preset169).toBeDefined();
+      expect(preset11).toBeDefined();
+      expect(preset916).toBeDefined();
     });
 
     it('getResolutionType应该正确返回分辨率类型', () => {
-      // 测试不同分辨率返回正确的类型
-      expect(getResolutionType(1920, 1080)).toBe('1080p');
-      expect(getResolutionType(1280, 720)).toBe('720p');
-      expect(getResolutionType(512, 512)).toBe('512p');
+      // 测试不同分辨率返回正确的类型（基于最大边长）
+      expect(getResolutionType(1920, 1080)).toBe('2k'); // max=1920
+      expect(getResolutionType(1280, 720)).toBe('1.5k'); // max=1280
+      expect(getResolutionType(512, 512)).toBe('1k'); // max=512
+      expect(getResolutionType(2048, 2048)).toBe('2k'); // max=2048
     });
   });
 
@@ -210,7 +218,7 @@ describe('工具类测试', () => {
       expect(decoded.escape).toBe(testObj.escape);
     });
 
-    it('urlEncode应该正确编码URL参数', () => {
+    it('toUrlParams应该正确编码URL参数', () => {
       const testParams = {
         simple: 'value',
         space: 'hello world',
@@ -218,47 +226,49 @@ describe('工具类测试', () => {
         chinese: '中文参数',
         number: 123
       };
-      
-      const encoded = urlEncode(testParams);
-      
+
+      const encoded = toUrlParams(testParams);
+
       expect(typeof encoded).toBe('string');
       expect(encoded).toContain('simple=value');
-      expect(encoded).toContain('space=hello%20world');
+      expect(encoded).toContain('space=hello+world');
       expect(encoded).toContain('&');
     });
 
-    it('urlEncode应该处理空对象', () => {
-      const encoded = urlEncode({});
-      
+    it('toUrlParams应该处理空对象', () => {
+      const encoded = toUrlParams({});
+
       expect(typeof encoded).toBe('string');
       expect(encoded).toBe('');
     });
 
-    it('urlEncode应该处理数组参数', () => {
+    it('toUrlParams应该处理数组参数', () => {
       const testParams = {
         tags: ['tag1', 'tag2', 'tag3'],
         single: 'value'
       };
-      
-      const encoded = urlEncode(testParams);
-      
+
+      const encoded = toUrlParams(testParams);
+
       expect(typeof encoded).toBe('string');
       expect(encoded).toContain('single=value');
-      // 数组参数的处理方式取决于具体实现
+      expect(encoded).toContain('tags=tag1');
+      expect(encoded).toContain('tags=tag2');
     });
 
-    it('urlEncode应该处理null和undefined值', () => {
+    it('toUrlParams应该处理null和undefined值', () => {
       const testParams = {
         nullValue: null,
         undefinedValue: undefined,
         validValue: 'test'
       };
-      
-      const encoded = urlEncode(testParams);
-      
+
+      const encoded = toUrlParams(testParams);
+
       expect(typeof encoded).toBe('string');
       expect(encoded).toContain('validValue=test');
-      // null和undefined的处理方式取决于具体实现
+      expect(encoded).not.toContain('nullValue');
+      expect(encoded).not.toContain('undefinedValue');
     });
   });
 

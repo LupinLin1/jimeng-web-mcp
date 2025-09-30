@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 视频生成功能测试
  * 测试重构后的视频生成API功能，包括传统模式和多帧模式

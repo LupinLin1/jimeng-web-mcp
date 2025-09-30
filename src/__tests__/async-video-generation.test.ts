@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 异步视频生成契约测试
  * 测试异步视频生成API的行为契约

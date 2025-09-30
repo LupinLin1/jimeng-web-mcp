@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 异步图像生成核心功能测试
  * 测试异步图像生成的基础功能、参数验证、错误处理和边界条件

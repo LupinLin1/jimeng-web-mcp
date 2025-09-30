@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 向后兼容性测试
  * 确保新的异步功能不会破坏现有的同步模式，保证所有现有代码继续正常工作

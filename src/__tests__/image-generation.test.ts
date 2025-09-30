@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 图像生成功能测试
  * 测试重构后的图像生成API功能，使用Mock避免实际网络请求
@@ -164,14 +166,14 @@ describe('图像生成功能测试', () => {
       const params: ImageGenerationParams = {
         prompt: '基于参考图的生成',
         refresh_token: 'test-token',
-        filePath: '/path/to/reference.jpg',
+        filePath: ['/path/to/reference.jpg'],
         sample_strength: 0.7
       };
 
       await generateImage(params);
       expect(mockClient.generateImage).toHaveBeenCalledWith(
-        expect.objectContaining({ 
-          filePath: '/path/to/reference.jpg',
+        expect.objectContaining({
+          filePath: ['/path/to/reference.jpg'],
           sample_strength: 0.7
         })
       );

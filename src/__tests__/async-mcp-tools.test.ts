@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * MCP工具层异步功能测试
  * 测试MCP服务器层的异步工具实现，包括Zod验证、工具注册、响应格式等

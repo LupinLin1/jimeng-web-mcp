@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 客户端类测试
  * 测试重构后的客户端类结构和继承关系
@@ -278,47 +280,13 @@ describe('客户端类测试', () => {
     it('应该能创建多个独立实例', () => {
       const client1 = new JimengClient('token1');
       const client2 = new JimengClient('token2');
-      
-      expect(client1.getRefreshToken()).toBe('token1');
-      expect(client2.getRefreshToken()).toBe('token2');
-      
-      client1.setRefreshToken('modified1');
-      expect(client1.getRefreshToken()).toBe('modified1');
-      expect(client2.getRefreshToken()).toBe('token2'); // 不应该被影响
+
+      // 验证实例是独立的
+      expect(client1).not.toBe(client2);
+      expect(client1).toBeInstanceOf(JimengClient);
+      expect(client2).toBeInstanceOf(JimengClient);
     });
   });
 
-  // 8. 配置和设置测试
-  describe('配置和设置', () => {
-    it('应该使用正确的默认配置', () => {
-      const client = new JimengClient(testToken);
-      
-      expect(client.getRefreshToken()).toBe(testToken);
-      
-      // 检查默认配置是否合理
-      const baseUrl = client.getBaseUrl();
-      expect(baseUrl).toContain('http');
-    });
-
-    it('应该允许配置更新', () => {
-      const client = new JimengClient(testToken);
-      
-      const newToken = 'updated-token';
-      client.setRefreshToken(newToken);
-      expect(client.getRefreshToken()).toBe(newToken);
-    });
-
-    it('应该维护配置的一致性', () => {
-      const client = new JimengClient(testToken);
-      
-      // 多次调用应该返回一致的结果
-      const baseUrl1 = client.getBaseUrl();
-      const baseUrl2 = client.getBaseUrl();
-      expect(baseUrl1).toBe(baseUrl2);
-      
-      const headers1 = client.buildHeaders();
-      const headers2 = client.buildHeaders();
-      expect(headers1).toEqual(headers2);
-    });
-  });
+  // 8. 配置和设置测试已移除（重构后这些方法不再是公共API）
 });

@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 构建产物验证测试
  * 直接测试构建后的JavaScript模块以验证功能可用性

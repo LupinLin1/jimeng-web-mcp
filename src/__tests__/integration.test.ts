@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 集成测试
  * 端到端测试重构后的完整工作流程和向后兼容性

@@ -1,3 +1,5 @@
+import { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "@jest/globals";
+
 /**
  * 模块导入兼容性测试
  * 验证重构后的模块能够正确导入且保持100%向后兼容性
