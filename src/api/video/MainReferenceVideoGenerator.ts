@@ -10,7 +10,7 @@ import {
   IdipMetaItem,
   IdipFrameImage
 } from '../../types/video.types.js';
-import { DEFAULT_VIDEO_MODEL } from '../../types/models.js';
+import { DEFAULT_VIDEO_MODEL, WEB_ID } from '../../types/models.js';
 import { generateUuid } from '../../utils/index.js';
 
 /**
@@ -51,11 +51,21 @@ export class MainReferenceVideoGenerator extends JimengClient {
 
     // 6. 发送请求
     console.log('[MainReference] 发送视频生成请求...');
+    console.log('[MainReference] 请求数据:', JSON.stringify(requestData, null, 2));
+
+    // 构建URL参数（与JimengClient保持一致）
+    const urlParams = {
+      aid: 513695,
+      device_platform: "web",
+      region: "cn",
+      webId: WEB_ID
+    };
+
     const result = await this.request(
       'POST',
       '/mweb/v1/aigc_draft/generate',
-      requestData.draft_content,
-      requestData
+      requestData,  // body数据
+      urlParams     // URL参数
     );
 
     console.log('[MainReference] 请求发送成功，开始轮询结果...');
@@ -224,7 +234,8 @@ export class MainReferenceVideoGenerator extends JimengClient {
   ): any {
     const componentId = generateUuid();
     const submitId = generateUuid();
-    const model = params.model || DEFAULT_VIDEO_MODEL;
+    const modelName = params.model || DEFAULT_VIDEO_MODEL;
+    const model = this.getModel(modelName);  // 映射模型名称
     const resolution = params.resolution || '720p';
     const videoAspectRatio = params.videoAspectRatio || '16:9';
     const fps = params.fps || 24;
@@ -330,10 +341,14 @@ export class MainReferenceVideoGenerator extends JimengClient {
    * 复用JimengClient的轮询逻辑
    */
   private async pollVideoResult(result: any): Promise<string> {
+    // 调试：打印完整响应
+    console.log('[MainReference] API响应:', JSON.stringify(result, null, 2));
+
     // 获取历史记录ID
     const historyId = result?.data?.aigc_data?.history_record_id;
     if (!historyId) {
-      throw new Error(result?.errmsg || '获取历史记录ID失败');
+      console.error('[MainReference] 无法获取historyId，完整响应:', result);
+      throw new Error(result?.errmsg || result?.data?.fail_starling_message || '获取历史记录ID失败');
     }
 
     console.log(`[MainReference] 开始轮询视频结果，historyId: ${historyId}`);
@@ -344,8 +359,8 @@ export class MainReferenceVideoGenerator extends JimengClient {
     while (pollCount < maxPollCount) {
       pollCount++;
 
-      // 等待一段时间再轮询
-      const waitTime = pollCount === 1 ? 5000 : 10000;  // 首次5秒，后续10秒
+      // 等待一段时间再轮询 - 视频生成需要较长时间
+      const waitTime = pollCount === 1 ? 60000 : 10000;  // 首次60秒，后续10秒
       await new Promise(resolve => setTimeout(resolve, waitTime));
 
       console.log(`[MainReference] 轮询 ${pollCount}/${maxPollCount}...`);
@@ -359,13 +374,14 @@ export class MainReferenceVideoGenerator extends JimengClient {
             image_info: {
               width: 2048,
               height: 2048,
-              resolution_type: '2k'
+              format: "webp"
             }
           },
           {}
         );
 
-        const record = pollResult?.data?.history_records?.[0];
+        // 视频轮询响应格式：data[historyId]
+        const record = pollResult?.data?.[historyId];
         if (!record) {
           console.log(`[MainReference] 轮询 ${pollCount}: 未获取到记录`);
           continue;
@@ -374,25 +390,30 @@ export class MainReferenceVideoGenerator extends JimengClient {
         const status = record.status;
         console.log(`[MainReference] 轮询 ${pollCount}: 状态=${status}`);
 
-        // 状态30表示完成
-        if (status === 30) {
-          const videoUrl = record.item_list?.[0]?.video_info?.video_url;
+        // 状态50表示完成
+        if (status === 50) {
+          const videoUrl = record.item_list?.[0]?.video?.transcoded_video?.origin?.video_url;
           if (!videoUrl) {
             throw new Error('视频生成完成但未获取到视频URL');
           }
           return videoUrl;
         }
 
-        // 状态50表示失败
-        if (status === 50) {
+        // 状态30表示失败
+        if (status === 30) {
           const failCode = record.fail_code || 'unknown';
           throw new Error(`视频生成失败，错误码: ${failCode}`);
         }
 
-        // 其他状态继续轮询
+        // 其他状态继续轮询(如status=20表示处理中)
       } catch (error) {
-        console.error(`[MainReference] 轮询 ${pollCount} 出错:`, error);
-        // 网络错误继续轮询，其他错误抛出
+        // 如果是业务失败(有错误消息),立即抛出,停止轮询
+        if (error instanceof Error && error.message.includes('视频生成失败')) {
+          throw error;
+        }
+
+        // 网络错误或其他临时错误,接近最大次数时抛出
+        console.error(`[MainReference] 轮询 ${pollCount} 网络错误:`, error);
         if (pollCount >= maxPollCount - 5) {
           throw error;
         }
