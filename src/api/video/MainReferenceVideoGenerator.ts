@@ -3,7 +3,7 @@
  * 独立实现主体参考功能，不改动现有JimengClient代码
  */
 
-import { JimengClient } from '../JimengClient.js';
+import { BaseClient } from '../BaseClient.js';
 import {
   MainReferenceVideoParams,
   MainReferenceSegment,
@@ -15,9 +15,9 @@ import { generateUuid } from '../../utils/index.js';
 
 /**
  * 主体参考视频生成器
- * 通过继承JimengClient复用基础能力（上传、请求、积分等）
+ * 通过继承BaseClient复用基础能力（上传、请求、积分等）
  */
-export class MainReferenceVideoGenerator extends JimengClient {
+export class MainReferenceVideoGenerator extends BaseClient {
 
   /**
    * 生成主体参考视频
@@ -75,6 +75,64 @@ export class MainReferenceVideoGenerator extends JimengClient {
     console.log('[MainReference] 视频生成完成:', videoUrl);
 
     return videoUrl;
+  }
+
+  /**
+   * 异步生成主体参考视频 - 立即返回historyId
+   * 与generate方法相同的逻辑，但不等待轮询结果
+   */
+  async generateAsync(params: MainReferenceVideoParams): Promise<string> {
+    console.log('[MainReference] [Async] 开始异步生成主体参考视频...');
+
+    // 1. 参数验证
+    this.validateParams(params);
+
+    // 2. 检查积分
+    const creditInfo = await this.getCredit();
+    if (creditInfo.totalCredit <= 0) {
+      console.log('[MainReference] [Async] 积分不足，尝试领取积分...');
+      await this.receiveCredit();
+    }
+
+    // 3. 解析提示词，提取图片引用和文本片段
+    const segments = this.parsePrompt(params.prompt);
+    console.log(`[MainReference] [Async] 提示词解析完成，共${segments.length}个片段`);
+
+    // 4. 上传参考图片
+    console.log(`[MainReference] [Async] 开始上传${params.referenceImages.length}张参考图片...`);
+    const uploadedImages = await this.uploadReferenceImages(params.referenceImages);
+    console.log(`[MainReference] [Async] 图片上传完成`);
+
+    // 5. 构建请求数据
+    const requestData = this.buildRequestData(params, segments, uploadedImages);
+
+    // 6. 发送请求
+    console.log('[MainReference] [Async] 发送视频生成请求...');
+
+    // 构建URL参数（与JimengClient保持一致）
+    const urlParams = {
+      aid: 513695,
+      device_platform: "web",
+      region: "cn",
+      webId: WEB_ID
+    };
+
+    const result = await this.request(
+      'POST',
+      '/mweb/v1/aigc_draft/generate',
+      requestData,  // body数据
+      urlParams     // URL参数
+    );
+
+    // 7. 提取并返回historyId（不轮询）
+    const historyId = result?.data?.aigc_data?.history_record_id;
+    if (!historyId) {
+      console.error('[MainReference] [Async] 无法获取historyId，完整响应:', result);
+      throw new Error(result?.errmsg || result?.data?.fail_starling_message || '未返回history_id');
+    }
+
+    console.log('[MainReference] [Async] 返回historyId:', historyId);
+    return historyId;
   }
 
   /**
@@ -175,8 +233,8 @@ export class MainReferenceVideoGenerator extends JimengClient {
     for (let i = 0; i < imagePaths.length; i++) {
       console.log(`[MainReference] 上传图片 ${i + 1}/${imagePaths.length}: ${imagePaths[i]}`);
 
-      // 使用父类的uploadCoverFile方法
-      const uploadResult = await (this as any).uploadCoverFile(imagePaths[i]);
+      // 使用父类的uploadImage方法
+      const uploadResult = await this.uploadImage(imagePaths[i]);
 
       uploadedImages.push({
         type: 'image',

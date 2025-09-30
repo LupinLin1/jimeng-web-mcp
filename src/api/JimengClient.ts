@@ -5,7 +5,8 @@
  */
 
 import { JimengApiClient } from './ApiClient.js';
-import { CreditService } from './CreditService.js';
+import { BaseClient } from './BaseClient.js';
+import { VideoGenerator } from './video/VideoGenerator.js';
 import {
   ImageGenerationParams,
   VideoGenerationParams,
@@ -13,15 +14,16 @@ import {
   SuperResolutionParams,
   AudioEffectGenerationParams,
   VideoPostProcessUnifiedParams,
+  MainReferenceVideoParams,
   DraftResponse,
   AigcMode,
   AbilityItem,
   QueryResultResponse,
   GenerationStatus
 } from '../types/api.types.js';
-import { 
-  DEFAULT_MODEL, 
-  DEFAULT_VIDEO_MODEL, 
+import {
+  DEFAULT_MODEL,
+  DEFAULT_VIDEO_MODEL,
   DRAFT_VERSION,
   getResolutionType,
   ASPECT_RATIO_PRESETS,
@@ -40,31 +42,14 @@ import crc32 from 'crc32';
  * JiMeng 完整功能客户端
  * 提供图像生成、视频生成、文件上传等全部功能
  */
-export class JimengClient extends CreditService {
-  private sessionId?: string;
+export class JimengClient extends BaseClient {
+  private videoGen: VideoGenerator;
 
-  /**
-   * 生成完整的请求参数
-   */
-  private generateRequestParams(): any {
-    const rqParams: any = {
-      "aid": parseInt("513695"),
-      "device_platform": "web",
-      "region": "cn",
-      "webId": WEB_ID,
-      "da_version": "3.3.2",
-      "web_component_open_flag": 1,
-      "web_version": "6.6.0",
-      "aigc_features": "app_lip_sync",
-      "msToken": generateMsToken(),
-    };
-
-    // 添加a_bogus防篡改参数
-    rqParams['a_bogus'] = generate_a_bogus(toUrlParams(rqParams), 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-
-    return rqParams;
+  constructor(refreshToken?: string) {
+    super(refreshToken);
+    this.videoGen = new VideoGenerator(refreshToken);
   }
-  
+
   // ============== 图像生成功能 ==============
   
   /**
@@ -97,7 +82,7 @@ export class JimengClient extends CreditService {
       // filePath 现在只支持数组格式
       console.log(`[DEBUG] 文件上传模式，共${params.filePath.length}个文件`);
       for (const filePath of params.filePath) {
-        const result = await this.uploadCoverFile(filePath);
+        const result = await this.uploadImage(filePath);
         uploadResults.push(result);
       }
       uploadResult = uploadResults[0]; // 兼容现有逻辑
@@ -167,26 +152,19 @@ export class JimengClient extends CreditService {
   }
 
   // ============== 视频生成功能 ==============
-  
+
   /**
    * 即梦AI视频生成
    */
   public async generateVideo(params: VideoGenerationParams): Promise<string> {
-    const modelName = params.model || DEFAULT_VIDEO_MODEL;
-    const actualModel = this.getModel(modelName);
-    
-    // 检查积分
-    const creditInfo = await this.getCredit();
-    if (creditInfo.totalCredit <= 0) {
-      await this.receiveCredit();
-    }
-    
-    // 多帧模式 vs 传统模式
-    if (params.multiFrames && params.multiFrames.length > 0) {
-      return await this.generateMultiFrameVideo(params, actualModel);
-    } else {
-      return await this.generateTraditionalVideo(params, actualModel);
-    }
+    return this.videoGen.generateVideo(params);
+  }
+
+  /**
+   * 主体参考视频生成 - 组合多图主体到一个场景
+   */
+  public async generateMainReferenceVideo(params: MainReferenceVideoParams): Promise<string> {
+    return this.videoGen.generateMainReferenceVideo(params);
   }
 
   // ============== 文件上传功能 ==============
@@ -463,134 +441,6 @@ export class JimengClient extends CreditService {
     );
 
     console.log('[DEBUG] 继续生成请求已发送，响应:', JSON.stringify(result, null, 2));
-  }
-
-  // ============== 轮询日志格式化函数 ==============
-
-  /**
-   * 格式化轮询开始日志
-   */
-  private logPollStart(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, maxPollCount: number,
-                      status: number | string, waitTime: number, elapsedTotal: number,
-                      networkErrorCount: number, maxNetworkErrors: number, id: string): void {
-    console.log(`[${type}-START] Poll=${pollCount}/${maxPollCount}, Status=${status}, Wait=${waitTime/1000}s, Elapsed=${elapsedTotal}s, NetErr=${networkErrorCount}/${maxNetworkErrors}, ID=${id}`);
-  }
-
-  /**
-   * 格式化轮询数据日志
-   */
-  private logPollData(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, apiCallDuration: number,
-                     status: number | string, prevStatus?: number | string, failCode?: string,
-                     finishedCount?: number, totalCount?: number, itemListLength?: number,
-                     progress?: string, errorMessage?: string): void {
-
-    let message = `[DATA] [${type}-DATA] 轮询=${pollCount}, API耗时=${apiCallDuration}ms`;
-
-    if (prevStatus !== undefined) {
-      message += `, 状态变化=${prevStatus}→${status}`;
-    } else {
-      message += `, 状态=${status}`;
-    }
-
-    message += `, 失败码=${failCode || 'null'}`;
-
-    if (finishedCount !== undefined && totalCount !== undefined) {
-      message += `, 完成度=${finishedCount}/${totalCount}`;
-    }
-
-    if (itemListLength !== undefined) {
-      message += `, 结果数=${itemListLength}`;
-    }
-
-    if (progress !== undefined) {
-      message += `, 进度=${progress}`;
-    }
-
-    if (errorMessage !== undefined) {
-      message += `, 错误=${errorMessage}`;
-    }
-
-    console.log(message);
-  }
-
-  /**
-   * 格式化轮询错误日志
-   */
-  private logPollError(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, networkErrorCount: number,
-                      maxNetworkErrors: number, errorDuration: number, error: any): void {
-    console.error(`[${type}-ERROR] Poll=${pollCount}, NetErr=${networkErrorCount}/${maxNetworkErrors}, Duration=${errorDuration}ms, Error=${error}`);
-  }
-
-  /**
-   * 格式化轮询状态检查日志
-   */
-  private logPollStatusCheck(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number,
-                           isCompletionState: boolean, isProcessingState: boolean,
-                           currentStatus: number | string, hasResults?: boolean, resultCount?: number): void {
-
-    let message = `[DATA] [${type}-STATUS] 轮询=${pollCount}, 状态检查={完成状态:${isCompletionState}, 处理中:${isProcessingState}, 当前状态:${currentStatus}`;
-
-    if (hasResults !== undefined) {
-      message += `, 有结果:${hasResults}`;
-    }
-
-    if (resultCount !== undefined) {
-      message += `, 结果数:${resultCount}`;
-    }
-
-    message += '}';
-    console.log(message);
-  }
-
-  /**
-   * 格式化轮询进度日志
-   */
-  private logPollProgress(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, maxPollCount: number,
-                         status: number | string, elapsedTime: number, networkErrorCount: number,
-                         finishedCount?: number, totalCount?: number, progress?: string): void {
-
-    let message = `[DATA] [${type}-PROGRESS] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 已用时=${elapsedTime}s, 网络错误=${networkErrorCount}`;
-
-    if (finishedCount !== undefined && totalCount !== undefined) {
-      message += `, 完成度=${finishedCount}/${totalCount}`;
-    }
-
-    if (progress !== undefined) {
-      message += `, 进度=${progress}`;
-    }
-
-    console.log(message);
-  }
-
-  /**
-   * 格式化轮询结束日志
-   */
-  private logPollEnd(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, maxPollCount: number,
-                    status: number | string, totalElapsedSec: number, networkErrorCount: number,
-                    id: string, timeoutReason?: 'MAX_POLLS' | 'OVERALL_TIMEOUT' | 'UNKNOWN'): void {
-
-    console.log(`[END] [${type}-END] 轮询结束, 总轮询=${pollCount}/${maxPollCount}, 最终状态=${status}, 总耗时=${totalElapsedSec}s, 网络错误=${networkErrorCount}, ID=${id}`);
-
-    // 记录超时原因
-    if (timeoutReason === 'MAX_POLLS') {
-      console.warn(`[TIMEOUT] [${type}-TIMEOUT] 达到最大轮询次数限制, 轮询超时`);
-    } else if (timeoutReason === 'OVERALL_TIMEOUT') {
-      console.warn(`[TIMEOUT] [${type}-TIMEOUT] 达到总体时间限制, 轮询超时`);
-    } else if (timeoutReason === 'UNKNOWN') {
-      console.warn(`[UNKNOWN] [${type}-UNKNOWN] 未知原因导致轮询结束`);
-    }
-  }
-
-  /**
-   * 格式化轮询完成日志
-   */
-  private logPollComplete(type: 'POLL' | 'DRAFT' | 'VIDEO', pollCount: number, status: number | string,
-                         resultCount: number, completionType?: 'SUCCESS' | 'FAIL'): void {
-    if (completionType === 'FAIL') {
-      console.error(`[ERROR] [${type}-FAIL] 轮询=${pollCount}, 生成失败, 状态=${status}`);
-    } else {
-      console.log(`[SUCCESS] [${type}-COMPLETE] 轮询=${pollCount}, 生成完成, 状态=${status}, 返回${resultCount}个结果`);
-    }
   }
 
   // ============== 轮询相关方法（简化版本） ==============
@@ -1024,1033 +874,6 @@ export class JimengClient extends CreditService {
     return resultList
   }
 
-  /**
-   * 专门用于视频生成的轮询方法 - 只基于URL存在性判断完成
-   */
-  private async pollTraditionalResultForVideo(result: any): Promise<string[]> {
-    console.log('[DEBUG] 开始视频轮询');
-    console.log('[DEBUG] 视频生成响应: submitId=', result?.data?.aigc_data?.task?.submit_id, 'historyId=', result?.data?.aigc_data?.history_record_id);
-
-    // 获取正确的ID用于轮询 - 实际需要使用submit_id
-    const submitId = result?.data?.aigc_data?.task?.submit_id ||
-                    result?.data?.aigc_data?.submit_id ||
-                    result?.data?.submit_id ||
-                    result?.submit_id;
-
-    const historyId = result?.data?.aigc_data?.history_record_id;
-
-    if (!submitId) {
-      console.error('[ERROR] 未找到有效的submit_id: submitId=', submitId, 'errmsg=', result?.errmsg);
-      if (result?.errmsg) {
-        throw new Error(result.errmsg);
-      } else {
-        throw new Error('submit_id不存在');
-      }
-    }
-
-    console.log('[DEBUG] 使用的submitId:', submitId);
-    console.log('[DEBUG] historyId:', historyId);
-
-    // 轮询获取结果
-    let pollCount = 0;
-    let networkErrorCount = 0;
-
-    const maxPollCount = 30;
-    const maxNetworkErrors = 3;
-    const overallTimeoutMs = 10 * 60 * 1000; // 10分钟总体超时
-    const overallStartTime = Date.now();
-
-    console.log('[DEBUG] 开始视频轮询，submitId:', submitId);
-    
-    while (pollCount < maxPollCount && Date.now() - overallStartTime < overallTimeoutMs) {
-      // 检查网络错误次数
-      if (networkErrorCount >= maxNetworkErrors) {
-        console.error(`[ERROR] [VIDEO-ERROR] 网络错误次数达到限制=${networkErrorCount}, 退出视频轮询`);
-        break;
-      }
-
-      pollCount++;
-
-      // 等待时间：第一次等待久一点，后续缩短
-      const waitTime = pollCount === 1 ? 60000 : 5000;
-
-      // [DATA] 视频轮询日志 - 轮询开始
-      const pollStartTime = Date.now();
-      const elapsedTotal = Math.round((pollStartTime - overallStartTime) / 1000);
-      console.log(`[DATA] [VIDEO-START] 轮询=${pollCount}/${maxPollCount}, 等待=${waitTime/1000}s, 总耗时=${elapsedTotal}s, 网络错误=${networkErrorCount}/${maxNetworkErrors}, Submit ID=${submitId}`);
-
-      await new Promise(resolve => setTimeout(resolve, waitTime));
-
-      let pollResult;
-      try {
-        pollResult = await this.request(
-          'POST',
-          '/mweb/v1/get_history_by_ids',
-          { submit_ids: [submitId] },
-          this.generateRequestParams()
-        );
-        networkErrorCount = 0; // 重置网络错误计数
-      } catch (error) {
-        networkErrorCount++;
-        console.error(`[ERROR] [VIDEO-ERROR] 轮询=${pollCount}, 网络错误=${networkErrorCount}/${maxNetworkErrors}, 错误:`, error instanceof Error ? error.message : String(error));
-
-        continue; // 继续下一轮询
-      }
-
-      if (!pollResult?.data || !pollResult.data[submitId]) {
-        console.error(`[ERROR] 轮询响应无效，submitId=${submitId}`, 'hasData=', !!pollResult?.data, 'hasSubmitId=', !!pollResult?.data?.[submitId]);
-        continue;
-      }
-
-      const record = pollResult.data[submitId];
-      const status = record.common_attr?.status ?? 'unknown';
-      const failCode = record.common_attr?.fail_code ?? null;
-
-      // 获取状态相关数据
-      const finishedCount = record.finished_count ?? 0;
-      const totalCount = record.total_count ?? 0;
-      const itemListLength = record.item_list?.length ?? 0;
-
-      // [DATA] 视频轮询日志 - 状态数据详情
-      const apiCallDuration = Date.now() - pollStartTime;
-      console.log(`[DATA] [VIDEO-DATA] 轮询=${pollCount}, API耗时=${apiCallDuration}ms, 状态=${status}, 失败码=${failCode || 'null'}, 完成度=${finishedCount}/${totalCount}, 结果数=${itemListLength}`);
-
-      // 检查是否有item_list
-      const hasItemList = record.item_list && record.item_list.length > 0;
-      console.log(`[DATA] [VIDEO-CHECK] 轮询=${pollCount}, 完成检查={有结果:${hasItemList}, 结果数:${itemListLength}}`);
-
-      // 核心逻辑：如果有结果，尝试提取视频URL
-      if (hasItemList) {
-        const currentItemList = record.item_list as any[];
-        console.log(`[DATA] [VIDEO-EXTRACT-TRY] 轮询=${pollCount}, 尝试提取视频URL, 结果数=${currentItemList.length}`);
-
-        // 尝试提取视频URL
-        const videoUrls = this.extractVideoUrls(currentItemList);
-
-        if (videoUrls && videoUrls.length > 0) {
-          console.log(`[SUCCESS] [VIDEO-DONE] 轮询=${pollCount}, 成功提取到${videoUrls.length}个视频URL`);
-          return videoUrls;
-        } else {
-          console.log(`[DATA] [VIDEO-NO-URL] 轮询=${pollCount}, 有结果但未提取到URL，继续轮询`);
-        }
-      }
-      
-      // [DATA] 视频轮询日志 - 进度报告
-      if (pollCount % 5 === 0) {
-        const currentElapsed = Math.round((Date.now() - overallStartTime) / 1000);
-        console.log(`[DATA] [VIDEO-PROGRESS] 轮询=${pollCount}/${maxPollCount}, 状态=${status}, 已用时=${currentElapsed}s, 完成度=${finishedCount}/${totalCount}, 网络错误=${networkErrorCount}`);
-      }
-    }
-
-    // [DATA] 视频轮询日志 - 结束统计
-    const elapsedTime = Date.now() - overallStartTime;
-    const finalElapsedSec = Math.round(elapsedTime / 1000);
-    console.log(`[END] [VIDEO-END] 视频轮询结束, 总轮询=${pollCount}/${maxPollCount}, 总耗时=${finalElapsedSec}s, 网络错误=${networkErrorCount}, Submit ID=${submitId}`);
-
-    // 判断结束原因
-    if (pollCount >= maxPollCount) {
-      console.warn(`[TIMEOUT] [VIDEO-TIMEOUT] 达到最大轮询次数限制`);
-    } else if (Date.now() - overallStartTime > overallTimeoutMs) {
-      console.warn(`[TIMEOUT] [VIDEO-TIMEOUT] 达到总体时间限制`);
-    } else {
-      console.warn(`[TIMEOUT] [VIDEO-TIMEOUT] 网络错误过多，退出轮询`);
-    }
-
-    console.log('[DEBUG] 视频轮询结束，未找到视频URL，返回空数组');
-    return [];
-  }
-
-  /**
-   * 从itemList中提取视频URL
-   */
-  private extractVideoUrls(itemList: any[]): string[] {
-    console.log('[DEBUG] 提取视频URL，itemList长度:', itemList?.length || 0);
-
-    const resultList = (itemList || []).map((item, index) => {
-      console.log(`[DEBUG] 处理视频第${index}项:`, Object.keys(item || {}));
-      
-      // 尝试多种可能的视频URL路径
-      let videoUrl = item?.video?.transcoded_video?.origin?.video_url ||
-                    item?.video?.video_url ||
-                    item?.video?.origin?.video_url ||
-                    item?.common_attr?.cover_url ||
-                    item?.aigc_video_params?.video_url ||
-                    item?.url ||
-                    item?.video_url;
-      
-      console.log(`[DEBUG] 提取到的视频URL:`, videoUrl);
-      return videoUrl;
-    }).filter(Boolean)
-    
-    console.log('[DEBUG] 本轮提取的视频结果:', resultList)
-    return resultList
-  }
-
-  // ============== 占位符方法（需要从原文件继续提取） ==============
-  
-  private async generateMultiFrameVideo(params: VideoGenerationParams, actualModel: string): Promise<string> {
-    console.log('[DEBUG] 开始智能多帧视频生成...');
-    
-    // 验证多帧参数
-    if (!params.multiFrames || params.multiFrames.length === 0) {
-      throw new Error('多帧模式需要提供multiFrames参数');
-    }
-
-    // 验证帧数量限制（实际用户提供的帧数，系统会自动添加结束帧）
-    if (params.multiFrames.length > 9) {
-      throw new Error(`智能多帧最多支持9个内容帧（系统会自动添加结束帧），当前提供了${params.multiFrames.length}帧`);
-    }
-
-    // 验证每个帧的参数
-    for (const frame of params.multiFrames) {
-      if (frame.duration_ms < 1000 || frame.duration_ms > 5000) {
-        throw new Error(`帧${frame.idx}的duration_ms必须在1000-5000ms范围内（1-5秒）`);
-      }
-    }
-
-    // 计算总时长（所有用户提供帧的累计时长）
-    const totalDuration = params.multiFrames.reduce((sum, frame) => sum + frame.duration_ms, 0);
-    console.log(`[DEBUG] 计算总时长: ${totalDuration}ms (${params.multiFrames.length}个内容帧)`);
-
-    // 处理多帧图片上传
-    const processedFrames = [];
-    for (const frame of params.multiFrames) {
-      const uploadResult = await this.uploadCoverFile(frame.image_path);
-      processedFrames.push({
-        type: "",
-        id: generateUuid(),
-        idx: frame.idx,
-        duration_ms: frame.duration_ms,
-        prompt: frame.prompt,
-        media_info: {
-          type: "",
-          id: generateUuid(),
-          media_type: 1,
-          image_info: {
-            type: "image",
-            id: generateUuid(),
-            source_from: "upload",
-            platform_type: 1,
-            name: "",
-            image_uri: uploadResult.uri,
-            width: uploadResult.width,
-            height: uploadResult.height,
-            format: uploadResult.format,
-            uri: uploadResult.uri
-          }
-        }
-      });
-    }
-
-    // 添加最后一个结束帧（duration_ms: 0, prompt: ""）
-    // 根据实际API调用分析，最后一帧需要是结束状态
-    const lastFrame = params.multiFrames[params.multiFrames.length - 1];
-    const lastUploadResult = await this.uploadCoverFile(lastFrame.image_path);
-    processedFrames.push({
-      type: "",
-      id: generateUuid(),
-      idx: params.multiFrames.length, // 下一个idx
-      duration_ms: 0, // 结束帧时长为0
-      prompt: "", // 结束帧prompt为空
-      media_info: {
-        type: "",
-        id: generateUuid(),
-        media_type: 1,
-        image_info: {
-          type: "image",
-          id: generateUuid(),
-          source_from: "upload",
-          platform_type: 1,
-          name: "",
-          image_uri: lastUploadResult.uri,
-          width: lastUploadResult.width,
-          height: lastUploadResult.height,
-          format: lastUploadResult.format,
-          uri: lastUploadResult.uri
-        }
-      }
-    });
-
-    console.log(`[DEBUG] 处理后的帧数量: ${processedFrames.length} (${params.multiFrames.length}内容帧 + 1结束帧)`);
-
-    const componentId = generateUuid();
-    const metricsExtra = JSON.stringify({
-      "isDefaultSeed": 1,
-      "originSubmitId": generateUuid(),
-      "isRegenerate": false,
-      "enterFrom": "click",
-      "functionMode": "multi_frame"
-    });
-
-    const rqData = {
-      "extend": {
-        "root_model": actualModel,
-        "m_video_commerce_info": {
-          "benefit_type": "basic_video_operation_vgfm_v_three",
-          "resource_id": "generate_video", 
-          "resource_id_type": "str",
-          "resource_sub_type": "aigc"
-        },
-        "m_video_commerce_info_list": [{
-          "benefit_type": "basic_video_operation_vgfm_v_three",
-          "resource_id": "generate_video",
-          "resource_id_type": "str", 
-          "resource_sub_type": "aigc"
-        }]
-      },
-      "submit_id": generateUuid(),
-      "metrics_extra": metricsExtra,
-      "draft_content": JSON.stringify({
-        "type": "draft",
-        "id": generateUuid(),
-        "min_version": "3.0.5",
-        "min_features": ["AIGC_GenerateType_VideoMultiFrame"],
-        "is_from_tsn": true,
-        "version": "3.3.2",
-        "main_component_id": componentId,
-        "component_list": [{
-          "type": "video_base_component",
-          "id": componentId,
-          "min_version": "1.0.0",
-          "aigc_mode": "workbench",
-          "metadata": {
-            "type": "",
-            "id": generateUuid(),
-            "created_platform": 3,
-            "created_platform_version": "",
-            "created_time_in_ms": Date.now().toString(),
-            "created_did": ""
-          },
-          "generate_type": "gen_video",
-          "abilities": {
-            "type": "",
-            "id": generateUuid(),
-            "gen_video": {
-              "type": "",
-              "id": generateUuid(),
-              "text_to_video_params": {
-                "type": "",
-                "id": generateUuid(),
-                "video_gen_inputs": [{
-                  "type": "",
-                  "id": generateUuid(),
-                  "min_version": "3.0.5",
-                  "prompt": params.prompt || "",
-                  "video_mode": 2,
-                  "fps": params.fps || 24,
-                  "duration_ms": totalDuration,
-                  "resolution": params.resolution || "720p",
-                  "multi_frames": processedFrames,
-                  "idip_meta_list": []
-                }],
-                "video_aspect_ratio": params.video_aspect_ratio || "3:4",
-                "seed": Math.floor(Math.random() * 100000000) + 2500000000,
-                "model_req_key": actualModel,
-                "priority": 0
-              },
-              "video_task_extra": metricsExtra
-            }
-          },
-          "process_type": 1
-        }]
-      }),
-      "http_common_info": {
-        "aid": parseInt("513695")
-      }
-    };
-
-    const rqParams = this.generateRequestParams();
-
-    // 发送生成请求
-    const result = await this.request(
-      'POST',
-      '/mweb/v1/aigc_draft/generate',
-      rqData,
-      rqParams
-    );
-
-    // 使用视频专用轮询获取结果
-    const videoUrls = await this.pollTraditionalResultForVideo(result);
-
-    // 提取视频URL
-    let videoUrl;
-    if (videoUrls && videoUrls.length > 0) {
-      videoUrl = videoUrls[0];
-      console.log('[DEBUG] 多帧视频生成结果:', videoUrl);
-    }
-
-    return videoUrl || '';
-  }
-
-  private async generateTraditionalVideo(params: VideoGenerationParams, actualModel: string): Promise<string> {
-    console.log('[DEBUG] 开始传统视频生成...');
-    
-    // 传统单帧/首尾帧模式的处理逻辑
-    let first_frame_image = undefined
-    let end_frame_image = undefined
-    if (params?.filePath) {
-      let uploadResults: any[] = []
-      for (const item of params.filePath) {
-        const uploadResult = await this.uploadCoverFile(item)
-        uploadResults.push(uploadResult)
-      }
-      if (uploadResults[0]) {
-        first_frame_image = {
-          format: uploadResults[0].format,
-          height: uploadResults[0].height,
-          id: generateUuid(),
-          image_uri: uploadResults[0].uri,
-          name: "",
-          platform_type: 1,
-          source_from: "upload",
-          type: "image",
-          uri: uploadResults[0].uri,
-          width: uploadResults[0].width,
-        }
-      }
-      if (uploadResults[1]) {
-        end_frame_image = {
-          format: uploadResults[1].format,
-          height: uploadResults[1].height,
-          id: generateUuid(),
-          image_uri: uploadResults[1].uri,
-          name: "",
-          platform_type: 1,
-          source_from: "upload",
-          type: "image",
-          uri: uploadResults[1].uri,
-          width: uploadResults[1].width,
-        }
-      }
-      if (!first_frame_image && !end_frame_image) {
-        throw new Error('上传封面图片失败，请检查图片路径是否正确');
-      }
-    }
-
-    const componentId = generateUuid();
-    const metricsExtra = JSON.stringify({
-      "enterFrom": "click",
-      "isDefaultSeed": 1,
-      "promptSource": "custom",
-      "isRegenerate": false,
-      "originSubmitId": generateUuid(),
-    });
-
-    const rqData = {
-      "extend": {
-        "root_model": end_frame_image ? 'dreamina_ic_generate_video_model_vgfm_3.0' : actualModel,
-        "m_video_commerce_info": {
-          benefit_type: "basic_video_operation_vgfm_v_three",
-          resource_id: "generate_video",
-          resource_id_type: "str",
-          resource_sub_type: "aigc"
-        },
-        "m_video_commerce_info_list": [{
-          benefit_type: "basic_video_operation_vgfm_v_three",
-          resource_id: "generate_video",
-          resource_id_type: "str",
-          resource_sub_type: "aigc"
-        }]
-      },
-      "submit_id": generateUuid(),
-      "metrics_extra": metricsExtra,
-      "draft_content": JSON.stringify({
-        "type": "draft",
-        "id": generateUuid(),
-        "min_version": "3.0.5",
-        "is_from_tsn": true,
-        "version": "3.3.2",
-        "main_component_id": componentId,
-        "component_list": [{
-          "type": "video_base_component",
-          "id": componentId,
-          "min_version": "1.0.0",
-          "metadata": {
-            "type": "",
-            "id": generateUuid(),
-            "created_platform": 3,
-            "created_platform_version": "",
-            "created_time_in_ms": Date.now(),
-            "created_did": ""
-          },
-          "generate_type": "gen_video",
-          "aigc_mode": "workbench",
-          "abilities": {
-            "type": "",
-            "id": generateUuid(),
-            "gen_video": {
-              "id": generateUuid(),
-              "type": "",
-              "text_to_video_params": {
-                "type": "",
-                "id": generateUuid(),
-                "model_req_key": actualModel,
-                "priority": 0,
-                "seed": Math.floor(Math.random() * 100000000) + 2500000000,
-                "video_aspect_ratio": params.video_aspect_ratio || "1:1",
-                "video_gen_inputs": [{
-                  duration_ms: params.duration_ms || 5000,
-                  first_frame_image: first_frame_image,
-                  end_frame_image: end_frame_image,
-                  fps: params.fps || 24,
-                  id: generateUuid(),
-                  min_version: "3.0.5",
-                  prompt: params.prompt,
-                  resolution: params.resolution || "720p",
-                  type: "",
-                  video_mode: 2
-                }]
-              },
-              "video_task_extra": metricsExtra,
-            }
-          }
-        }],
-      }),
-    };
-
-    const rqParams = this.generateRequestParams();
-
-    // 发送生成请求
-    const result = await this.request(
-      'POST',
-      '/mweb/v1/aigc_draft/generate',
-      rqData,
-      rqParams
-    );
-
-    const videoUrls = await this.pollTraditionalResultForVideo(result);
-    let videoUrl;
-    if (videoUrls && videoUrls.length > 0) {
-      videoUrl = videoUrls[0];
-    }
-
-    console.log('[DEBUG] 传统视频生成结果:', videoUrl);
-    return videoUrl || '';
-  }
-
-  private async getUploadAuth(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const authRes = await this.request(
-          'POST',
-          '/mweb/v1/get_upload_token?aid=513695&da_version=3.2.2&aigc_features=app_lip_sync',
-          {
-            scene: 2
-          },
-          {},
-        );
-        if (!authRes.data) {
-          reject(authRes.errmsg ?? '获取上传凭证失败,账号可能已掉线!');
-          return;
-        }
-        resolve(authRes.data);
-      } catch (err) {
-        console.error('获取上传凭证失败:', err);
-        reject(err);
-      }
-    });
-  }
-
-  private async uploadFile(
-    url: string,
-    fileContent: Buffer,
-    headers: any,
-    method: string = 'PUT',
-  ): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const res = await this.request(
-        'POST',
-        url,
-        fileContent,
-        {},
-        headers
-      );
-      resolve(res);
-    });
-  }
-
-  public async getFileContent(filePath: string): Promise<Buffer> {
-    try {
-      if (filePath.includes('https://') || filePath.includes('http://')) {
-        // 直接用axios获取图片Buffer
-        const axios = (await import('axios')).default;
-        const res = await axios.get(filePath, { responseType: 'arraybuffer' });
-        return Buffer.from(res.data);
-      } else {
-        // 确保路径是绝对路径
-        const path = (await import('path')).default;
-        const fs = await import('fs');
-        const absolutePath = path.resolve(filePath);
-        // 读取文件内容
-        return await fs.promises.readFile(absolutePath);
-      }
-    } catch (error) {
-      console.error('Failed to read file:', error);
-      throw new Error(`读取文件失败: ${filePath}`);
-    }
-  }
-
-  private getImageMetadata(buffer: Buffer, filePath: string): {width: number, height: number, format: string} {
-    try {
-      // 检测文件格式
-      const format = this.detectImageFormat(buffer, filePath);
-      
-      // 根据格式解析尺寸
-      let width = 0;
-      let height = 0;
-
-      if (format === 'png') {
-        const metadata = this.parsePNG(buffer);
-        width = metadata.width;
-        height = metadata.height;
-      } else if (format === 'jpg' || format === 'jpeg') {
-        const metadata = this.parseJPEG(buffer);
-        width = metadata.width;
-        height = metadata.height;
-      } else if (format === 'webp') {
-        const metadata = this.parseWebP(buffer);
-        width = metadata.width;
-        height = metadata.height;
-      }
-
-      return { width, height, format };
-    } catch (error) {
-      console.error('获取图片元数据失败:', error);
-      // 返回默认值以保持兼容性
-      return { width: 0, height: 0, format: 'png' };
-    }
-  }
-
-  /**
-   * 检测图片格式
-   */
-  private detectImageFormat(buffer: Buffer, filePath: string): string {
-    // 通过文件扩展名检测
-    const ext = path.extname(filePath).toLowerCase();
-    if (ext === '.png') return 'png';
-    if (ext === '.jpg' || ext === '.jpeg') return 'jpeg';
-    if (ext === '.webp') return 'webp';
-
-    // 通过文件头检测
-    if (buffer.length >= 8) {
-      // PNG: 89 50 4E 47 0D 0A 1A 0A
-      if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
-        return 'png';
-      }
-      // JPEG: FF D8 FF
-      if (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF) {
-        return 'jpeg';
-      }
-      // WebP: 52 49 46 46 xx xx xx xx 57 45 42 50
-      if (buffer[0] === 0x52 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x46 &&
-          buffer[8] === 0x57 && buffer[9] === 0x45 && buffer[10] === 0x42 && buffer[11] === 0x50) {
-        return 'webp';
-      }
-    }
-
-    return 'png'; // 默认格式
-  }
-
-  /**
-   * 解析PNG尺寸
-   */
-  private parsePNG(buffer: Buffer): { width: number; height: number } {
-    try {
-      // PNG IHDR chunk starts at byte 16
-      if (buffer.length >= 24) {
-        const width = buffer.readUInt32BE(16);
-        const height = buffer.readUInt32BE(20);
-        return { width, height };
-      }
-    } catch (error) {
-      console.error('解析PNG失败:', error);
-    }
-    return { width: 0, height: 0 };
-  }
-
-  /**
-   * 解析JPEG尺寸
-   */
-  private parseJPEG(buffer: Buffer): { width: number; height: number } {
-    try {
-      let i = 2; // Skip SOI marker
-      while (i < buffer.length - 4) {
-        // Find SOF marker (Start of Frame)
-        if (buffer[i] === 0xFF) {
-          const marker = buffer[i + 1];
-          // SOF0, SOF1, SOF2, SOF3, SOF5, SOF6, SOF7, SOF9, SOF10, SOF11, SOF13, SOF14, SOF15
-          if ((marker >= 0xC0 && marker <= 0xC3) || (marker >= 0xC5 && marker <= 0xC7) || 
-              (marker >= 0xC9 && marker <= 0xCB) || (marker >= 0xCD && marker <= 0xCF)) {
-            const height = buffer.readUInt16BE(i + 5);
-            const width = buffer.readUInt16BE(i + 7);
-            return { width, height };
-          }
-          // Skip this segment
-          const segmentLength = buffer.readUInt16BE(i + 2);
-          i += segmentLength + 2;
-        } else {
-          i++;
-        }
-      }
-    } catch (error) {
-      console.error('解析JPEG失败:', error);
-    }
-    return { width: 0, height: 0 };
-  }
-
-  /**
-   * 解析WebP尺寸
-   */
-  private parseWebP(buffer: Buffer): { width: number; height: number } {
-    try {
-      if (buffer.length >= 30) {
-        // Simple WebP format
-        if (buffer.toString('ascii', 12, 16) === 'VP8 ') {
-          const width = buffer.readUInt16LE(26) & 0x3FFF;
-          const height = buffer.readUInt16LE(28) & 0x3FFF;
-          return { width, height };
-        }
-        // Lossless WebP format
-        if (buffer.toString('ascii', 12, 16) === 'VP8L') {
-          const bits = buffer.readUInt32LE(21);
-          const width = (bits & 0x3FFF) + 1;
-          const height = ((bits >> 14) & 0x3FFF) + 1;
-          return { width, height };
-        }
-      }
-    } catch (error) {
-      console.error('解析WebP失败:', error);
-    }
-    return { width: 0, height: 0 };
-  }
-
-  /**
-   * 上传文件并获取图片元数据
-   */
-  private async uploadCoverFile(
-    filePath: string,
-  ): Promise<{uri: string, width: number, height: number, format: string}> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        console.log('开始上传文件:', filePath);
-        // 获取上传令牌所需Ak和Tk
-        const uploadAuth = await this.getUploadAuth();
-
-        // 获取图片数据
-        const imageRes = await this.getFileContent(filePath);
-        // 获取图片元数据
-        const metadata = this.getImageMetadata(imageRes, filePath);
-        // 获取图片Crc32标识
-        const imageCrc32 = crc32(imageRes).toString(16);
-
-        // 获取图片上传凭证签名所需参数
-        const getUploadImageProofRequestParams = {
-          Action: 'ApplyImageUpload',
-          FileSize: imageRes.length,
-          ServiceId: 'tb4s082cfz',
-          Version: '2018-08-01',
-          s: this.generateRandomString(11),
-        };
-
-        // 获取图片上传请求头
-        const requestHeadersInfo = await this.generateAuthorizationAndHeader(
-          uploadAuth.access_key_id,
-          uploadAuth.secret_access_key,
-          uploadAuth.session_token,
-          'cn-north-1',
-          'imagex',
-          'GET',
-          getUploadImageProofRequestParams,
-        );
-
-        const getUploadImageProofUrl = 'https://imagex.bytedanceapi.com/';
-        
-        // 获取图片上传凭证
-        const uploadImgRes = await this.request(
-          'GET',
-          getUploadImageProofUrl + '?' + this.httpBuildQuery(getUploadImageProofRequestParams),
-          {},
-          {},
-          requestHeadersInfo
-        );
-
-        if (uploadImgRes?.['Response  ']?.hasOwnProperty('Error')) {
-          reject(uploadImgRes['Response ']['Error']['Message']);
-          return;
-        }
-
-        const UploadAddress = uploadImgRes.Result.UploadAddress;
-        // 用凭证拼接上传图片接口
-        const uploadImgUrl = `https://${UploadAddress.UploadHosts[0]}/upload/v1/${UploadAddress.StoreInfos[0].StoreUri}`;
-
-        // 上传图片
-        const imageUploadRes = await this.uploadFile(
-          uploadImgUrl,
-          imageRes,
-          {
-            Authorization: UploadAddress.StoreInfos[0].Auth,
-            'Content-Crc32': imageCrc32,
-            'Content-Type': 'application/octet-stream',
-          },
-          'POST',
-        );
-
-        if (imageUploadRes.code !== 2000) {
-          reject(imageUploadRes.message);
-          return;
-        }
-
-        const commitImgParams = {
-          Action: 'CommitImageUpload',
-          FileSize: imageRes.length,
-          ServiceId: 'tb4s082cfz',
-          Version: '2018-08-01',
-        };
-
-        const commitImgContent = {
-          SessionKey: UploadAddress.SessionKey,
-        };
-
-        const commitImgHead = await this.generateAuthorizationAndHeader(
-          uploadAuth.access_key_id,
-          uploadAuth.secret_access_key,
-          uploadAuth.session_token,
-          'cn-north-1',
-          'imagex',
-          'POST',
-          commitImgParams,
-          commitImgContent,
-        );
-
-        // 提交图片上传
-        const commitImg = await this.request(
-          'POST',
-          getUploadImageProofUrl + '?' + this.httpBuildQuery(commitImgParams),
-          commitImgContent,
-          {},
-          {
-            ...commitImgHead,
-            'Content-Type': 'application/json',
-          }
-        );
-
-        if (commitImg['Response ']?.hasOwnProperty('Error')) {
-          reject(commitImg['Response  ']['Error']['Message']);
-          return;
-        }
-
-        resolve({
-          uri: commitImg.Result.Results[0].Uri,
-          width: metadata.width,
-          height: metadata.height,
-          format: metadata.format
-        });
-      } catch (err: any) {
-        console.error('上传文件失败:', err);
-        const errorMessage = err?.message || err || '未知';
-        reject('上传失败,失败原因:' + errorMessage);
-      }
-    });
-  }
-
-  private generateRandomString(length: number): string {
-    let result = '';
-    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
-
-  private httpBuildQuery(params: any): string {
-    const searchParams = new URLSearchParams();
-    for (const key in params) {
-      if (params?.hasOwnProperty(key)) {
-        searchParams.append(key, params[key]);
-      }
-    }
-    return searchParams.toString();
-  }
-
-  private async generateAuthorizationAndHeader(
-    accessKeyID: string,
-    secretAccessKey: string,
-    sessionToken: string,
-    region: string,
-    service: string,
-    requestMethod: string,
-    requestParams: any,
-    requestBody: any = {},
-  ): Promise<any> {
-    return new Promise((resolve) => {
-      // 获取当前ISO时间
-      const now = new Date();
-      const amzDate = now.toISOString().replace(/[:\-]|\.\d{3}/g, '').slice(0, 15) + 'Z';
-
-      // 生成请求的Header
-      const requestHeaders: Record<string, string> = this.addHeaders(
-        amzDate,
-        sessionToken,
-        requestBody,
-      )
-
-      if (Object.keys(requestBody).length > 0) {
-        requestHeaders['X-Amz-Content-Sha256'] = crypto
-          .createHash('sha256')
-          .update(JSON.stringify(requestBody))
-          .digest('hex')
-      }
-      // 生成请求的Authorization
-      const authorizationParams = [
-        'AWS4-HMAC-SHA256 Credential=' + accessKeyID + '/' +
-        this.credentialString(amzDate, region, service),
-        'SignedHeaders=' + this.signedHeaders(requestHeaders),
-        'Signature=' + this.signature(
-          secretAccessKey,
-          amzDate,
-          region,
-          service,
-          requestMethod,
-          requestParams,
-          requestHeaders,
-          requestBody,
-        ),
-      ];
-      const authorization = authorizationParams.join(', ');
-
-      // 返回Headers
-      const headers: any = {};
-      for (const key in requestHeaders) {
-        headers[key] = requestHeaders[key];
-      }
-      headers['Authorization'] = authorization;
-      resolve(headers);
-    });
-  }
-
-  private addHeaders(
-    amzDate: string,
-    sessionToken: string,
-    requestBody: any,
-  ): any {
-    const headers = {
-      'X-Amz-Date': amzDate,
-      'X-Amz-Security-Token': sessionToken,
-    };
-    if (Object.keys(requestBody).length > 0) {
-      // @ts-ignore
-      headers['X-Amz-Content-Sha256'] = crypto
-        .createHash('sha256')
-        .update(JSON.stringify(requestBody))
-        .digest('hex');
-    }
-    return headers;
-  }
-
-  private credentialString(
-    amzDate: string,
-    region: string,
-    service: string,
-  ): string {
-    const credentialArr = [
-      amzDate.substring(0, 8),
-      region,
-      service,
-      'aws4_request',
-    ];
-    return credentialArr.join('/');
-  }
-
-  private signedHeaders(requestHeaders: any): string {
-    const headers: string[] = [];
-    Object.keys(requestHeaders).forEach(function (r) {
-      r = r.toLowerCase();
-      headers.push(r);
-    });
-    return headers.sort().join(';');
-  }
-
-  private canonicalString(
-    requestMethod: string,
-    requestParams: any,
-    requestHeaders: any,
-    requestBody: any,
-  ): string {
-    let canonicalHeaders: string[] = [];
-    const headerKeys = Object.keys(requestHeaders).sort();
-    for (let i = 0; i < headerKeys.length; i++) {
-      canonicalHeaders.push(
-        headerKeys[i].toLowerCase() + ':' + requestHeaders[headerKeys[i]],
-      );
-    }
-    // @ts-ignore
-    canonicalHeaders = canonicalHeaders.join('\n') + '\n';
-    let body = '';
-    if (Object.keys(requestBody).length > 0) {
-      body = JSON.stringify(requestBody);
-    }
-
-    const canonicalStringArr = [
-      requestMethod.toUpperCase(),
-      '/',
-      this.httpBuildQuery(requestParams),
-      canonicalHeaders,
-      this.signedHeaders(requestHeaders),
-      crypto.createHash('sha256').update(body).digest('hex'),
-    ];
-    return canonicalStringArr.join('\n');
-  }
-
-  private signature(
-    secretAccessKey: string,
-    amzDate: string,
-    region: string,
-    service: string,
-    requestMethod: string,
-    requestParams: any,
-    requestHeaders: any,
-    requestBody: any,
-  ): string {
-    // 生成signingKey
-    const amzDay = amzDate.substring(0, 8);
-    const kDate = crypto
-      .createHmac('sha256', 'AWS4' + secretAccessKey)
-      .update(amzDay)
-      .digest();
-    const kRegion = crypto.createHmac('sha256', kDate).update(region).digest();
-    const kService = crypto
-      .createHmac('sha256', kRegion)
-      .update(service)
-      .digest();
-    const signingKey = crypto
-      .createHmac('sha256', kService)
-      .update('aws4_request')
-      .digest();
-
-    // 生成StringToSign
-    const stringToSignArr = [
-      'AWS4-HMAC-SHA256',
-      amzDate,
-      this.credentialString(amzDate, region, service),
-      crypto
-        .createHash('sha256')
-        .update(
-          this.canonicalString(
-            requestMethod,
-            requestParams,
-            requestHeaders,
-            requestBody,
-          ),
-        )
-        .digest('hex'),
-    ];
-    const stringToSign = stringToSignArr.join('\n');
-    return crypto
-      .createHmac('sha256', signingKey)
-      .update(stringToSign)
-      .digest('hex');
-  }
 
   // ============== 视频后处理方法 ==============
 
@@ -2553,46 +1376,7 @@ export class JimengClient extends CreditService {
    * 统一视频后处理方法 - 整合补帧、分辨率提升和音效生成
    */
   public async videoPostProcess(params: VideoPostProcessUnifiedParams): Promise<string> {
-    console.log(`🎬 开始视频后处理: ${params.operation}`);
-    
-    switch (params.operation) {
-      case 'frame_interpolation':
-        if (!params.targetFps || !params.originFps) {
-          throw new Error('补帧操作需要提供 targetFps 和 originFps 参数');
-        }
-        return await this.frameInterpolation({
-          videoId: params.videoId,
-          originHistoryId: params.originHistoryId,
-          targetFps: params.targetFps,
-          originFps: params.originFps,
-          duration: params.duration,
-          refresh_token: params.refresh_token
-        });
-      
-      case 'super_resolution':
-        if (!params.targetWidth || !params.targetHeight || !params.originWidth || !params.originHeight) {
-          throw new Error('分辨率提升操作需要提供 targetWidth, targetHeight, originWidth, originHeight 参数');
-        }
-        return await this.superResolution({
-          videoId: params.videoId,
-          originHistoryId: params.originHistoryId,
-          targetWidth: params.targetWidth,
-          targetHeight: params.targetHeight,
-          originWidth: params.originWidth,
-          originHeight: params.originHeight,
-          refresh_token: params.refresh_token
-        });
-      
-      case 'audio_effect':
-        return await this.generateAudioEffect({
-          videoId: params.videoId,
-          originHistoryId: params.originHistoryId,
-          refresh_token: params.refresh_token
-        });
-      
-      default:
-        throw new Error(`不支持的操作类型: ${params.operation}`);
-    }
+    return this.videoGen.videoPostProcess(params);
   }
 
   // ============== 请求日志功能 ==============
@@ -2679,7 +1463,7 @@ export class JimengClient extends CreditService {
     if (hasFilePath) {
       console.log(`📤 [Async] 上传 ${params.filePath!.length} 张参考图`);
       for (const filePath of params.filePath!) {
-        const result = await this.uploadCoverFile(filePath);
+        const result = await this.uploadImage(filePath);
         uploadResults.push(result);
       }
       uploadResult = uploadResults[0]; // 兼容现有逻辑
@@ -2803,9 +1587,13 @@ export class JimengClient extends CreditService {
 
       // 判断是图片还是视频
       const firstItem = itemList[0];
-      if (firstItem.video_url) {
-        // 视频生成
-        response.videoUrl = firstItem.video_url;
+
+      // 视频生成 - 检查多个可能的视频URL路径
+      const videoUrl = firstItem.video?.transcoded_video?.origin?.video_url  // 新格式：完整路径
+                    || firstItem.video_url;                                    // 旧格式：直接字段
+
+      if (videoUrl) {
+        response.videoUrl = videoUrl;
         console.log(`✅ [Query] 视频生成完成: ${response.videoUrl}`);
       } else if (firstItem.image_url) {
         // 直接在item上的image_url（旧格式）
@@ -2833,6 +1621,164 @@ export class JimengClient extends CreditService {
     }
 
     return response;
+  }
+
+  /**
+   * 批量查询多个任务的生成状态和结果（Feature 002-）
+   *
+   * @param historyIds 任务ID数组（建议≤10个）
+   * @returns Promise<BatchQueryResponse> 每个任务ID对应的结果或错误
+   *
+   * @example
+   * ```typescript
+   * const results = await client.getBatchResults([
+   *   "4721606420748",
+   *   "4721606420749",
+   *   "invalid-id"
+   * ]);
+   * // {
+   * //   "4721606420748": { status: "completed", progress: 100, videoUrl: "..." },
+   * //   "4721606420749": { status: "processing", progress: 45 },
+   * //   "invalid-id": { error: "无效的historyId格式" }
+   * // }
+   * ```
+   */
+  async getBatchResults(historyIds: string[]): Promise<{ [historyId: string]: QueryResultResponse | { error: string } }> {
+    console.log(`🔍 [Batch Query] 批量查询 ${historyIds.length} 个任务状态`);
+
+    // 验证输入
+    if (!historyIds || historyIds.length === 0) {
+      throw new Error('historyIds数组不能为空');
+    }
+
+    if (historyIds.length > 10) {
+      console.warn(`⚠️ [Batch Query] 批量查询超过10个任务 (${historyIds.length}), 可能影响性能`);
+    }
+
+    // 预先验证所有historyId格式，记录无效的ID
+    const validIds: string[] = [];
+    const results: { [historyId: string]: QueryResultResponse | { error: string } } = {};
+
+    for (const id of historyIds) {
+      if (!id || id.trim() === '') {
+        results[id] = { error: '无效的historyId格式: historyId不能为空' };
+        continue;
+      }
+
+      const isValidFormat = /^[0-9]+$/.test(id) || /^h[a-zA-Z0-9]+$/.test(id);
+      if (!isValidFormat) {
+        results[id] = { error: '无效的historyId格式: historyId必须是纯数字或以"h"开头的字母数字字符串' };
+        continue;
+      }
+
+      validIds.push(id);
+    }
+
+    // 如果没有有效ID，直接返回
+    if (validIds.length === 0) {
+      console.log('⚠️ [Batch Query] 没有有效的historyId');
+      return results;
+    }
+
+    console.log(`✅ [Batch Query] 有效ID数量: ${validIds.length}/${historyIds.length}`);
+
+    // 批量调用API（单次请求）
+    try {
+      const pollResult = await this.request(
+        'POST',
+        '/mweb/v1/get_history_by_ids',
+        {
+          "history_ids": validIds,
+          "image_info": {
+            "width": 2048,
+            "height": 2048,
+            "format": "webp",
+            "image_scene_list": [
+              { "scene": "smart_crop", "width": 360, "height": 360, "uniq_key": "smart_crop-w:360-h:360", "format": "webp" },
+              { "scene": "smart_crop", "width": 480, "height": 480, "uniq_key": "smart_crop-w:480-h:480", "format": "webp" },
+              { "scene": "smart_crop", "width": 720, "height": 720, "uniq_key": "smart_crop-w:720-h:720", "format": "webp" },
+              { "scene": "normal", "width": 1080, "height": 1080, "uniq_key": "1080", "format": "webp" },
+              { "scene": "normal", "width": 720, "height": 720, "uniq_key": "720", "format": "webp" },
+              { "scene": "normal", "width": 480, "height": 480, "uniq_key": "480", "format": "webp" }
+            ]
+          },
+          "http_common_info": {
+            "aid": parseInt("513695")
+          }
+        }
+      );
+
+      // 处理每个有效ID的结果
+      for (const id of validIds) {
+        const record = pollResult?.data?.[id];
+
+        if (!record) {
+          results[id] = { error: '记录不存在' };
+          continue;
+        }
+
+        // 复用getImageResult的状态解析逻辑
+        const statusCode = record.status;
+        const failCode = record.fail_code;
+        const finishedCount = record.finished_image_count || 0;
+        const totalCount = record.total_image_count || 1;
+        const progress = totalCount > 0 ? Math.round((finishedCount / totalCount) * 100) : 0;
+
+        // 映射状态码
+        let status: GenerationStatus;
+        if (statusCode === 50) {
+          status = 'completed';
+        } else if (statusCode === 30) {
+          status = 'failed';
+        } else if (statusCode === 20 || statusCode === 42 || statusCode === 45) {
+          status = finishedCount === 0 ? 'pending' : 'processing';
+        } else {
+          status = 'processing';
+        }
+
+        // 构建响应
+        const response: QueryResultResponse = {
+          status,
+          progress
+        };
+
+        // 处理完成状态
+        if (status === 'completed' && record.item_list && record.item_list.length > 0) {
+          const itemList = record.item_list as any[];
+          const firstItem = itemList[0];
+
+          if (firstItem.video_url) {
+            response.videoUrl = firstItem.video_url;
+          } else if (firstItem.image_url) {
+            response.imageUrls = itemList.map(item => item.image_url).filter(url => url);
+          } else if (firstItem.image && firstItem.image.large_images) {
+            response.imageUrls = itemList
+              .map(item => item.image?.large_images?.[0]?.image_url)
+              .filter(url => url);
+          }
+        }
+
+        // 处理失败状态
+        if (status === 'failed') {
+          if (failCode === '2038') {
+            response.error = '内容被过滤';
+          } else if (failCode) {
+            response.error = `生成失败 (错误码: ${failCode})`;
+          } else {
+            response.error = '生成失败';
+          }
+        }
+
+        results[id] = response;
+      }
+
+      console.log(`✅ [Batch Query] 查询完成: ${Object.keys(results).length} 个结果`);
+      return results;
+
+    } catch (error) {
+      console.error('❌ [Batch Query] API请求失败:', error);
+      throw error;
+    }
   }
 }
 

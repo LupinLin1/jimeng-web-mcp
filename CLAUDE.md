@@ -66,8 +66,11 @@ The project follows a modular architecture after refactoring from a 2800+ line m
 
 - **`src/api.ts`** - Main entry point with backward-compatible exports
 - **`src/server.ts`** - MCP server implementation with tool definitions
-- **`src/api/JimengClient.ts`** - Unified API client (400 lines)
-- **`src/api/ApiClient.ts`** - Base HTTP client for JiMeng API
+- **`src/api/BaseClient.ts`** - Base client class with shared HTTP and upload methods (582 lines)
+- **`src/api/JimengClient.ts`** - Image generation client with video delegation (1644 lines)
+- **`src/api/video/VideoGenerator.ts`** - Dedicated video generation module (1121 lines)
+- **`src/api/video/MainReferenceVideoGenerator.ts`** - Main reference video generation
+- **`src/api/ApiClient.ts`** - Legacy HTTP client for JiMeng API
 - **`src/api/CreditService.ts`** - Credit/point management service
 - **`src/types/api.types.ts`** - Complete API type definitions (200 lines)
 - **`src/types/models.ts`** - Model mappings and constants (80 lines)
@@ -77,7 +80,13 @@ The project follows a modular architecture after refactoring from a 2800+ line m
 
 **Singleton Pattern**: The `getApiClient()` function maintains a global client instance for backward compatibility.
 
-**Inheritance Hierarchy**: `JimengClient` extends `CreditService` which provides point management capabilities.
+**Inheritance Hierarchy**: `CreditService` → `BaseClient` → `JimengClient` / `VideoGenerator`
+- **CreditService**: Handles point management
+- **BaseClient**: Provides shared HTTP requests, image upload, and logging methods
+- **JimengClient**: Manages image generation, delegates video operations to VideoGenerator
+- **VideoGenerator**: Handles all video generation (traditional, multi-frame, post-processing)
+
+**Delegation Pattern**: JimengClient delegates all video operations to VideoGenerator instance, maintaining clean separation of concerns.
 
 **Type Safety**: Comprehensive TypeScript definitions with Zod validation for MCP tool parameters.
 
@@ -173,11 +182,18 @@ JIMENG_API_TOKEN=your_session_id_from_jimeng_cookies
 
 ## Common Development Tasks
 
-### Adding New MCP Tools
+### Adding New Image Generation Tools
 1. Define tool in `src/server.ts` using Zod schemas
 2. Add corresponding function in `src/api/JimengClient.ts`
 3. Update type definitions in `src/types/api.types.ts`
 4. Add tests in appropriate test file
+
+### Adding New Video Generation Tools
+1. Define tool in `src/server.ts` using Zod schemas
+2. Add corresponding function in `src/api/video/VideoGenerator.ts`
+3. Update type definitions in `src/types/api.types.ts`
+4. Expose method through JimengClient delegation if needed
+5. Add tests in appropriate test file
 
 ### Testing API Changes
 1. Use existing async test patterns for network-dependent tests

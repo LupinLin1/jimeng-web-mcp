@@ -3,6 +3,9 @@
  * 从api.ts中提取的所有API相关的接口和类型
  */
 
+// 导出视频相关类型
+export type { MainReferenceVideoParams } from './video.types.js';
+
 // ============== Draft-based API 类型定义 ==============
 
 /**
@@ -272,4 +275,24 @@ export interface QueryResultResponse {
 
   /** 错误信息（仅当 status='failed' 时存在） */
   error?: string;
+}
+
+/**
+ * 批量查询响应接口
+ * 用于批量查询多个生成任务的状态和结果
+ *
+ * @interface BatchQueryResponse
+ * @property {QueryResultResponse | {error: string}} [historyId] - 每个任务ID对应的查询结果或错误信息
+ *
+ * @example
+ * ```typescript
+ * const results: BatchQueryResponse = {
+ *   "4721606420748": { status: "completed", progress: 100, videoUrl: "https://..." },
+ *   "4721606420749": { status: "processing", progress: 45 },
+ *   "invalid-id": { error: "无效的historyId格式" }
+ * };
+ * ```
+ */
+export interface BatchQueryResponse {
+  [historyId: string]: QueryResultResponse | { error: string };
 }

@@ -27,13 +27,15 @@ import { JimengClient } from './api/JimengClient.js';
 import {
   ImageGenerationParams,
   VideoGenerationParams,
+  MainReferenceVideoParams,
   FrameInterpolationParams,
   SuperResolutionParams,
   AudioEffectGenerationParams,
   VideoPostProcessUnifiedParams,
   LogoInfo,
   QueryResultResponse,
-  GenerationStatus
+  GenerationStatus,
+  BatchQueryResponse
 } from './types/api.types.js';
 
 // 创建单例实例以保持向后兼容
@@ -78,17 +80,38 @@ export const generateImage = (params: ImageGenerationParams): Promise<string[]> 
 export const generateVideo = (params: VideoGenerationParams): Promise<string> => {
   console.log('🔍 [重构后API] generateVideo 被调用');
   console.log('🔍 [参数] 模式:', params.multiFrames ? '多帧模式' : '传统模式');
-  
+
   if (!params.refresh_token) {
     throw new Error('refresh_token is required');
   }
-  
+
   const client = getApiClient(params.refresh_token);
-  
+
   return client.generateVideo(params)
     .catch(error => {
       console.error('❌ [重构后API] 视频生成失败:', error.message);
       console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
+      throw error;
+    });
+};
+
+/**
+ * 主体参考视频生成 - 组合多图主体到一个场景
+ * ✨ 支持2-4张参考图，使用[图N]语法引用
+ */
+export const generateMainReferenceVideo = (params: MainReferenceVideoParams): Promise<string> => {
+  console.log('🔍 [重构后API] generateMainReferenceVideo 被调用');
+  console.log('🔍 [参数] 参考图数量:', params.referenceImages.length);
+
+  if (!params.refresh_token) {
+    throw new Error('refresh_token is required');
+  }
+
+  const client = getApiClient(params.refresh_token);
+
+  return client.generateMainReferenceVideo(params)
+    .catch(error => {
+      console.error('❌ [重构后API] 主体参考视频生成失败:', error.message);
       throw error;
     });
 };
@@ -212,13 +235,15 @@ export const getImageResult = async (
 export type {
   ImageGenerationParams,
   VideoGenerationParams,
+  MainReferenceVideoParams,
   FrameInterpolationParams,
   SuperResolutionParams,
   AudioEffectGenerationParams,
   VideoPostProcessUnifiedParams,
   LogoInfo,
   QueryResultResponse,
-  GenerationStatus
+  GenerationStatus,
+  BatchQueryResponse
 };
 
 // ============== 高级用户API ==============
@@ -226,6 +251,16 @@ export type {
  * 直接导出JimengClient供需要更多控制的用户使用
  */
 export { JimengClient };
+
+/**
+ * 导出getApiClient函数用于获取单例客户端实例
+ */
+export { getApiClient };
+
+/**
+ * 导出VideoGenerator供高级用户直接使用
+ */
+export { VideoGenerator } from './api/video/VideoGenerator.js';
 
 // ============== 重构完成 ==============
 // 移除了启动时的重构提示信息，避免在生产环境产生不必要的日志输出
