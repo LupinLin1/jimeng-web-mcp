@@ -358,7 +358,7 @@ export const createServer = (): McpServer => {
     "getImageResult",
     "🔍 查询生成任务的当前状态和结果",
     {
-      historyId: z.string().regex(/^h[a-zA-Z0-9]+$/).describe("生成任务ID（从generateImageAsync获取）")
+      historyId: z.string().regex(/^([0-9]+|h[a-zA-Z0-9]+)$/).describe("生成任务ID（从generateImageAsync获取）")
     },
     async ({ historyId }) => {
       try {
