@@ -6,16 +6,18 @@
 
 import { JimengApiClient } from './ApiClient.js';
 import { CreditService } from './CreditService.js';
-import { 
-  ImageGenerationParams, 
-  VideoGenerationParams, 
-  FrameInterpolationParams, 
+import {
+  ImageGenerationParams,
+  VideoGenerationParams,
+  FrameInterpolationParams,
   SuperResolutionParams,
   AudioEffectGenerationParams,
   VideoPostProcessUnifiedParams,
   DraftResponse,
   AigcMode,
-  AbilityItem
+  AbilityItem,
+  QueryResultResponse,
+  GenerationStatus
 } from '../types/api.types.js';
 import { 
   DEFAULT_MODEL, 
@@ -2651,6 +2653,186 @@ export class JimengClient extends CreditService {
       this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
     return this.sessionId;
+  }
+
+  // ============== 异步查询功能 ==============
+
+  /**
+   * 异步提交图像生成任务（立即返回historyId，不等待完成）
+   *
+   * @param params 图像生成参数
+   * @returns Promise<string> 返回historyId，用于后续查询生成状态
+   * @throws Error 当提交失败或无法获取historyId时抛出错误
+   */
+  async generateImageAsync(params: ImageGenerationParams): Promise<string> {
+    console.log('🚀 [Async] 提交异步图像生成任务');
+
+    // 获取模型信息（复用现有逻辑）
+    const modelName = params.model || DEFAULT_MODEL;
+    const actualModel = this.getModel(modelName);
+
+    // 处理参考图上传（复用现有逻辑）
+    let uploadResult;
+    let uploadResults: any[] = [];
+    const hasFilePath = !!(params.filePath && params.filePath.length > 0);
+
+    if (hasFilePath) {
+      console.log(`📤 [Async] 上传 ${params.filePath!.length} 张参考图`);
+      for (const filePath of params.filePath!) {
+        const result = await this.uploadCoverFile(filePath);
+        uploadResults.push(result);
+      }
+      uploadResult = uploadResults[0]; // 兼容现有逻辑
+    }
+
+    // 构建请求数据（复用现有逻辑）
+    const { rqData, rqParams } = this.buildGenerationRequestData(
+      params, actualModel, modelName, hasFilePath, uploadResult, uploadResults
+    );
+
+    // 提交生成请求
+    const result = await this.request(
+      'POST',
+      '/mweb/v1/aigc_draft/generate',
+      rqData,
+      rqParams
+    );
+
+    // 提取historyId
+    const historyId = result?.data?.aigc_data?.history_record_id;
+
+    if (!historyId) {
+      if (result?.errmsg) {
+        throw new Error(`提交失败: ${result.errmsg}`);
+      }
+      throw new Error('提交失败: 无法获取historyId');
+    }
+
+    console.log(`✅ [Async] 任务提交成功, historyId: ${historyId}`);
+    return historyId;
+  }
+
+  /**
+   * 查询生成任务的当前状态和结果
+   *
+   * @param historyId 生成任务的历史记录ID
+   * @returns Promise<QueryResultResponse> 返回当前状态、进度和结果
+   * @throws Error 当historyId无效或查询失败时抛出错误
+   */
+  async getImageResult(historyId: string): Promise<QueryResultResponse> {
+    // 验证historyId格式
+    if (!historyId || historyId.trim() === '') {
+      throw new Error('无效的historyId格式: historyId不能为空');
+    }
+    // JiMeng API 返回的 historyId 是纯数字字符串（如 "4721606420748"）或 'h' 开头的字符串
+    // 接受两种格式以保持兼容性
+    const isValidFormat = /^[0-9]+$/.test(historyId) || /^h[a-zA-Z0-9]+$/.test(historyId);
+    if (!isValidFormat) {
+      throw new Error('无效的historyId格式: historyId必须是纯数字或以"h"开头的字母数字字符串');
+    }
+
+    console.log(`🔍 [Query] 查询生成状态, historyId: ${historyId}`);
+
+    // 调用查询接口
+    const pollResult = await this.request(
+      'POST',
+      '/mweb/v1/get_history_by_ids',
+      {
+        "history_ids": [historyId],
+        "image_info": {
+          "width": 2048,
+          "height": 2048,
+          "format": "webp",
+          "image_scene_list": [
+            { "scene": "smart_crop", "width": 360, "height": 360, "uniq_key": "smart_crop-w:360-h:360", "format": "webp" },
+            { "scene": "smart_crop", "width": 480, "height": 480, "uniq_key": "smart_crop-w:480-h:480", "format": "webp" },
+            { "scene": "smart_crop", "width": 720, "height": 720, "uniq_key": "smart_crop-w:720-h:720", "format": "webp" },
+            { "scene": "smart_crop", "width": 720, "height": 480, "uniq_key": "smart_crop-w:720-h:480", "format": "webp" },
+            { "scene": "smart_crop", "width": 360, "height": 240, "uniq_key": "smart_crop-w:360-h:240", "format": "webp" },
+            { "scene": "smart_crop", "width": 240, "height": 320, "uniq_key": "smart_crop-w:240-h:320", "format": "webp" },
+            { "scene": "smart_crop", "width": 480, "height": 640, "uniq_key": "smart_crop-w:480-h:640", "format": "webp" },
+            { "scene": "normal", "width": 2400, "height": 2400, "uniq_key": "2400", "format": "webp" },
+            { "scene": "normal", "width": 1080, "height": 1080, "uniq_key": "1080", "format": "webp" },
+            { "scene": "normal", "width": 720, "height": 720, "uniq_key": "720", "format": "webp" },
+            { "scene": "normal", "width": 480, "height": 480, "uniq_key": "480", "format": "webp" },
+            { "scene": "normal", "width": 360, "height": 360, "uniq_key": "360", "format": "webp" }
+          ]
+        },
+        "http_common_info": {
+          "aid": parseInt("513695")
+        }
+      }
+    );
+
+    const record = pollResult?.data?.[historyId];
+    if (!record) {
+      throw new Error('记录不存在');
+    }
+
+    // 解析状态
+    const statusCode = record.status;
+    const failCode = record.fail_code;
+    const finishedCount = record.finished_image_count || 0;
+    const totalCount = record.total_image_count || 1;
+    const progress = totalCount > 0 ? Math.round((finishedCount / totalCount) * 100) : 0;
+
+    // 映射状态码到用户友好的字符串
+    let status: GenerationStatus;
+    if (statusCode === 50) {
+      status = 'completed';
+    } else if (statusCode === 30) {
+      status = 'failed';
+    } else if (statusCode === 20 || statusCode === 42 || statusCode === 45) {
+      status = finishedCount === 0 ? 'pending' : 'processing';
+    } else {
+      // 未知状态码，默认为processing
+      status = 'processing';
+    }
+
+    console.log(`📊 [Query] 状态: ${status}, 进度: ${progress}%, 代码: ${statusCode}`);
+
+    // 构建响应
+    const response: QueryResultResponse = {
+      status,
+      progress
+    };
+
+    // 处理完成状态
+    if (status === 'completed' && record.item_list && record.item_list.length > 0) {
+      const itemList = record.item_list as any[];
+
+      // 判断是图片还是视频
+      const firstItem = itemList[0];
+      if (firstItem.video_url) {
+        // 视频生成
+        response.videoUrl = firstItem.video_url;
+        console.log(`✅ [Query] 视频生成完成: ${response.videoUrl}`);
+      } else if (firstItem.image_url) {
+        // 直接在item上的image_url（旧格式）
+        response.imageUrls = itemList.map(item => item.image_url).filter(url => url);
+        console.log(`✅ [Query] 图片生成完成: ${response.imageUrls!.length} 张`);
+      } else if (firstItem.image && firstItem.image.large_images) {
+        // 在item.image.large_images数组中（新格式）
+        response.imageUrls = itemList
+          .map(item => item.image?.large_images?.[0]?.image_url)
+          .filter(url => url);
+        console.log(`✅ [Query] 图片生成完成: ${response.imageUrls!.length} 张`);
+      }
+    }
+
+    // 处理失败状态
+    if (status === 'failed') {
+      if (failCode === '2038') {
+        response.error = '内容被过滤';
+      } else if (failCode) {
+        response.error = `生成失败 (错误码: ${failCode})`;
+      } else {
+        response.error = '生成失败';
+      }
+      console.log(`❌ [Query] 生成失败: ${response.error}`);
+    }
+
+    return response;
   }
 }
 

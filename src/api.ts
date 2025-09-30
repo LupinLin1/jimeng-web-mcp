@@ -24,14 +24,16 @@ export { generateCookie } from './utils/auth.js';
 
 // ============== API功能导出 ==============
 import { JimengClient } from './api/JimengClient.js';
-import { 
-  ImageGenerationParams, 
-  VideoGenerationParams, 
-  FrameInterpolationParams, 
+import {
+  ImageGenerationParams,
+  VideoGenerationParams,
+  FrameInterpolationParams,
   SuperResolutionParams,
   AudioEffectGenerationParams,
   VideoPostProcessUnifiedParams,
-  LogoInfo 
+  LogoInfo,
+  QueryResultResponse,
+  GenerationStatus
 } from './types/api.types.js';
 
 // 创建单例实例以保持向后兼容
@@ -142,15 +144,81 @@ export async function videoPostProcess(params: VideoPostProcessUnifiedParams): P
   return await client.videoPostProcess(params);
 }
 
+// ============== 异步查询功能 ==============
+
+/**
+ * 异步提交图像生成任务（立即返回historyId，不等待完成）
+ *
+ * @param params - 图像生成参数
+ * @returns Promise<string> 返回historyId，用于后续查询生成状态
+ * @throws Error 当refresh_token缺失或提交失败时抛出错误
+ *
+ * @example
+ * ```typescript
+ * const historyId = await generateImageAsync({
+ *   prompt: '美丽的风景画',
+ *   refresh_token: 'your_token_here'
+ * });
+ * console.log('任务ID:', historyId);
+ * ```
+ */
+export const generateImageAsync = async (params: ImageGenerationParams): Promise<string> => {
+  console.log('🔍 [重构后API] generateImageAsync 被调用');
+
+  if (!params.refresh_token) {
+    throw new Error('refresh_token is required');
+  }
+
+  const client = getApiClient(params.refresh_token);
+  return await client.generateImageAsync(params);
+};
+
+/**
+ * 查询生成任务的当前状态和结果
+ *
+ * @param historyId - 生成任务的历史记录ID（从generateImageAsync获取）
+ * @param refresh_token - API令牌（可选，默认使用JIMENG_API_TOKEN环境变量）
+ * @returns Promise<QueryResultResponse> 返回当前状态、进度和结果
+ * @throws Error 当historyId无效或查询失败时抛出错误
+ *
+ * @example
+ * ```typescript
+ * const result = await getImageResult('h1234567890abcdef');
+ * if (result.status === 'completed') {
+ *   console.log('图片URLs:', result.imageUrls);
+ * } else if (result.status === 'failed') {
+ *   console.log('错误:', result.error);
+ * } else {
+ *   console.log('进度:', result.progress, '%');
+ * }
+ * ```
+ */
+export const getImageResult = async (
+  historyId: string,
+  refresh_token?: string
+): Promise<QueryResultResponse> => {
+  console.log('🔍 [重构后API] getImageResult 被调用');
+
+  const token = refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+
+  const client = getApiClient(token);
+  return await client.getImageResult(historyId);
+};
+
 // ============== 类型导出（保持兼容性） ==============
-export type { 
-  ImageGenerationParams, 
-  VideoGenerationParams, 
-  FrameInterpolationParams, 
+export type {
+  ImageGenerationParams,
+  VideoGenerationParams,
+  FrameInterpolationParams,
   SuperResolutionParams,
   AudioEffectGenerationParams,
   VideoPostProcessUnifiedParams,
-  LogoInfo 
+  LogoInfo,
+  QueryResultResponse,
+  GenerationStatus
 };
 
 // ============== 高级用户API ==============

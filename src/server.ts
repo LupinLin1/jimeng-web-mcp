@@ -1,7 +1,7 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { generateImage, generateVideo, videoPostProcess } from "./api.js";
+import { generateImage, generateVideo, videoPostProcess, generateImageAsync, getImageResult } from "./api.js";
 import { MainReferenceVideoGenerator } from "./api/video/MainReferenceVideoGenerator.js";
 import { logger } from './utils/logger.js';
 
@@ -301,6 +301,111 @@ export const createServer = (): McpServer => {
         const errorMessage = error instanceof Error ? error.message : String(error);
         return {
           content: [{ type: "text", text: `视频后处理失败: ${errorMessage}` }],
+          isError: true
+        };
+      }
+    }
+  );
+
+  // ============== 异步查询工具 ==============
+
+  logger.debug('Registering generateImageAsync tool...');
+
+  server.tool(
+    "generateImageAsync",
+    "🚀 异步提交图像生成任务（立即返回historyId，不等待完成）",
+    {
+      filePath: z.array(z.string()).optional().describe("参考图绝对路径数组，最多4张"),
+      prompt: z.string().describe("图像描述文本"),
+      model: z.string().optional().describe("模型名称，默认jimeng-4.0"),
+      aspectRatio: z.string().optional().default("auto").describe("宽高比: auto/1:1/16:9/9:16/3:4/4:3/3:2/2:3/21:9"),
+      sample_strength: z.number().min(0).max(1).optional().default(0.5).describe("参考图影响强度0-1，默认0.5"),
+      negative_prompt: z.string().optional().default("").describe("负向提示词"),
+      reference_strength: z.array(z.number().min(0).max(1)).optional().describe("每张参考图的独立强度数组"),
+    },
+    async (params) => {
+      try {
+        logger.debug('generateImageAsync tool called with params:', JSON.stringify(params, null, 2));
+
+        const hasToken = !!process.env.JIMENG_API_TOKEN;
+        logger.debug('Environment token available:', hasToken);
+
+        const historyId = await generateImageAsync({
+          ...params,
+          refresh_token: process.env.JIMENG_API_TOKEN!
+        });
+
+        return {
+          content: [{
+            type: "text",
+            text: `异步任务已提交成功！\n\nhistoryId: ${historyId}\n\n请使用 getImageResult 工具查询生成结果。`
+          }]
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.error('generateImageAsync failed:', errorMessage);
+        return {
+          content: [{ type: "text", text: `❌ 提交失败: ${errorMessage}` }],
+          isError: true
+        };
+      }
+    }
+  );
+
+  logger.debug('Registering getImageResult tool...');
+
+  server.tool(
+    "getImageResult",
+    "🔍 查询生成任务的当前状态和结果",
+    {
+      historyId: z.string().regex(/^h[a-zA-Z0-9]+$/).describe("生成任务ID（从generateImageAsync获取）")
+    },
+    async ({ historyId }) => {
+      try {
+        logger.debug('getImageResult tool called with historyId:', historyId);
+
+        const result = await getImageResult(historyId);
+
+        logger.debug('Query result:', JSON.stringify(result, null, 2));
+
+        // 格式化响应
+        if (result.status === 'completed') {
+          // 完成状态
+          let resultText = `✅ 生成完成！\n\n状态: completed\n进度: 100%\n\n`;
+
+          if (result.imageUrls && result.imageUrls.length > 0) {
+            resultText += `生成结果:\n${result.imageUrls.map((url: string) => `- ${url}`).join('\n')}`;
+          } else if (result.videoUrl) {
+            resultText += `视频URL: ${result.videoUrl}`;
+          }
+
+          return {
+            content: [{ type: "text", text: resultText }]
+          };
+        } else if (result.status === 'failed') {
+          // 失败状态
+          return {
+            content: [{
+              type: "text",
+              text: `❌ 生成失败\n\n状态: failed\n进度: ${result.progress}%\n错误: ${result.error || '未知错误'}`
+            }],
+            isError: true
+          };
+        } else {
+          // 进行中状态
+          const statusEmoji = result.status === 'pending' ? '⏳' : '🔄';
+          return {
+            content: [{
+              type: "text",
+              text: `${statusEmoji} 生成中...\n\n状态: ${result.status}\n进度: ${result.progress}%`
+            }]
+          };
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.error('getImageResult failed:', errorMessage);
+        return {
+          content: [{ type: "text", text: `❌ 查询失败: ${errorMessage}` }],
           isError: true
         };
       }

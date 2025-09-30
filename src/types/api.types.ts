@@ -237,3 +237,39 @@ export interface VideoPostProcessUnifiedParams {
   // 通用参数
   duration?: number; // 视频时长（毫秒），可选
 }
+
+// ============== 异步查询 API 类型定义 ==============
+
+/**
+ * 生成状态枚举
+ * 用于表示图片/视频生成任务的当前状态
+ */
+export type GenerationStatus = 'pending' | 'processing' | 'completed' | 'failed';
+
+/**
+ * 查询结果响应接口
+ * 用于异步查询生成任务的状态和结果
+ *
+ * @interface QueryResultResponse
+ * @property {GenerationStatus} status - 当前生成状态
+ * @property {number} progress - 生成进度百分比 (0-100)
+ * @property {string[]} [imageUrls] - 生成完成的图片URL数组（仅图片生成）
+ * @property {string} [videoUrl] - 生成完成的视频URL（仅视频生成）
+ * @property {string} [error] - 错误信息（仅失败状态）
+ */
+export interface QueryResultResponse {
+  /** 当前生成状态：pending(待处理), processing(生成中), completed(完成), failed(失败) */
+  status: GenerationStatus;
+
+  /** 生成进度百分比 (0-100) */
+  progress: number;
+
+  /** 生成完成的图片URL数组（仅当 status='completed' 且为图片生成时存在） */
+  imageUrls?: string[];
+
+  /** 生成完成的视频URL（仅当 status='completed' 且为视频生成时存在） */
+  videoUrl?: string;
+
+  /** 错误信息（仅当 status='failed' 时存在） */
+  error?: string;
+}

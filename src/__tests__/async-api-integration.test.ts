@@ -95,6 +95,7 @@ describe('异步API集成测试', () => {
       // 第二步：查询任务状态（模拟失败）
       const failedResult = {
         status: 'failed' as const,
+        progress: 0,
         error: '生成过程中发生错误：积分不足'
       };
       mockClient.getImageResult.mockResolvedValue(failedResult);
@@ -123,6 +124,7 @@ describe('异步API集成测试', () => {
       // 查询完成结果
       const completedResult = {
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/ref_generated.jpg']
       };
       mockClient.getImageResult.mockResolvedValue(completedResult);
@@ -170,6 +172,7 @@ describe('异步API集成测试', () => {
       const historyIds = ['h_query1', 'h_query2', 'h_query3'];
       const mockResults = historyIds.map((id, index) => ({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: [`https://example.com/${id}.jpg`],
         progress: 100
       }));
@@ -200,7 +203,6 @@ describe('异步API集成测试', () => {
       // 模拟状态变化序列
       const statusSequence = [
         { status: 'pending' as const, progress: 20 },
-        { status: 'pending' as const, progress: 50 },
         { status: 'pending' as const, progress: 80 },
         { 
           status: 'completed' as const, 
@@ -244,6 +246,7 @@ describe('异步API集成测试', () => {
       // 第二次查询：成功
       const successResult = {
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/recovered.jpg']
       };
       mockClient.getImageResult.mockResolvedValueOnce(successResult);
@@ -335,6 +338,7 @@ describe('异步API集成测试', () => {
       // 第一个成功
       mockClient.getImageResult.mockResolvedValueOnce({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/success1.jpg']
       });
 
@@ -344,6 +348,7 @@ describe('异步API集成测试', () => {
       // 第三个成功
       mockClient.getImageResult.mockResolvedValueOnce({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/success2.jpg']
       });
 
@@ -389,6 +394,7 @@ describe('异步API集成测试', () => {
       
       mockClient.getImageResult.mockResolvedValue({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/quick.jpg']
       });
 
@@ -402,9 +408,7 @@ describe('异步API集成测试', () => {
       // 模拟长时间运行的任务
       const longRunningStates = [
         { status: 'pending' as const, progress: 10 },
-        { status: 'pending' as const, progress: 30 },
         { status: 'pending' as const, progress: 60 },
-        { status: 'pending' as const, progress: 90 },
         { 
           status: 'completed' as const, 
           imageUrls: ['https://example.com/long_task.jpg'],

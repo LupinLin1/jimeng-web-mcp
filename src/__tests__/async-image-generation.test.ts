@@ -134,6 +134,7 @@ describe('异步图像生成核心功能测试', () => {
     it('应该成功查询失败状态的结果', async () => {
       const mockResult = {
         status: 'failed' as const,
+        progress: 0,
         error: '生成过程中发生错误：模型服务暂时不可用'
       };
       mockClient.getImageResult.mockResolvedValue(mockResult);
@@ -152,6 +153,7 @@ describe('异步图像生成核心功能测试', () => {
 
       const mockResult = {
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/generated.jpg']
       };
       mockClient.getImageResult.mockResolvedValue(mockResult);

@@ -127,6 +127,7 @@ describe('MCP工具层异步功能测试', () => {
     it('应该正确处理失败状态的查询', async () => {
       const mockResult = {
         status: 'failed' as const,
+        progress: 0,
         error: 'MCP测试：生成失败，模型服务不可用'
       };
       mockedGetImageResult.mockResolvedValue(mockResult);
@@ -142,6 +143,7 @@ describe('MCP工具层异步功能测试', () => {
     it('应该使用环境变量中的token当未提供时', async () => {
       const mockResult = {
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/env_token_result.jpg']
       };
       mockedGetImageResult.mockResolvedValue(mockResult);
@@ -209,6 +211,7 @@ describe('MCP工具层异步功能测试', () => {
         },
         {
           status: 'failed' as const,
+          progress: 0,
           error: '结构化错误信息测试'
         }
       ];
@@ -350,6 +353,7 @@ describe('MCP工具层异步功能测试', () => {
       // 第二步：查询结果
       const mockResult = {
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/workflow_result.jpg']
       };
       mockedGetImageResult.mockResolvedValue(mockResult);
@@ -392,6 +396,7 @@ describe('MCP工具层异步功能测试', () => {
 
       mockedGetImageResult.mockResolvedValue({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/env_config.jpg']
       });
 

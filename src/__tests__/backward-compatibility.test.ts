@@ -265,6 +265,7 @@ describe('向后兼容性测试', () => {
       // 第三步：查询异步结果
       mockClient.getImageResult.mockResolvedValueOnce({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/async_result.jpg']
       });
 
@@ -299,6 +300,7 @@ describe('向后兼容性测试', () => {
       // 阶段3：查询异步结果
       mockClient.getImageResult.mockResolvedValueOnce({
         status: 'completed' as const,
+        progress: 100,
         imageUrls: ['https://example.com/phase3.jpg']
       });
       const phase3Result = await getImageResult(phase2Result, 'upgrade-token');
