@@ -45,6 +45,19 @@ import crc32 from 'crc32';
 export class JimengClient extends BaseClient {
   private videoGen: VideoGenerator;
 
+  // 异步任务参数缓存（用于继续生成）
+  private static asyncTaskCache = new Map<string, {
+    params: ImageGenerationParams,
+    actualModel: string,
+    modelName: string,
+    hasFilePath: boolean,
+    uploadResult: any,
+    uploadResults: any[]
+  }>();
+
+  // 继续生成发送状态（防重复）
+  private static continuationSent = new Map<string, boolean>();
+
   constructor(refreshToken?: string) {
     super(refreshToken);
     this.videoGen = new VideoGenerator(refreshToken);
@@ -186,29 +199,40 @@ export class JimengClient extends BaseClient {
   ) {
     // 生成组件ID
     const componentId = generateUuid();
-    
+
     // 计算尺寸和正确的imageRatio
     const dimensions = ImageDimensionCalculator.calculateDimensions(params.aspectRatio || 'auto');
     const { width, height } = dimensions;
-    
+
     // 使用预设的imageRatio而不是计算值
     const aspectRatioPreset = ImageDimensionCalculator.getAspectRatioPreset(params.aspectRatio || 'auto');
     const imageRatio = aspectRatioPreset?.imageRatio || 3; // 默认使用16:9的imageRatio
-    
+
     // 确定AIGC模式 - 根据成功的参考文件，都应该使用 workbench 模式
     let aigcMode: AigcMode = "workbench";
 
-    // 构建abilities
+    // 🔥 处理prompt：当count > 4时，在prompt末尾添加生成数量说明
+    const generateCount = params.count || 4;
+    let finalPrompt = params.prompt;
+
+    if (generateCount > 4 && !isContinuation) {
+      // 只在首次生成时添加，继续生成时不添加
+      finalPrompt = `${params.prompt}，一共生成${generateCount}张图`;
+      console.log(`🔢 [Count] 添加生成数量到prompt: count=${generateCount}`);
+    }
+
+    // 构建abilities（使用处理后的prompt）
+    const modifiedParams = { ...params, prompt: finalPrompt };
     let abilities: Record<string, any> = {};
     if (hasFilePath) {
-      abilities = this.buildBlendAbilities(params, actualModel, uploadResults || [uploadResult!], imageRatio, width, height);
+      abilities = this.buildBlendAbilities(modifiedParams, actualModel, uploadResults || [uploadResult!], imageRatio, width, height);
     } else {
-      abilities = this.buildGenerateAbilities(params, actualModel, imageRatio, width, height);
+      abilities = this.buildGenerateAbilities(modifiedParams, actualModel, imageRatio, width, height);
     }
 
     // 生成提交ID
     const submitId = generateUuid();
-    
+
     // 构建请求数据
     const baseData: any = {
       "extend": {
@@ -217,7 +241,7 @@ export class JimengClient extends BaseClient {
       "submit_id": submitId,
       "metrics_extra": jsonEncode({
         "promptSource": "custom",
-        "generateCount": 1,
+        "generateCount": generateCount,
         "enterFrom": "click",
         "generateId": submitId,
         "isRegenerate": false
@@ -406,7 +430,7 @@ export class JimengClient extends BaseClient {
   }
 
   /**
-   * 执行继续生成请求
+   * 执行继续生成请求（同步模式）
    * 只执行一次，不循环
    */
   private async performContinuationGeneration(
@@ -419,13 +443,13 @@ export class JimengClient extends BaseClient {
     historyId: string
   ): Promise<void> {
     console.log('[DEBUG] 开始执行继续生成请求...');
-    
+
     // 构建继续生成请求数据
     const { rqData, rqParams } = this.buildGenerationRequestData(
       params, actualModel, modelName, hasFilePath, uploadResult, uploadResults, historyId, true
     );
 
-    console.log('[DEBUG] 继续生成请求参数:', JSON.stringify({ 
+    console.log('[DEBUG] 继续生成请求参数:', JSON.stringify({
       action: rqData.action,
       history_id: rqData.history_id,
       requestedModel: modelName,
@@ -441,6 +465,54 @@ export class JimengClient extends BaseClient {
     );
 
     console.log('[DEBUG] 继续生成请求已发送，响应:', JSON.stringify(result, null, 2));
+  }
+
+  /**
+   * 执行异步继续生成请求（异步模式）
+   * 使用缓存的参数构建完整请求
+   */
+  private async performAsyncContinueGeneration(historyId: string): Promise<void> {
+    console.log(`🔄 [Async Continue] 开始发送继续生成请求, historyId: ${historyId}`);
+
+    // 从缓存获取原始参数
+    const cached = JimengClient.asyncTaskCache.get(historyId);
+
+    if (!cached) {
+      console.error(`❌ [Async Continue] 未找到缓存的参数, historyId: ${historyId}`);
+      throw new Error(`无法找到historyId对应的原始参数: ${historyId}`);
+    }
+
+    console.log(`💾 [Async Continue] 从缓存获取参数成功`);
+
+    // 使用完整的 buildGenerationRequestData 构建继续生成请求
+    const { rqData, rqParams } = this.buildGenerationRequestData(
+      cached.params,
+      cached.actualModel,
+      cached.modelName,
+      cached.hasFilePath,
+      cached.uploadResult,
+      cached.uploadResults,
+      historyId,
+      true  // isContinuation = true
+    );
+
+    console.log(`🔄 [Async Continue] 完整请求参数:`, JSON.stringify({
+      action: rqData.action,
+      history_id: rqData.history_id,
+      model: cached.actualModel,
+      has_draft_content: !!rqData.draft_content,
+      has_metrics_extra: !!rqData.metrics_extra
+    }, null, 2));
+
+    // 发送继续生成请求
+    const result = await this.request(
+      'POST',
+      '/mweb/v1/aigc_draft/generate',
+      rqData,
+      rqParams
+    );
+
+    console.log(`✅ [Async Continue] 继续生成请求已发送, 响应:`, JSON.stringify(result, null, 2));
   }
 
   // ============== 轮询相关方法（简化版本） ==============
@@ -1492,6 +1564,17 @@ export class JimengClient extends BaseClient {
       throw new Error('提交失败: 无法获取historyId');
     }
 
+    // 🔥 缓存参数用于后续继续生成
+    JimengClient.asyncTaskCache.set(historyId, {
+      params,
+      actualModel,
+      modelName,
+      hasFilePath,
+      uploadResult,
+      uploadResults
+    });
+    console.log(`💾 [Async] 参数已缓存, historyId: ${historyId}`);
+
     console.log(`✅ [Async] 任务提交成功, historyId: ${historyId}`);
     return historyId;
   }
@@ -1573,7 +1656,34 @@ export class JimengClient extends BaseClient {
       status = 'processing';
     }
 
-    console.log(`📊 [Query] 状态: ${status}, 进度: ${progress}%, 代码: ${statusCode}`);
+    console.log(`📊 [Query] 状态: ${status}, 进度: ${progress}%, 代码: ${statusCode}, 完成度: ${finishedCount}/${totalCount}`);
+
+    // 🔥 异步继续生成逻辑：当检测到需要继续生成时，立即发送请求
+    // 判断条件优化：
+    // 1. totalCount > 4 - 需要生成超过4张
+    // 2. finishedCount >= 4 - 已完成至少4张（不要求精确等于4，避免错过时机）
+    // 3. finishedCount < totalCount - 还没全部完成
+    // 4. statusCode !== 30 - 没有失败
+    // 5. 未发送过继续生成请求（防重复）
+    const needsContinuation = totalCount > 4
+      && finishedCount >= 4
+      && finishedCount < totalCount
+      && statusCode !== 30
+      && !JimengClient.continuationSent.get(historyId);
+
+    if (needsContinuation) {
+      console.log(`🔄 [Async Continue] 检测到需要继续生成: 目标${totalCount}张，已完成${finishedCount}张`);
+
+      // 标记为已发送，防止重复
+      JimengClient.continuationSent.set(historyId, true);
+
+      // 异步发送继续生成请求（不等待完成）
+      this.performAsyncContinueGeneration(historyId).catch(err => {
+        console.error(`❌ [Async Continue] 继续生成请求失败:`, err);
+        // 失败时清除标记，允许重试
+        JimengClient.continuationSent.delete(historyId);
+      });
+    }
 
     // 构建响应
     const response: QueryResultResponse = {

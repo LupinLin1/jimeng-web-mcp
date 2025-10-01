@@ -149,6 +149,8 @@ export interface ImageGenerationParams {
   // 新增blend模式参数
   blend_mode?: 'single' | 'multi'; // blend模式类型
   reference_strength?: number[]; // 每个参考图的强度（与filePath数组对应）
+  // 生成数量控制
+  count?: number; // 生成图片数量，默认4张，超过4张会自动触发继续生成
 }
 
 /**
