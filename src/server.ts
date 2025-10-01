@@ -44,7 +44,7 @@ export const createServer = (): McpServer => {
 
   server.tool(
     "generateImage",
-    "🎨 文本生成图像，支持多参考图(最多4张)。推荐jimeng-4.0模型",
+    "🎨 文本生成图像，支持多参考图(最多4张)、异步模式和多帧场景描述。推荐jimeng-4.0模型",
     {
       filePath: z.array(z.string()).optional().describe("参考图绝对路径数组，最多4张"),
       prompt: z.string().describe("图像描述文本"),
@@ -53,6 +53,9 @@ export const createServer = (): McpServer => {
       sample_strength: z.number().min(0).max(1).optional().default(0.5).describe("参考图影响强度0-1，默认0.5"),
       negative_prompt: z.string().optional().default("").describe("负向提示词"),
       reference_strength: z.array(z.number().min(0).max(1)).optional().describe("每张参考图的独立强度数组"),
+      async: z.boolean().optional().describe("异步模式: false(默认)同步等待返回URLs，true立即返回historyId"),
+      frames: z.array(z.string()).max(15).optional().describe("多帧场景描述数组，最多15个，会与prompt组合成最终提示词"),
+      count: z.number().min(1).max(15).optional().describe("生成图片数量，默认1张，最大15张"),
     },
     async (params) => {
       // 🔥 [MCP DEBUG] Tool call entry point - this is the CRITICAL debugging point
@@ -82,7 +85,7 @@ export const createServer = (): McpServer => {
         console.log('  - negative_prompt:', params.negative_prompt || 'empty');
         console.log('  - reference_strength:', params.reference_strength ? `[${params.reference_strength.join(', ')}]` : 'undefined');
 
-        const imageUrls = await generateImage({
+        const imageUrls: string[] | string = await generateImage({
           filePath: params.filePath,
           prompt: params.prompt,
           model: params.model,
@@ -90,8 +93,11 @@ export const createServer = (): McpServer => {
           sample_strength: params.sample_strength,
           negative_prompt: params.negative_prompt,
           reference_strength: params.reference_strength,
+          async: params.async,
+          frames: params.frames,
+          count: params.count,
           refresh_token: process.env.JIMENG_API_TOKEN
-        });
+        } as any);
 
         // 如果没有返回URL数组，返回错误信息
         if (!imageUrls || (Array.isArray(imageUrls) && imageUrls.length === 0)) {
@@ -105,13 +111,13 @@ export const createServer = (): McpServer => {
         // 将返回的图像URL转换为MCP响应格式
         // 使用单个文本内容，每行一个URL，方便客户端解析
         let responseText = '';
-        
+
         if (typeof imageUrls === 'string') {
-          // 单个URL的情况
+          // 单个URL的情况（异步模式返回historyId）
           responseText = imageUrls;
         } else if (Array.isArray(imageUrls)) {
-          // URL数组的情况，每行一个URL
-          responseText = imageUrls.join('\n');
+          // URL数组的情况（同步模式返回URLs），每行一个URL
+          responseText = (imageUrls as string[]).join('\n');
         }
 
         return {

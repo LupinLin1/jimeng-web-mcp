@@ -1,10 +1,12 @@
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
   testMatch: [
     '**/__tests__/**/module-imports.test.ts',
     '**/__tests__/**/utilities.test.ts',
+    '**/tests/unit/**/*.test.ts',
+    '**/tests/integration/**/*.test.ts',
   ],
   // 暂时排除需要mock的测试文件（ESM环境下jest.mock()不工作）
   // TODO: 未来重写这些测试或升级到支持ESM mock的jest版本

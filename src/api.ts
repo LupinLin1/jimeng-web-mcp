@@ -51,10 +51,12 @@ const getApiClient = (token?: string): JimengClient => {
 // ============== 主要API函数（保持100%兼容） ==============
 
 /**
- * 图像生成 - 与原API完全兼容
- * ✨ 支持所有新特性：单图参考、多图参考、Draft-based响应、creation_agent模式
+ * 图像生成 - 统一接口，支持同步和异步模式
+ * ✨ 支持所有新特性：单图参考、多图参考、Draft-based响应、creation_agent模式、多帧场景描述
  */
-export const generateImage = (params: ImageGenerationParams): Promise<string[]> => {
+export function generateImage(params: ImageGenerationParams & { async: true }): Promise<string>;
+export function generateImage(params: ImageGenerationParams & { async?: false }): Promise<string[]>;
+export function generateImage(params: ImageGenerationParams): Promise<string[] | string> {
   console.log('🔍 [重构后API] generateImage 被调用');
   console.log('🔍 [参数] 文件数量:', params?.filePath ? params.filePath.length : 0);
   console.log('🔍 [参数] 模型:', params.model || 'jimeng-4.0 (默认)');
@@ -64,14 +66,14 @@ export const generateImage = (params: ImageGenerationParams): Promise<string[]> 
   }
 
   const client = getApiClient(params.refresh_token);
-  
-  return client.generateImage(params)
+
+  return client.generateImage(params as any)
     .catch(error => {
       console.error('❌ [重构后API] 图像生成失败:', error.message);
       console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
       throw error;
     });
-};
+}
 
 /**
  * 视频生成 - 与原API完全兼容

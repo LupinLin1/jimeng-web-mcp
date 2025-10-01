@@ -57,10 +57,24 @@ export class JimengClient extends BaseClient {
   // ============== 图像生成功能（委托给 ImageGenerator）==============
 
   /**
-   * 即梦AI图像生成（支持批量生成和多参考图）
+   * 即梦AI图像生成（统一接口，支持同步和异步模式）
+   *
+   * @param params 图像生成参数
+   * @returns
+   *   - 当 async: true 时返回 historyId (string)
+   *   - 当 async: false 或未指定时返回图片URLs (string[])
    */
-  public async generateImage(params: ImageGenerationParams): Promise<string[]> {
-    return this.imageGen.generateImage(params);
+  public generateImage(params: ImageGenerationParams & { async: true }): Promise<string>;
+  public generateImage(params: ImageGenerationParams & { async?: false }): Promise<string[]>;
+  public async generateImage(params: ImageGenerationParams): Promise<string[] | string> {
+    // Type-safe delegation to ImageGenerator
+    if (params.async === true) {
+      const asyncParams: ImageGenerationParams & { async: true } = { ...params, async: true };
+      return this.imageGen.generateImage(asyncParams);
+    } else {
+      const syncParams: ImageGenerationParams & { async?: false } = { ...params, async: false };
+      return this.imageGen.generateImage(syncParams);
+    }
   }
 
   /**

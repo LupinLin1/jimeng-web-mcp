@@ -151,6 +151,25 @@ export interface ImageGenerationParams {
   reference_strength?: number[]; // 每个参考图的强度（与filePath数组对应）
   // 生成数量控制
   count?: number; // 生成图片数量，默认1张，最大15张，超过4张会自动触发继续生成
+
+  /**
+   * 是否异步模式
+   * - false (默认): 同步等待生成完成，返回图片URL数组
+   * - true: 立即返回historyId，不等待完成
+   */
+  async?: boolean;
+
+  /**
+   * 多帧场景描述数组
+   * - 最多15个元素
+   * - 非空字符串才有效
+   * - 会与prompt组合成最终提示词
+   *
+   * @example
+   * frames: ["实验室场景", "时空隧道", "外星球"]
+   * 最终prompt: "{prompt} 实验室场景 时空隧道 外星球，一共3张图"
+   */
+  frames?: string[];
 }
 
 /**

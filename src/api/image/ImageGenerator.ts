@@ -56,13 +56,35 @@ export class ImageGenerator extends BaseClient {
   // ============== 公共方法 ==============
 
   /**
-   * 即梦AI图像生成（支持批量生成和多参考图）
+   * 即梦AI图像生成（统一接口，支持同步和异步模式）
+   *
+   * @param params 图像生成参数
+   * @returns
+   *   - 当 async: true 时返回 historyId (string)
+   *   - 当 async: false 或未指定时返回图片URLs (string[])
    */
-  public async generateImage(params: ImageGenerationParams): Promise<string[]> {
+  public generateImage(params: ImageGenerationParams & { async: true }): Promise<string>;
+  public generateImage(params: ImageGenerationParams & { async?: false }): Promise<string[]>;
+  public async generateImage(params: ImageGenerationParams): Promise<string[] | string> {
     console.log('[DEBUG] [API Client] generateImage method called');
     console.log('[DEBUG] [API Client] Token in this instance:', this.refreshToken ? '[PROVIDED]' : '[MISSING]');
 
-    return await this.generateImageWithBatch(params);
+    // 处理frames参数
+    const validFrames = this.validateAndFilterFrames(params.frames);
+
+    // 构建最终prompt
+    const count = params.count || 1;
+    const finalPrompt = this.buildPromptWithFrames(params.prompt, validFrames, count);
+
+    // 更新params
+    const processedParams = { ...params, prompt: finalPrompt };
+
+    // 根据async参数分支
+    if (params.async) {
+      return await this.generateImageAsync(processedParams);
+    } else {
+      return await this.generateImageWithBatch(processedParams);
+    }
   }
 
   /**
@@ -421,6 +443,52 @@ export class ImageGenerator extends BaseClient {
   }
 
   // ============== 私有辅助方法 ==============
+
+  /**
+   * 验证并过滤frames数组
+   * @param frames 原始frames数组
+   * @returns 过滤后的有效frames数组
+   */
+  private validateAndFilterFrames(frames?: string[]): string[] {
+    if (!frames || !Array.isArray(frames)) {
+      return [];
+    }
+
+    // 过滤无效元素
+    const valid = frames
+      .filter(f => f != null && typeof f === 'string' && f.trim() !== '')
+      .map(f => f.trim());
+
+    // 长度限制
+    if (valid.length > 15) {
+      console.warn(`[Frames] 截断frames数组: ${valid.length} -> 15`);
+      return valid.slice(0, 15);
+    }
+
+    return valid;
+  }
+
+  /**
+   * 构建包含frames的最终prompt
+   * @param basePrompt 基础prompt
+   * @param frames 有效frames数组
+   * @param count 生成数量
+   * @returns 最终prompt
+   */
+  private buildPromptWithFrames(
+    basePrompt: string,
+    frames: string[],
+    count: number
+  ): string {
+    if (frames.length === 0) {
+      return basePrompt;
+    }
+
+    // 给每个 frame 加上序号
+    const numberedFrames = frames.map((frame, index) => `第${index + 1}张：${frame}`);
+    const framesText = numberedFrames.join(' ');
+    return `${basePrompt} ${framesText}，一共${count}张图`;
+  }
 
   /**
    * 批量生成图像，支持自动继续生成和多参考图
