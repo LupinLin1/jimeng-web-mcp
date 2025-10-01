@@ -322,7 +322,7 @@ export const createServer = (): McpServer => {
       sample_strength: z.number().min(0).max(1).optional().default(0.5).describe("参考图影响强度0-1，默认0.5"),
       negative_prompt: z.string().optional().default("").describe("负向提示词"),
       reference_strength: z.array(z.number().min(0).max(1)).optional().describe("每张参考图的独立强度数组"),
-      count: z.number().int().min(1).max(20).optional().default(4).describe("生成图片数量，默认4张，超过4张会自动触发继续生成"),
+      count: z.number().int().min(1).max(15).optional().default(4).describe("生成图片数量，默认4张，最大15张（即梦API限制），超过4张会自动触发继续生成"),
     },
     async (params) => {
       try {
