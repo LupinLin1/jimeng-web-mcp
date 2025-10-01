@@ -211,11 +211,11 @@ export class JimengClient extends BaseClient {
     // 确定AIGC模式 - 根据成功的参考文件，都应该使用 workbench 模式
     let aigcMode: AigcMode = "workbench";
 
-    // 🔥 处理prompt：当count > 4时，在prompt末尾添加生成数量说明
-    const generateCount = params.count || 4;
+    // 🔥 处理prompt：当count > 1时，在prompt末尾添加生成数量说明
+    const generateCount = params.count || 1;
     let finalPrompt = params.prompt;
 
-    if (generateCount > 4 && !isContinuation) {
+    if (generateCount > 1 && !isContinuation) {
       // 只在首次生成时添加，继续生成时不添加
       finalPrompt = `${params.prompt}，一共生成${generateCount}张图`;
       console.log(`🔢 [Count] 添加生成数量到prompt: count=${generateCount}`);
