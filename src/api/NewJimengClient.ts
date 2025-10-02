@@ -132,10 +132,74 @@ export class NewJimengClient {
       method: 'POST',
       url: '/mweb/v1/get_history_by_ids',
       params: requestParams,
-      data: { history_ids: [historyId] }
+      data: {
+        history_ids: [historyId],
+        image_info: {
+          width: 2048,
+          height: 2048,
+          format: "webp",
+          image_scene_list: [
+            { scene: "smart_crop", width: 360, height: 360, uniq_key: "smart_crop-w:360-h:360", format: "webp" },
+            { scene: "smart_crop", width: 480, height: 480, uniq_key: "smart_crop-w:480-h:480", format: "webp" },
+            { scene: "smart_crop", width: 720, height: 720, uniq_key: "smart_crop-w:720-h:720", format: "webp" },
+            { scene: "normal", width: 2400, height: 2400, uniq_key: "2400", format: "webp" },
+            { scene: "normal", width: 1080, height: 1080, uniq_key: "1080", format: "webp" },
+            { scene: "normal", width: 720, height: 720, uniq_key: "720", format: "webp" },
+            { scene: "normal", width: 480, height: 480, uniq_key: "480", format: "webp" },
+            { scene: "normal", width: 360, height: 360, uniq_key: "360", format: "webp" }
+          ]
+        },
+        http_common_info: { aid: 513695 }
+      }
     });
 
-    return response;
+    // 解析响应
+    const record = response?.data?.[historyId];
+    if (!record) {
+      return { status: 'failed', error: '记录不存在' };
+    }
+
+    const statusCode = record.status;
+    const finishedCount = record.finished_image_count || 0;
+    const totalCount = record.total_image_count || 1;
+
+    // 映射状态码
+    let status: string;
+    if (statusCode === 50) {
+      status = 'completed';
+    } else if (statusCode === 30) {
+      status = 'failed';
+    } else if (statusCode === 20 || statusCode === 42 || statusCode === 45) {
+      status = finishedCount === 0 ? 'pending' : 'processing';
+    } else {
+      status = 'processing';
+    }
+
+    const result: any = {
+      status,
+      progress: totalCount > 0 ? Math.round((finishedCount / totalCount) * 100) : 0
+    };
+
+    // 提取图片URLs（完成状态）
+    if (status === 'completed' && record.item_list && record.item_list.length > 0) {
+      result.images = record.item_list
+        .map((item: any) => ({
+          url: item.image?.large_images?.[0]?.image_url
+            || item.image_url
+            || item.image?.url
+        }))
+        .filter((img: any) => img.url);
+    }
+
+    // 处理失败状态
+    if (status === 'failed') {
+      const failCode = record.fail_code;
+      result.error = failCode === '2038' ? '内容被过滤'
+        : failCode ? `生成失败 (错误码: ${failCode})`
+        : '生成失败';
+    }
+
+    return result;
   }
 
   /**
@@ -455,8 +519,8 @@ export class NewJimengClient {
     while (attempts < maxAttempts) {
       const result = await this.getImageResult(historyId);
 
-      if (result.status === 'completed' && result.images) {
-        return result.images.map((img: any) => img.url);
+      if (result.status === 'completed' && result.images && result.images.length > 0) {
+        return result.images.map((img: any) => img.url).filter(Boolean);
       }
 
       if (result.status === 'failed') {
