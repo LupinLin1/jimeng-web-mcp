@@ -217,8 +217,12 @@ Supports complex image mixing through:
 
 - **`video_multi`**: Multi-frame precision control (default: async)
   - **工作原理**: 提供2-10个关键帧图片，系统在帧间生成平滑过渡动画
-  - **⚠️ 重要**: prompt描述的是"从当前帧到下一帧的过渡动画"，不是当前帧的静态内容
+  - **⚠️ 重要**: prompt描述的是"从当前帧到下一帧的过渡过程"，必须包含：
+    1. **镜头移动**：推进、拉远、摇移、跟随等
+    2. **画面变化**：主体动作、场景变化、光影变化
+    3. **转场效果**：淡入淡出、切换方式等
   - **⚠️ 注意**: 最后一帧的prompt不生效（因为没有下一帧了），可以留空或随意填写
+  - **时长限制**: 每帧1-6秒（1000-6000毫秒），总时长≤15秒
   - Default async: `true`
 
   **参数说明**:
@@ -228,8 +232,8 @@ Supports complex image mixing through:
       {
         idx: 0,                           // 帧序号，从0开始
         imagePath: "/abs/path/frame0.jpg", // 绝对路径
-        duration_ms: 2000,                 // 这段过渡动画的时长（毫秒）
-        prompt: "猫从坐姿慢慢站起来"      // 描述0→1的变换过程
+        duration_ms: 2000,                 // 这段过渡动画的时长（毫秒，1000-6000）
+        prompt: "镜头从正面缓慢推进，猫从坐姿站起，光线从左侧照入"  // 描述0→1的镜头、动作、转场
       },
       {
         idx: 1,

@@ -442,10 +442,10 @@ export const createServer = (): McpServer => {
     {
       frames: z.array(z.object({
         idx: z.number().int().min(0).describe("帧序号（0-based，从0开始连续递增）"),
-        imagePath: z.string().describe("关键帧图片绝对路径（必须是本地绝对路径）"),
-        duration_ms: z.number().min(1000).max(5000).describe("从当前帧过渡到下一帧的动画时长（毫秒，1000-5000），总时长≤15000"),
-        prompt: z.string().min(1).describe("⚠️关键：描述从此帧到下一帧的过渡动画（如：猫从坐姿站起来）。最后一帧的prompt会被忽略")
-      })).min(2).max(10).describe("关键帧数组（2-10个）。每帧包含图片、过渡时长、动画描述。⚠️注意：最后一帧的prompt不生效。示例：[{idx:0,imagePath:\"/path/1.jpg\",duration_ms:2000,prompt:\"从静止到站起\"},{idx:1,imagePath:\"/path/2.jpg\",duration_ms:1000,prompt:\"忽略\"}]"),
+        imagePath: z.string().min(1).describe("关键帧图片绝对路径（必填，必须是本地绝对路径）"),
+        duration_ms: z.number().min(1000).max(6000).describe("从当前帧过渡到下一帧的动画时长（毫秒，1000-6000），总时长≤15000"),
+        prompt: z.string().min(1).describe("⚠️关键：描述从此帧到下一帧的过渡过程，包括：1)镜头移动（推拉摇移）2)画面变化（主体动作、光影变化）3)转场效果。示例：'镜头从正面缓慢推进，猫从坐姿站起，光线从左侧照入'。最后一帧的prompt会被忽略")
+      })).min(2).max(10).describe("关键帧数组（2-10个）。每帧必须包含图片、过渡时长、动画描述。⚠️注意：最后一帧的prompt不生效。示例：[{idx:0,imagePath:\"/path/1.jpg\",duration_ms:2000,prompt:\"镜头从正面推进，猫站起\"},{idx:1,imagePath:\"/path/2.jpg\",duration_ms:1000,prompt:\"忽略\"}]"),
       async: z.boolean().optional().default(true).describe("是否异步模式，默认true（异步）"),
       resolution: z.enum(["720p", "1080p"]).optional().default("720p").describe("分辨率"),
       videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().default("16:9").describe("视频宽高比"),

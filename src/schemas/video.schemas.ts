@@ -33,9 +33,9 @@ export const textToVideoOptionsSchema = baseVideoOptionsSchema.extend({
  */
 const frameConfigurationSchema = z.object({
   idx: z.number().int().min(0).describe('帧序号（0-based）'),
-  duration_ms: z.number().int().min(1000).max(5000).describe('帧时长（毫秒，1000-5000）'),
+  duration_ms: z.number().int().min(1000).max(6000).describe('帧时长（毫秒，1000-6000）'),
   prompt: z.string().min(1).describe('帧描述文本'),
-  image_path: z.string().min(1).describe('参考图片路径')
+  imagePath: z.string().min(1).describe('参考图片路径（必填）')
 });
 
 /**
