@@ -91,6 +91,49 @@ Rules:
 - External API changes trigger updates ONLY to client implementation, NOT user-facing interfaces
 - MCP tool schemas (Zod definitions) change only for genuine feature additions
 
+### VI. Technical Debt Remediation Exception
+
+  **Critical technical debt that blocks maintainability MAY require exceptions to Principles I and II under
+  strict conditions.**
+
+  Rationale: While minimizing code changes and preferring modular extension are fundamental principles,
+  accumulated technical debt can reach a threshold where incremental fixes become counterproductive. In such
+  cases, structured refactoring with strong safeguards is necessary.
+
+  **Qualifying Conditions** (ALL must be met):
+  1. **Demonstrable Impact**: Technical debt measurably impairs developer productivity (e.g., >2x longer feature
+  development time, >50% increase in bug fix complexity)
+  2. **Impossibility of Modular Fix**: Analysis confirms the issue cannot be resolved through new modules or
+  adapters without creating additional complexity
+  3. **Documented Analysis**: A formal code quality assessment (e.g., from code-quality-pragmatist agent)
+  identifies specific anti-patterns
+  4. **Backward Compatibility Guarantee**: All public API signatures MUST remain unchanged (Principle III still
+  applies absolutely)
+  5. **Risk Mitigation Plan**: Staged execution with validation gates at each phase
+
+  **Required Safeguards**:
+  - **Phase Gating**: Execute in risk-ordered phases (low-risk first, core changes last)
+  - **Test Coverage**: Existing tests MUST pass at each phase completion
+  - **Performance Baseline**: Establish and verify no regression against pre-refactor metrics
+  - **Rollback Plan**: Each phase can be independently reverted
+  - **Documentation**: Update CHANGELOG, CLAUDE.md, and architecture docs
+
+  **Approval Process**:
+  - Document violation justification in plan.md "Constitution Check" section
+  - Explicitly mark tasks with constitutional exception in tasks.md
+  - Include "[CONSTITUTION-EXCEPTION: Tech Debt]" in commit messages
+  - Post-implementation review to assess if constitution needs permanent update
+
+  **Example Qualifying Scenarios**:
+  - Removing deep inheritance hierarchies (3+ levels) causing coupling
+  - Eliminating premature abstractions (>200 LOC for <5 use cases)
+  - Consolidating fragmented modules (>10 files, <100 LOC each)
+
+  **Non-Qualifying Scenarios**:
+  - "Code smell" without measurable impact
+  - Preference for different architecture style
+  - Feature additions disguised as refactoring
+
 ## Development Standards
 
 ### Code Organization
