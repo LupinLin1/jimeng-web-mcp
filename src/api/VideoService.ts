@@ -455,8 +455,14 @@ export class VideoService {
     while (Date.now() - startTime < timeout) {
       const status = await this.checkTaskStatus(taskId);
 
-      if (status.status === 'completed' && status.video_url) {
-        return status.video_url;
+      if (status.status === 'completed') {
+        if (status.video_url) {
+          return status.video_url;
+        } else {
+          // 状态完成但没有URL，打印调试信息
+          console.error('视频生成完成但未找到URL，完整状态:', JSON.stringify(status, null, 2));
+          throw new Error('视频生成完成但未返回URL');
+        }
       }
 
       if (status.status === 'failed') {
@@ -484,10 +490,15 @@ export class VideoService {
       data: { submit_ids: [taskId] }  // 视频轮询使用submit_ids
     });
 
+    console.log('🔍 [checkTaskStatus] 响应:', JSON.stringify(response, null, 2).substring(0, 500));
+
     const record = response?.data?.[taskId];
     if (!record) {
+      console.log('⚠️  [checkTaskStatus] 未找到record，继续等待');
       return { status: 'processing' };
     }
+
+    console.log('📊 [checkTaskStatus] 找到record:', JSON.stringify(record, null, 2).substring(0, 500));
 
     // 解析状态（与旧代码一致）
     const status = record.common_attr?.status ?? 'unknown';
