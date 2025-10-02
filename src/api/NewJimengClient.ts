@@ -73,7 +73,9 @@ export class NewJimengClient {
     // 处理参考图
     let uploadedImages: any[] = [];
     if (filePath && filePath.length > 0) {
+      console.log(`📤 [参考图] 开始上传 ${filePath.length} 张参考图`);
       uploadedImages = await this.imageUploader.uploadBatch(filePath);
+      console.log(`✅ [参考图] 上传完成:`, uploadedImages);
     }
 
     // 构建API参数
@@ -86,10 +88,13 @@ export class NewJimengClient {
       draft_version: DRAFT_VERSION
     };
 
-    // 添加参考图参数
+    // 添加参考图参数（包含完整的图片元数据）
     if (uploadedImages.length > 0) {
       apiParams.reference_images = uploadedImages.map((img, idx) => ({
         uri: img.uri,
+        width: img.width,
+        height: img.height,
+        format: img.format,
         strength: reference_strength?.[idx] ?? sample_strength ?? 0.5
       }));
     }
@@ -360,7 +365,7 @@ export class NewJimengClient {
     // 构建完整的请求体结构（兼容即梦API）
     const submitId = generateUuid();
     const componentId = generateUuid();
-    const hasRefImages = params.reference_images && params.reference_images.length > 0;
+    const hasRefImages = !!(params.reference_images && params.reference_images.length > 0);
 
     const requestBody: any = {
       extend: {
@@ -397,7 +402,11 @@ export class NewJimengClient {
             created_did: ""
           },
           generate_type: hasRefImages ? "blend" : "generate",
-          abilities: this.buildAbilities(params, hasRefImages)
+          abilities: {
+            type: "",
+            id: generateUuid(),
+            ...this.buildAbilities(params, hasRefImages)
+          }
         }]
       }),
       http_common_info: {
@@ -476,9 +485,9 @@ export class NewJimengClient {
               platform_type: 1,
               name: "",
               image_uri: ref.uri,
-              width: ref.width || 1024,
-              height: ref.height || 1024,
-              format: ref.format || "png",
+              width: ref.width,
+              height: ref.height,
+              format: ref.format,
               uri: ref.uri
             }],
             strength: ref.strength

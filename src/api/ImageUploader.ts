@@ -139,7 +139,7 @@ export class ImageUploader {
         throw new Error(commitRes['Response']['Error']['Message']);
       }
 
-      const uri = commitRes.Result.PluginResult[0].Uri;
+      const uri = commitRes.Result.PluginResult[0].ImageUri;
 
       return {
         uri,
