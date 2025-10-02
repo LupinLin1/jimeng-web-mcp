@@ -94,29 +94,166 @@ export class VideoService {
       throw new Error('duration必须在3000-15000毫秒之间');
     }
 
-    // 构建请求参数
-    const apiParams: any = {
-      prompt,
-      model: getModel(model),
-      resolution,
-      video_aspect_ratio: videoAspectRatio,
-      fps,
-      duration_ms: duration
-    };
+    const actualModel = getModel(model);
 
-    // 如果有首尾帧，上传图片
+    // 上传首尾帧图片
+    let first_frame_image = undefined;
+    let end_frame_image = undefined;
+
     if (firstFrameImage || lastFrameImage) {
-      const framePaths: string[] = [];
-      if (firstFrameImage) framePaths.push(firstFrameImage);
-      if (lastFrameImage) framePaths.push(lastFrameImage);
+      const uploadResults: any[] = [];
 
-      const uploadedFrames = await this.uploadFrames(framePaths);
-      apiParams.file_list = uploadedFrames.map(f => ({ uri: f.uri }));
+      if (firstFrameImage) {
+        const result = await this.imageUploader.upload(firstFrameImage);
+        uploadResults.push(result);
+      }
+
+      if (lastFrameImage) {
+        const result = await this.imageUploader.upload(lastFrameImage);
+        if (!firstFrameImage) uploadResults.unshift(null as any);
+        uploadResults.push(result);
+      }
+
+      if (uploadResults[0]) {
+        first_frame_image = {
+          format: uploadResults[0].format,
+          height: uploadResults[0].height,
+          id: this.generateUuid(),
+          image_uri: uploadResults[0].uri,
+          name: "",
+          platform_type: 1,
+          source_from: "upload",
+          type: "image",
+          uri: uploadResults[0].uri,
+          width: uploadResults[0].width,
+        };
+      }
+
+      if (uploadResults[1]) {
+        end_frame_image = {
+          format: uploadResults[1].format,
+          height: uploadResults[1].height,
+          id: this.generateUuid(),
+          image_uri: uploadResults[1].uri,
+          name: "",
+          platform_type: 1,
+          source_from: "upload",
+          type: "image",
+          uri: uploadResults[1].uri,
+          width: uploadResults[1].width,
+        };
+      }
     }
 
-    // 提交任务并返回
-    return this.submitAndPoll(apiParams, asyncMode, {
-      model, resolution, duration, fps
+    // 构建draft_content请求体（与旧代码完全一致）
+    const componentId = this.generateUuid();
+    const submitId = this.generateUuid();
+    const metricsExtra = JSON.stringify({
+      "enterFrom": "click",
+      "isDefaultSeed": 1,
+      "promptSource": "custom",
+      "isRegenerate": false,
+      "originSubmitId": this.generateUuid(),
+    });
+
+    const requestBody = {
+      "extend": {
+        "root_model": end_frame_image ? 'dreamina_ic_generate_video_model_vgfm_3.0' : actualModel,
+        "m_video_commerce_info": {
+          benefit_type: "basic_video_operation_vgfm_v_three",
+          resource_id: "generate_video",
+          resource_id_type: "str",
+          resource_sub_type: "aigc"
+        },
+        "m_video_commerce_info_list": [{
+          benefit_type: "basic_video_operation_vgfm_v_three",
+          resource_id: "generate_video",
+          resource_id_type: "str",
+          resource_sub_type: "aigc"
+        }]
+      },
+      "submit_id": submitId,
+      "metrics_extra": metricsExtra,
+      "draft_content": JSON.stringify({
+        "type": "draft",
+        "id": this.generateUuid(),
+        "min_version": "3.0.5",
+        "is_from_tsn": true,
+        "version": "3.3.2",
+        "main_component_id": componentId,
+        "component_list": [{
+          "type": "video_base_component",
+          "id": componentId,
+          "min_version": "1.0.0",
+          "metadata": {
+            "type": "",
+            "id": this.generateUuid(),
+            "created_platform": 3,
+            "created_platform_version": "",
+            "created_time_in_ms": Date.now(),
+            "created_did": ""
+          },
+          "generate_type": "gen_video",
+          "aigc_mode": "workbench",
+          "abilities": {
+            "type": "",
+            "id": this.generateUuid(),
+            "gen_video": {
+              "id": this.generateUuid(),
+              "type": "",
+              "text_to_video_params": {
+                "type": "",
+                "id": this.generateUuid(),
+                "model_req_key": actualModel,
+                "priority": 0,
+                "seed": Math.floor(Math.random() * 100000000) + 2500000000,
+                "video_aspect_ratio": videoAspectRatio,
+                "video_gen_inputs": [{
+                  duration_ms: duration,
+                  first_frame_image: first_frame_image,
+                  end_frame_image: end_frame_image,
+                  fps: fps,
+                  id: this.generateUuid(),
+                  min_version: "3.0.5",
+                  prompt: prompt,
+                  resolution: resolution,
+                  type: "",
+                  video_mode: 2
+                }]
+              },
+              "video_task_extra": metricsExtra,
+            }
+          }
+        }],
+      }),
+    };
+
+    // 提交任务
+    const taskId = await this.submitTaskWithDraft(requestBody);
+
+    if (asyncMode) {
+      return {
+        taskId,
+        metadata: { model, resolution, duration, fps }
+      };
+    }
+
+    // 同步模式：轮询
+    const videoUrl = await this.pollUntilComplete(taskId);
+    return {
+      videoUrl,
+      metadata: { model, resolution, duration, fps }
+    };
+  }
+
+  /**
+   * 生成UUID（本地方法）
+   */
+  private generateUuid(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
     });
   }
 
@@ -256,7 +393,30 @@ export class VideoService {
   }
 
   /**
-   * 提交视频生成任务
+   * 提交draft格式的视频生成任务（新方法）
+   */
+  private async submitTaskWithDraft(requestBody: any): Promise<string> {
+    const requestParams = this.httpClient.generateRequestParams();
+
+    const response = await this.httpClient.request({
+      method: 'POST',
+      url: '/mweb/v1/aigc_draft/generate',
+      params: requestParams,
+      data: requestBody
+    });
+
+    // 正确的响应路径（与图片生成一致）
+    const historyId = response?.data?.aigc_data?.history_record_id;
+
+    if (!historyId) {
+      throw new Error(response.errmsg || '提交视频任务失败');
+    }
+
+    return historyId;
+  }
+
+  /**
+   * 提交视频生成任务（旧方法，保留用于其他模式）
    */
   private async submitTask(params: any): Promise<string> {
     const requestParams = this.httpClient.generateRequestParams();
@@ -268,11 +428,14 @@ export class VideoService {
       data: params
     });
 
-    if (!response.history_id) {
+    // 正确的响应路径（与图片生成一致）
+    const historyId = response?.data?.aigc_data?.history_record_id;
+
+    if (!historyId) {
       throw new Error(response.errmsg || '提交视频任务失败');
     }
 
-    return response.history_id;
+    return historyId;
   }
 
   /**
