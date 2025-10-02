@@ -57,6 +57,7 @@ export class NewJimengClient {
       reference_strength,
       sample_strength,
       negative_prompt,
+      frames,
       async: asyncMode = false
     } = params;
 
@@ -64,6 +65,10 @@ export class NewJimengClient {
     if (count < 1 || count > 15) {
       throw new Error('count必须在1-15之间');
     }
+
+    // 处理frames参数（与旧代码一致）
+    const validFrames = this.validateAndFilterFrames(frames);
+    const finalPrompt = this.buildPromptWithFrames(prompt, validFrames, count);
 
     // 处理参考图
     let uploadedImages: any[] = [];
@@ -73,7 +78,7 @@ export class NewJimengClient {
 
     // 构建API参数
     const apiParams: any = {
-      prompt: prompt,  // prompt不在这里添加前缀，而是在buildAbilities中处理
+      prompt: finalPrompt,  // 使用处理后的prompt
       model_name: getModel(model),
       count: Math.min(count, 4), // API限制单次最多4张
       aspect_ratio: aspectRatio,
@@ -558,6 +563,47 @@ export class NewJimengClient {
    */
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * 验证并过滤frames数组（与旧代码一致）
+   */
+  private validateAndFilterFrames(frames?: string[]): string[] {
+    if (!frames || !Array.isArray(frames)) {
+      return [];
+    }
+
+    // 过滤无效元素
+    const valid = frames
+      .filter(f => f != null && typeof f === 'string' && f.trim() !== '')
+      .map(f => f.trim());
+
+    // 长度限制
+    if (valid.length > 15) {
+      console.warn(`[Frames] 截断frames数组: ${valid.length} -> 15`);
+      return valid.slice(0, 15);
+    }
+
+    return valid;
+  }
+
+  /**
+   * 构建包含frames的最终prompt（与旧代码一致）
+   */
+  private buildPromptWithFrames(
+    basePrompt: string,
+    frames: string[],
+    count: number
+  ): string {
+    if (frames.length === 0) {
+      return basePrompt;
+    }
+
+    // 给每个frame加上序号
+    const numberedFrames = frames.map((frame, index) => `第${index + 1}张：${frame}`);
+    const framesText = numberedFrames.join(' ');
+    // 使用frames的数量，而不是count参数
+    return `${basePrompt} ${framesText}，一共${frames.length}张图`;
   }
 
   /**
