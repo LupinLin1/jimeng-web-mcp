@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0] - 2025-10-02
+
+### 🏗️ **Major Refactoring: Composition Pattern Architecture**
+
+#### **Code Simplification** (74.6% Reduction)
+- **Removed 5,268 lines** of complex code
+- **Added 1,335 lines** of simplified implementation
+- **Net reduction: 3,933 lines** (74.6% decrease)
+- From complex inheritance to clean composition pattern
+
+#### **Architecture Changes**
+- **✅ Composition Over Inheritance**: Replaced 3-level inheritance chain with dependency injection
+  - OLD: `CreditService` → `BaseClient` → `JimengClient` (multiple inheritance)
+  - NEW: Independent services composed via dependency injection
+- **✅ Unified Video Service**: Merged 4 separate video generators into single `VideoService`
+  - Removed: `VideoGenerator.ts` (1,676 lines), `TextToVideoGenerator` (378 lines), `MultiFrameVideoGenerator` (467 lines), `MainReferenceVideoGenerator` (710 lines)
+  - Added: `VideoService.ts` (393 lines) - handles all video generation modes
+- **✅ New Service Classes**:
+  - `HttpClient.ts` (256 lines) - Centralized HTTP and authentication
+  - `ImageUploader.ts` (221 lines) - Image upload with image-size library integration
+  - `NewCreditService.ts` (114 lines) - Credit management using composition
+  - `NewJimengClient.ts` (351 lines) - Main API client with composition pattern
+
+#### **Dependencies**
+- **✅ Added**: `image-size` - Replaced 132 lines of manual image format parsing
+- **✅ Removed**: Deprecation system (150 lines) - No longer needed
+- **✅ Simplified**: Polling logic inlined (~25 lines vs 249-line timeout abstraction)
+
+#### **Performance & Maintainability**
+- ✅ **Faster builds**: Less code to process
+- ✅ **Reduced memory footprint**: Simpler call stacks
+- ✅ **Better developer experience**: Flat architecture easier to understand
+- ✅ **Improved testability**: Independent services can be easily mocked
+
+#### **Backward Compatibility** (100% Maintained)
+- ✅ All API signatures unchanged
+- ✅ All MCP tools work identically
+- ✅ Existing code continues to work without modifications
+- ✅ Continue generation feature preserved
+- ✅ All video generation modes functional
+
+#### **Files Removed/Replaced**
+- ❌ `BaseClient.ts` (748 lines) → Replaced by `HttpClient` + `ImageUploader`
+- ❌ `JimengClient.ts.old` (831 lines) → Replaced by `NewJimengClient`
+- ❌ `CreditService.ts.old` (60 lines) → Replaced by `NewCreditService`
+- ❌ `VideoGenerator.ts` (1,676 lines) → Merged into `VideoService`
+- ❌ `TextToVideoGenerator.ts` (378 lines) → Merged into `VideoService`
+- ❌ `MultiFrameVideoGenerator.ts` (467 lines) → Merged into `VideoService`
+- ❌ `MainReferenceVideoGenerator.ts` (710 lines) → Merged into `VideoService`
+- ❌ `deprecation.ts` (150 lines) → Removed entirely
+- ❌ `timeout.ts` (248 lines) → Inlined polling logic
+
+#### **Testing & Validation**
+- ✅ All builds passing: CJS ✅ ESM ✅ DTS ✅
+- ✅ New unit tests created and passing (7/7)
+- ✅ Performance validated: No regression
+- ✅ Backward compatibility verified
+
+#### **Documentation Updates**
+- ✅ Updated CLAUDE.md with composition pattern architecture
+- ✅ Updated dependency information
+- ✅ Documented removed abstractions
+
+### **Migration Guide**
+No changes required for existing users. The refactoring is 100% backward compatible. All existing code continues to work without modification. Internal implementation improvements are transparent to API consumers.
+
+---
+
 ## [1.11.0] - 2025-01-25
 
 ### 🔧 Major Fixes

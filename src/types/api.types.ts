@@ -317,3 +317,167 @@ export interface QueryResultResponse {
 export interface BatchQueryResponse {
   [historyId: string]: QueryResultResponse | { error: string };
 }
+
+// ============== 视频生成方法重构相关类型 (Feature 005-3-1-2) ==============
+
+/**
+ * 视频生成模式枚举
+ */
+export enum VideoGenerationMode {
+  TEXT_TO_VIDEO = 'text_to_video',      // 文生视频及首尾帧
+  MULTI_FRAME = 'multi_frame',          // 多帧视频
+  MAIN_REFERENCE = 'main_reference'     // 主体参考
+}
+
+/**
+ * 视频任务状态
+ */
+export type VideoTaskStatus =
+  | 'pending'      // 等待处理
+  | 'processing'   // 处理中
+  | 'completed'    // 已完成
+  | 'failed';      // 失败
+
+/**
+ * 视频生成错误对象
+ */
+export interface VideoGenerationError {
+  /** 错误码 */
+  code:
+    | 'TIMEOUT'            // 超时
+    | 'CONTENT_VIOLATION'  // 内容违规
+    | 'API_ERROR'          // API错误
+    | 'INVALID_PARAMS'     // 参数无效
+    | 'PROCESSING_FAILED'  // 处理失败
+    | 'UNKNOWN';           // 未知错误
+
+  /** 简短错误消息 */
+  message: string;
+
+  /** 详细原因说明 */
+  reason: string;
+
+  /** 关联的任务ID（如果有） */
+  taskId?: string;
+
+  /** 错误发生时间戳 */
+  timestamp: number;
+}
+
+/**
+ * 视频元数据
+ */
+export interface VideoMetadata {
+  /** 实际时长（毫秒） */
+  duration: number;
+
+  /** 分辨率 */
+  resolution: string;
+
+  /** 文件大小（字节） */
+  fileSize?: number;
+
+  /** 格式 */
+  format?: string;
+
+  /** 生成参数快照 */
+  generationParams: {
+    mode: VideoGenerationMode;
+    model: string;
+    fps: number;
+    aspectRatio: string;
+  };
+}
+
+/**
+ * 视频任务结果（统一返回类型）
+ */
+export interface VideoTaskResult {
+  /** 任务ID（异步模式返回） */
+  taskId?: string;
+
+  /** 视频URL（同步模式返回） */
+  videoUrl?: string;
+
+  /** 任务状态（查询时返回） */
+  status?: VideoTaskStatus;
+
+  /** 错误信息（失败时返回） */
+  error?: VideoGenerationError;
+
+  /** 视频元数据（完成时返回） */
+  metadata?: VideoMetadata;
+}
+
+/**
+ * 基础视频生成选项（所有方法共享）
+ */
+export interface BaseVideoGenerationOptions {
+  /** 是否异步模式，默认false（同步） */
+  async?: boolean;
+
+  /** 视频分辨率 */
+  resolution?: '720p' | '1080p';
+
+  /** 视频宽高比 */
+  videoAspectRatio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16';
+
+  /** 帧率 (12-30) */
+  fps?: number;
+
+  /** 时长（毫秒，3000-15000） */
+  duration?: number;
+
+  /** 模型名称 */
+  model?: string;
+}
+
+/**
+ * 文生视频选项
+ */
+export interface TextToVideoOptions extends BaseVideoGenerationOptions {
+  /** 视频描述文本 */
+  prompt: string;
+
+  /** 首帧图片路径（可选） */
+  firstFrameImage?: string;
+
+  /** 尾帧图片路径（可选） */
+  lastFrameImage?: string;
+}
+
+/**
+ * 单帧配置
+ */
+export interface FrameConfiguration {
+  /** 帧序号 */
+  idx: number;
+
+  /** 帧时长（毫秒） */
+  duration_ms: number;
+
+  /** 帧描述文本 */
+  prompt: string;
+
+  /** 参考图片路径 */
+  image_path: string;
+}
+
+/**
+ * 多帧视频选项
+ */
+export interface MultiFrameVideoOptions extends BaseVideoGenerationOptions {
+  /** 帧配置数组（2-10个） */
+  frames: FrameConfiguration[];
+}
+
+/**
+ * 主体参考视频选项（扩展支持async）
+ */
+export interface MainReferenceVideoOptionsExtended extends BaseVideoGenerationOptions {
+  /** 参考图片路径数组（2-4张） */
+  referenceImages: string[];
+
+  /** 提示词，使用[图N]语法引用图片 */
+  prompt: string;
+}
