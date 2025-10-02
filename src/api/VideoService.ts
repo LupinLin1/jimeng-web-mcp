@@ -315,15 +315,42 @@ export class VideoService {
       data: { submit_ids: [taskId] }
     });
 
-    const history = response?.data?.[taskId];
-    if (!history) {
+    const record = response?.data?.[taskId];
+    if (!record) {
       return { status: 'processing' };
     }
 
+    // 解析状态（与旧代码一致）
+    const status = record.common_attr?.status ?? 'unknown';
+    const failCode = record.common_attr?.fail_code ?? null;
+
+    // 映射状态
+    let mappedStatus: string;
+    if (status === 'completed' || status === 'success') {
+      mappedStatus = 'completed';
+    } else if (status === 'failed' || status === 'error') {
+      mappedStatus = 'failed';
+    } else {
+      mappedStatus = 'processing';
+    }
+
+    // 提取视频URL（与旧代码一致，尝试多种路径）
+    let videoUrl = null;
+    if (record.item_list && record.item_list.length > 0) {
+      const item = record.item_list[0];
+      videoUrl = item?.video?.transcoded_video?.origin?.video_url ||
+                item?.video?.video_url ||
+                item?.video?.origin?.video_url ||
+                item?.common_attr?.cover_url ||
+                item?.aigc_video_params?.video_url ||
+                item?.url ||
+                item?.video_url;
+    }
+
     return {
-      status: history.status === 2 ? 'completed' : history.status === 3 ? 'failed' : 'processing',
-      video_url: history.resource_url,
-      error: history.errmsg
+      status: mappedStatus,
+      video_url: videoUrl,
+      error: failCode ? `生成失败 (错误码: ${failCode})` : null
     };
   }
 

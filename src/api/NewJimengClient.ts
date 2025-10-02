@@ -433,9 +433,10 @@ export class NewJimengClient {
     const imageRatio = aspectRatioPreset?.imageRatio || 1; // 默认1:1的imageRatio
 
     if (hasRefImages) {
-      // blend模式
+      // blend模式（与旧代码完全一致）
       const promptPrefix = reference_images.length === 1 ? "##" : "####";
-      return {
+
+      const blendData: any = {
         type: "",
         id: generateUuid(),
         blend: {
@@ -477,11 +478,27 @@ export class NewJimengClient {
             }],
             strength: ref.strength
           })),
-          "negative_prompt": negative_prompt || ""
+          prompt_placeholder_info_list: reference_images.map((_: any, index: number) => ({
+            type: "",
+            id: generateUuid(),
+            ability_index: index
+          })),
+          postedit_param: {
+            type: "",
+            id: generateUuid(),
+            generate_type: 0
+          }
         }
       };
+
+      // 多参考图需要添加 min_version
+      if (reference_images.length > 1) {
+        blendData.blend.min_version = "3.2.9";
+      }
+
+      return blendData;
     } else {
-      // generate模式
+      // generate模式（与旧代码完全一致）
       return {
         type: "",
         id: generateUuid(),
@@ -493,6 +510,9 @@ export class NewJimengClient {
             id: generateUuid(),
             model: model_name,
             prompt: prompt,
+            negative_prompt: negative_prompt || "",
+            seed: Math.floor(Math.random() * 100000000) + 2500000000,
+            sample_strength: params.sample_strength || 0.5,
             image_ratio: imageRatio,
             large_image_info: {
               type: "",
@@ -502,8 +522,7 @@ export class NewJimengClient {
               resolution_type: "2k"
             },
             intelligent_ratio: false
-          },
-          "negative_prompt": negative_prompt || ""
+          }
         }
       };
     }
