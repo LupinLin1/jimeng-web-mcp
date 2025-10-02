@@ -1583,4 +1583,95 @@ export class VideoGenerator extends BaseClient {
 
     return await this.request('POST', '/mweb/v1/aigc_draft/generate', rqData, this.generateRequestParams());
   }
+
+  // ============== 新的视频生成方法 (Feature 005-3-1-2) ==============
+
+  /**
+   * 文生视频生成（统一async参数版本）
+   *
+   * @param options - 文生视频选项
+   * @returns Promise<VideoTaskResult>
+   *
+   * @example
+   * // 同步模式
+   * const result = await videoGen.generateTextToVideo({
+   *   prompt: "一只猫在阳光下奔跑"
+   * });
+   *
+   * @example
+   * // 异步模式
+   * const result = await videoGen.generateTextToVideo({
+   *   prompt: "长视频",
+   *   async: true
+   * });
+   */
+
+  // ============== Feature 005-3-1-2: 新的统一接口 ==============
+
+  /**
+   * 文生视频（统一async参数版本）
+   *
+   * @param options - 文生视频选项
+   * @returns Promise<VideoTaskResult>
+   *
+   * @example
+   * // 同步模式
+   * const result = await videoGen.generateTextToVideo({
+   *   prompt: "一只猫在阳光下奔跑"
+   * });
+   * console.log(result.videoUrl);
+   *
+   * @example
+   * // 异步模式
+   * const result = await videoGen.generateTextToVideo({
+   *   prompt: "长视频",
+   *   async: true
+   * });
+   * console.log(result.taskId);
+   */
+  public async generateTextToVideo(options: import('../../types/api.types.js').TextToVideoOptions): Promise<import('../../types/api.types.js').VideoTaskResult> {
+    // 动态导入TextToVideoGenerator
+    const { TextToVideoGenerator } = await import('./TextToVideoGenerator.js');
+    const textToVideoGen = new TextToVideoGenerator(this.refreshToken);
+    return await textToVideoGen.generateTextToVideo(options);
+  }
+
+  /**
+   * 多帧视频生成（统一async参数版本）
+   *
+   * @param options - 多帧视频选项
+   * @returns Promise<VideoTaskResult>
+   *
+   * @example
+   * const result = await videoGen.generateMultiFrameVideo({
+   *   frames: [
+   *     { idx: 0, duration_ms: 2000, prompt: "场景A", image_path: "/a.jpg" },
+   *     { idx: 1, duration_ms: 2000, prompt: "场景B", image_path: "/b.jpg" }
+   *   ]
+   * });
+   */
+  public async generateMultiFrameVideoUnified(options: import('../../types/api.types.js').MultiFrameVideoOptions): Promise<import('../../types/api.types.js').VideoTaskResult> {
+    // 动态导入MultiFrameVideoGenerator
+    const { MultiFrameVideoGenerator } = await import('./MultiFrameVideoGenerator.js');
+    const multiFrameGen = new MultiFrameVideoGenerator(this.refreshToken);
+    return await multiFrameGen.generateMultiFrameVideo(options);
+  }
+
+  /**
+   * 主体参考视频生成（统一async参数版本）
+   *
+   * @param options - 主体参考视频选项
+   * @returns Promise<VideoTaskResult>
+   *
+   * @example
+   * const result = await videoGen.generateMainReferenceVideoUnified({
+   *   referenceImages: ["/img0.jpg", "/img1.jpg"],
+   *   prompt: "[图0]的猫在[图1]的地板上跑"
+   * });
+   */
+  public async generateMainReferenceVideoUnified(options: import('../../types/api.types.js').MainReferenceVideoOptionsExtended): Promise<import('../../types/api.types.js').VideoTaskResult> {
+    // 委托给MainReferenceVideoGenerator的新方法
+    const mainRefGen = new MainReferenceVideoGenerator(this.refreshToken);
+    return await mainRefGen.generateMainReferenceVideo(options);
+  }
 }

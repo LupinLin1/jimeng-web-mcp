@@ -8,6 +8,7 @@ import { JimengApiClient } from './ApiClient.js';
 import { BaseClient } from './BaseClient.js';
 import { VideoGenerator } from './video/VideoGenerator.js';
 import { ImageGenerator } from './image/ImageGenerator.js';
+import { deprecate, DEPRECATION_CONFIGS } from '../utils/deprecation.js';
 import {
   ImageGenerationParams,
   VideoGenerationParams,
@@ -102,16 +103,82 @@ export class JimengClient extends BaseClient {
 
   /**
    * 即梦AI视频生成
+   * @deprecated 请使用 generateTextToVideo() 或 generateMultiFrameVideoNew() 替代
+   *
+   * 迁移指南：
+   * - 传统模式：使用 generateTextToVideo({ prompt, firstFrameImage?, lastFrameImage? })
+   * - 多帧模式：使用 generateMultiFrameVideoNew({ frames })
    */
   public async generateVideo(params: VideoGenerationParams): Promise<string> {
+    // 显示废弃警告
+    if (params.multiFrames && params.multiFrames.length > 0) {
+      deprecate(DEPRECATION_CONFIGS.GENERATE_VIDEO_MULTI_FRAME);
+    } else {
+      deprecate(DEPRECATION_CONFIGS.GENERATE_VIDEO_TO_TEXT_TO_VIDEO);
+    }
+
     return this.videoGen.generateVideo(params);
   }
 
   /**
    * 主体参考视频生成 - 组合多图主体到一个场景
+   * @deprecated 请使用 generateMainReferenceVideoUnified() 替代
    */
   public async generateMainReferenceVideo(params: MainReferenceVideoParams): Promise<string> {
+    deprecate({
+      oldMethod: 'generateMainReferenceVideo',
+      newMethod: 'generateMainReferenceVideoUnified',
+      migrationGuideUrl: 'https://github.com/your-repo/docs/migration-guide.md#main-reference',
+      warnOnce: true
+    });
     return this.videoGen.generateMainReferenceVideo(params);
+  }
+
+  // ============== 新的视频生成方法 (Feature 005-3-1-2) ==============
+
+  /**
+   * 文生视频生成（统一async参数版本）
+   *
+   * @param options - 文生视频选项
+   * @returns Promise<VideoTaskResult> - 同步模式返回videoUrl，异步模式返回taskId
+   *
+   * @example
+   * // 同步模式
+   * const result = await client.generateTextToVideo({
+   *   prompt: "一只猫在阳光下奔跑"
+   * });
+   * console.log(result.videoUrl);
+   *
+   * @example
+   * // 异步模式
+   * const result = await client.generateTextToVideo({
+   *   prompt: "长视频",
+   *   async: true
+   * });
+   * console.log(result.taskId);
+   */
+  public async generateTextToVideo(options: import('../types/api.types.js').TextToVideoOptions): Promise<import('../types/api.types.js').VideoTaskResult> {
+    return this.videoGen.generateTextToVideo(options);
+  }
+
+  /**
+   * 多帧视频生成（统一async参数版本）
+   *
+   * @param options - 多帧视频选项
+   * @returns Promise<VideoTaskResult>
+   */
+  public async generateMultiFrameVideoNew(options: import('../types/api.types.js').MultiFrameVideoOptions): Promise<import('../types/api.types.js').VideoTaskResult> {
+    return this.videoGen.generateMultiFrameVideoUnified(options);
+  }
+
+  /**
+   * 主体参考视频生成（统一async参数版本）
+   *
+   * @param options - 主体参考视频选项
+   * @returns Promise<VideoTaskResult>
+   */
+  public async generateMainReferenceVideoUnified(options: import('../types/api.types.js').MainReferenceVideoOptionsExtended): Promise<import('../types/api.types.js').VideoTaskResult> {
+    return this.videoGen.generateMainReferenceVideoUnified(options);
   }
 
   // ============== 视频后处理方法 ==============

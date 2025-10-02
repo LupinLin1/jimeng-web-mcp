@@ -7,6 +7,7 @@ module.exports = {
     '**/__tests__/**/utilities.test.ts',
     '**/tests/unit/**/*.test.ts',
     '**/tests/integration/**/*.test.ts',
+    '**/tests/e2e/**/*.test.ts',
   ],
   // 暂时排除需要mock的测试文件（ESM环境下jest.mock()不工作）
   // TODO: 未来重写这些测试或升级到支持ESM mock的jest版本

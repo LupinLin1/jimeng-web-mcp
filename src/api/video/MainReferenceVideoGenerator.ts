@@ -12,6 +12,15 @@ import {
 } from '../../types/video.types.js';
 import { DEFAULT_VIDEO_MODEL, WEB_ID } from '../../types/models.js';
 import { generateUuid } from '../../utils/index.js';
+import { pollUntilComplete, TimeoutError } from '../../utils/timeout.js';
+import { deprecate, DEPRECATION_CONFIGS } from '../../utils/deprecation.js';
+import type {
+  MainReferenceVideoOptionsExtended,
+  VideoTaskResult,
+  VideoGenerationError,
+  VideoTaskStatus,
+  VideoGenerationMode
+} from '../../types/api.types.js';
 
 /**
  * 主体参考视频生成器
@@ -20,11 +29,188 @@ import { generateUuid } from '../../utils/index.js';
 export class MainReferenceVideoGenerator extends BaseClient {
 
   /**
-   * 生成主体参考视频
+   * 生成主体参考视频（统一async参数版本）
+   *
+   * @param options - 主体参考视频选项
+   * @returns Promise<VideoTaskResult> - 同步模式返回videoUrl，异步模式返回taskId
+   *
+   * @example
+   * // 同步模式
+   * const result = await generator.generateMainReferenceVideo({
+   *   referenceImages: ["/img0.jpg", "/img1.jpg"],
+   *   prompt: "[图0]的猫在[图1]的地板上跑"
+   * });
+   *
+   * @example
+   * // 异步模式
+   * const result = await generator.generateMainReferenceVideo({
+   *   referenceImages: ["/img0.jpg", "/img1.jpg"],
+   *   prompt: "[图0]和[图1]",
+   *   async: true
+   * });
+   */
+  async generateMainReferenceVideo(options: MainReferenceVideoOptionsExtended): Promise<VideoTaskResult> {
+    const {
+      referenceImages,
+      prompt,
+      async: asyncMode = false,
+      resolution = '720p',
+      videoAspectRatio = '16:9',
+      fps = 24,
+      duration = 5000,
+      model = 'jimeng-video-3.0'
+    } = options;
+
+    try {
+      // 构建旧格式参数
+      const legacyParams: MainReferenceVideoParams = {
+        referenceImages,
+        prompt,
+        resolution,
+        videoAspectRatio,
+        fps,
+        duration,
+        model
+      };
+
+      // 异步模式
+      if (asyncMode) {
+        const taskId = await this.generateAsync(legacyParams);
+        return { taskId };
+      }
+
+      // 同步模式 - 使用新的轮询逻辑
+      // 1. 提交任务并获取historyId
+      const historyId = await this.generateAsync(legacyParams);
+
+      // 2. 使用pollUntilComplete轮询
+      try {
+        const result = await pollUntilComplete<{ videoUrl: string }>(
+          historyId,
+          async (id) => this.checkVideoTaskStatus(id)
+        );
+
+        // 3. 返回结果
+        return {
+          videoUrl: result.videoUrl,
+          metadata: {
+            duration,
+            resolution,
+            format: 'mp4',
+            generationParams: {
+              mode: 'main_reference' as VideoGenerationMode,
+              model,
+              fps,
+              aspectRatio: videoAspectRatio
+            }
+          }
+        };
+      } catch (error: any) {
+        if (error instanceof TimeoutError) {
+          throw this.createVideoError('TIMEOUT', error.message, error.message, historyId);
+        }
+        throw error;
+      }
+    } catch (error: any) {
+      if (error.error) {
+        throw error; // 已经是VideoGenerationError格式
+      }
+      throw this.createVideoError('API_ERROR', 'API调用失败', error.message);
+    }
+  }
+
+  /**
+   * 检查视频任务状态（用于pollUntilComplete）
+   */
+  private async checkVideoTaskStatus(historyId: string): Promise<{
+    status: VideoTaskStatus;
+    result?: { videoUrl: string };
+    error?: string;
+  }> {
+    const pollResult = await this.request(
+      'POST',
+      '/mweb/v1/get_history_by_ids',
+      {
+        history_ids: [historyId],
+        image_info: {
+          width: 2048,
+          height: 2048,
+          format: "webp"
+        }
+      },
+      {}
+    );
+
+    const record = pollResult?.data?.[historyId];
+    if (!record) {
+      return { status: 'pending' };
+    }
+
+    const status = record.status;
+
+    // 状态50表示完成
+    if (status === 50) {
+      const videoUrl = record.item_list?.[0]?.video?.transcoded_video?.origin?.video_url;
+      if (!videoUrl) {
+        return {
+          status: 'failed',
+          error: '视频生成完成但未获取到视频URL'
+        };
+      }
+      return {
+        status: 'completed',
+        result: { videoUrl }
+      };
+    }
+
+    // 状态30表示失败
+    if (status === 30) {
+      const failCode = record.fail_code || 'unknown';
+      return {
+        status: 'failed',
+        error: `视频生成失败，错误码: ${failCode}`
+      };
+    }
+
+    // 其他状态(如status=20)表示处理中
+    return { status: 'processing' };
+  }
+
+  /**
+   * 创建VideoGenerationError对象
+   */
+  private createVideoError(
+    code: VideoGenerationError['code'],
+    message: string,
+    reason: string,
+    taskId?: string
+  ): { error: VideoGenerationError } {
+    return {
+      error: {
+        code,
+        message,
+        reason,
+        taskId,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  /**
+   * 生成主体参考视频（废弃方法，保留向后兼容）
+   * @deprecated 请使用 generateMainReferenceVideo({ async: false }) 替代
    * @param params 主体参考视频参数
    * @returns 生成的视频URL
    */
   async generate(params: MainReferenceVideoParams): Promise<string> {
+    // 显示废弃警告
+    deprecate({
+      oldMethod: 'generate (MainReference)',
+      newMethod: 'generateMainReferenceVideo',
+      migrationGuideUrl: 'https://github.com/your-repo/docs/migration-guide.md#main-reference',
+      warnOnce: true
+    });
+
     console.log('[MainReference] 开始生成主体参考视频...');
 
     // 1. 参数验证
@@ -78,10 +264,19 @@ export class MainReferenceVideoGenerator extends BaseClient {
   }
 
   /**
-   * 异步生成主体参考视频 - 立即返回historyId
+   * 异步生成主体参考视频 - 立即返回historyId（废弃方法）
+   * @deprecated 请使用 generateMainReferenceVideo({ async: true }) 替代
    * 与generate方法相同的逻辑，但不等待轮询结果
    */
   async generateAsync(params: MainReferenceVideoParams): Promise<string> {
+    // 显示废弃警告
+    deprecate({
+      oldMethod: 'generateAsync (MainReference)',
+      newMethod: 'generateMainReferenceVideo (with async: true)',
+      migrationGuideUrl: 'https://github.com/your-repo/docs/migration-guide.md#async-param',
+      warnOnce: true
+    });
+
     console.log('[MainReference] [Async] 开始异步生成主体参考视频...');
 
     // 1. 参数验证
@@ -479,5 +674,38 @@ export class MainReferenceVideoGenerator extends BaseClient {
     }
 
     throw new Error('视频生成超时，轮询次数已达上限');
+  }
+
+  
+  /**
+   * 映射错误到标准错误码
+   */
+  private mapErrorCode(error: any): string {
+    const message = error.message || String(error);
+
+    if (message.includes('超时')) {
+      return 'TIMEOUT';
+    } else if (message.includes('审核') || message.includes('违规')) {
+      return 'CONTENT_VIOLATION';
+    } else if (message.includes('参数') || message.includes('验证')) {
+      return 'INVALID_PARAMS';
+    } else if (message.includes('失败')) {
+      return 'PROCESSING_FAILED';
+    } else if (message.includes('API') || message.includes('网络')) {
+      return 'API_ERROR';
+    } else {
+      return 'UNKNOWN';
+    }
+  }
+
+  /**
+   * 提取简短的错误消息
+   */
+  private extractErrorMessage(error: any): string {
+    const message = error.message || String(error);
+
+    // 返回第一句话作为简短消息
+    const firstSentence = message.split(/[。.！!？?；;]/)[0];
+    return firstSentence || message;
   }
 }

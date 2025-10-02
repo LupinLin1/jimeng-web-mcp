@@ -69,12 +69,17 @@ The project follows a modular architecture after refactoring from a 2800+ line m
 - **`src/api/BaseClient.ts`** - Base client class with shared HTTP and upload methods (582 lines)
 - **`src/api/JimengClient.ts`** - Image generation client with video delegation (1644 lines)
 - **`src/api/video/VideoGenerator.ts`** - Dedicated video generation module (1121 lines)
-- **`src/api/video/MainReferenceVideoGenerator.ts`** - Main reference video generation
+- **`src/api/video/TextToVideoGenerator.ts`** - **NEW!** Text-to-video generation with first/last frame support
+- **`src/api/video/MultiFrameVideoGenerator.ts`** - **NEW!** Multi-frame video generation (2-10 frames)
+- **`src/api/video/MainReferenceVideoGenerator.ts`** - Main reference video generation with [图N] syntax
 - **`src/api/ApiClient.ts`** - Legacy HTTP client for JiMeng API
 - **`src/api/CreditService.ts`** - Credit/point management service
 - **`src/types/api.types.ts`** - Complete API type definitions (200 lines)
 - **`src/types/models.ts`** - Model mappings and constants (80 lines)
 - **`src/utils/`** - Authentication, dimension calculation, logging utilities
+- **`src/utils/timeout.ts`** - **NEW!** Timeout handling and polling logic (600s timeout, exponential backoff)
+- **`src/utils/deprecation.ts`** - **NEW!** Deprecation warning system with warnOnce support
+- **`src/schemas/video.schemas.ts`** - **NEW!** Zod validation schemas for video generation tools
 
 ### Key Architectural Patterns
 
@@ -83,10 +88,17 @@ The project follows a modular architecture after refactoring from a 2800+ line m
 **Inheritance Hierarchy**: `CreditService` → `BaseClient` → `JimengClient` / `VideoGenerator`
 - **CreditService**: Handles point management
 - **BaseClient**: Provides shared HTTP requests, image upload, and logging methods
-- **JimengClient**: Manages image generation, delegates video operations to VideoGenerator
-- **VideoGenerator**: Handles all video generation (traditional, multi-frame, post-processing)
+- **JimengClient**: Manages image generation, delegates video operations to specialized generators
+- **VideoGenerator**: Base class for video generation with shared polling logic
 
-**Delegation Pattern**: JimengClient delegates all video operations to VideoGenerator instance, maintaining clean separation of concerns.
+**Modular Generator Pattern**: Specialized generators for each video generation mode
+- **TextToVideoGenerator**: Handles text-to-video and first/last frame generation
+- **MultiFrameVideoGenerator**: Manages multi-frame video generation (2-10 frames)
+- **MainReferenceVideoGenerator**: Handles main reference video generation with [图N] syntax
+
+**Delegation Pattern**: JimengClient delegates video operations to appropriate specialized generators, maintaining clean separation of concerns and enabling independent development of each mode.
+
+**Unified Async/Sync Pattern**: All new video generation methods support a single `async` parameter instead of separate async methods. When `async=false`, the system uses conditional polling with 600s timeout and exponential backoff (2s→10s, 1.5x factor).
 
 **Type Safety**: Comprehensive TypeScript definitions with Zod validation for MCP tool parameters.
 
@@ -113,8 +125,10 @@ Supports complex image mixing through:
 - **`hello`**: Connection testing and server health check
 
 ### Video Generation Tools
-- **`generateVideo`**: Video generation with traditional and multi-frame modes
-- **`generateMainReferenceVideo`**: **NEW!** Main reference video generation - combines subjects from multiple images
+- **`generateTextToVideo`**: **NEW!** Text-to-video generation with optional first/last frame support (unified async parameter)
+- **`generateMultiFrameVideo`**: **NEW!** Multi-frame video generation (2-10 frames) with precise control
+- **`generateMainReferenceVideo`**: **NEW!** Main reference video generation - combines subjects from multiple images using [图N] syntax
+- **`generateVideo`**: Legacy video generation (deprecated, redirects to new methods)
 - **`videoPostProcess`**: Unified video post-processing (frame interpolation, super-resolution, audio effects)
 
 ### Resource Tools
@@ -189,11 +203,12 @@ JIMENG_API_TOKEN=your_session_id_from_jimeng_cookies
 4. Add tests in appropriate test file
 
 ### Adding New Video Generation Tools
-1. Define tool in `src/server.ts` using Zod schemas
-2. Add corresponding function in `src/api/video/VideoGenerator.ts`
+1. Create dedicated generator class in `src/api/video/` extending `VideoGenerator`
+2. Define tool in `src/server.ts` using Zod schemas from `src/schemas/video.schemas.ts`
 3. Update type definitions in `src/types/api.types.ts`
-4. Expose method through JimengClient delegation if needed
-5. Add tests in appropriate test file
+4. Expose method through JimengClient delegation
+5. Add tests in appropriate test file (unit/, integration/, e2e/)
+6. Add timeout and error handling using shared utilities
 
 ### Testing API Changes
 1. Use existing async test patterns for network-dependent tests
@@ -210,10 +225,14 @@ JIMENG_API_TOKEN=your_session_id_from_jimeng_cookies
 ## Important Notes
 
 - **Backward Compatibility**: All changes must maintain 100% compatibility with existing API
+- **Unified Async/Sync API**: New video methods use single `async` parameter instead of separate async methods
+- **Soft Deprecation**: Legacy methods show warnings but remain functional using `warnOnce` system
+- **Timeout Management**: Synchronous operations use 600s timeout with exponential backoff (2s→10s, 1.5x factor)
 - **Zero-install**: The npx deployment method is preferred over manual installation
 - **Security**: Never commit API tokens or sensitive information
 - **Performance**: The singleton pattern prevents duplicate client instances
 - **Error Handling**: Comprehensive error handling with user-friendly messages
+- **Modular Testing**: Three-tier testing strategy (unit → integration → e2e) ensures reliability
 
 ## Main Reference Video Generation (NEW Feature)
 
@@ -325,6 +344,177 @@ server.tool("generateMainReferenceVideo", ...)
 ```
 
 Available in Claude Desktop once MCP server is configured.
+
+## Video Generation API Reference (Feature 005-3-1-2)
+
+### Overview
+
+The video generation API has been refactored into three specialized methods, each supporting unified async/sync operation through a single `async` parameter.
+
+### New Video Generation Methods
+
+#### 1. generateTextToVideo
+
+Text-to-video generation with optional first/last frame support.
+
+```typescript
+// Usage in Claude Desktop
+generateTextToVideo({
+  prompt: "A beautiful sunset over mountains",
+  model: "jimeng-video-3.0",
+  resolution: "1080p",
+  videoAspectRatio: "16:9",
+  fps: 24,
+  duration: 5000,
+  async: false,  // Sync mode (default)
+  firstFrameImage: "/path/to/first.jpg",  // Optional
+  lastFrameImage: "/path/to/last.jpg"    // Optional
+})
+```
+
+**Key Features:**
+- **Text-to-Video**: Generate video from text description
+- **First/Last Frame**: Optional control over start and end frames
+- **Unified Async**: Single `async` parameter for sync/async modes
+- **600s Timeout**: Automatic polling with exponential backoff for sync mode
+
+#### 2. generateMultiFrameVideo
+
+Multi-frame video generation with precise control over 2-10 frames.
+
+```typescript
+generateMultiFrameVideo({
+  frames: [
+    {
+      idx: 0,
+      imagePath: "/frame-0.jpg",
+      duration_ms: 1000,
+      prompt: "Starting scene"
+    },
+    {
+      idx: 1,
+      imagePath: "/frame-1.jpg",
+      duration_ms: 1000,
+      prompt: "Middle scene"
+    },
+    {
+      idx: 2,
+      imagePath: "/frame-2.jpg",
+      duration_ms: 1000,
+      prompt: "Ending scene"
+    }
+  ],
+  prompt: "Smooth transition between frames",
+  model: "jimeng-video-3.0",
+  resolution: "720p",
+  fps: 24,
+  duration: 8000,
+  async: false
+})
+```
+
+**Key Features:**
+- **2-10 Frames**: Precise control over frame sequence
+- **Frame Timing**: Individual duration control per frame
+- **Automatic Sorting**: Frames automatically sorted by index
+- **Validation**: Comprehensive parameter validation
+
+#### 3. generateMainReferenceVideo
+
+Main reference video generation using [图N] syntax for multi-image composition.
+
+```typescript
+generateMainReferenceVideo({
+  referenceImages: [
+    "/path/to/person.jpg",
+    "/path/to/car.jpg",
+    "/path/to/beach.jpg"
+  ],
+  prompt: "[图0]中的人坐在[图1]的车里，背景是[图2]的海滩",
+  model: "jimeng-video-3.0",
+  resolution: "1080p",
+  videoAspectRatio: "16:9",
+  fps: 24,
+  duration: 5000,
+  async: false
+})
+```
+
+**Key Features:**
+- **Multi-Image Fusion**: Combine subjects from 2-4 reference images
+- **[图N] Syntax**: Natural language with precise image references
+- **Smart Parsing**: Automatic extraction of image references
+- **Validation**: Ensures valid indices and required image references
+
+### Async/Sync Pattern
+
+All new methods use the unified async parameter:
+
+```typescript
+// Synchronous mode (async: false)
+const result = await generateTextToVideo({
+  prompt: "Test video",
+  async: false
+});
+// Returns: { videoUrl: "...", metadata: {...} }
+
+// Asynchronous mode (async: true)
+const result = await generateTextToVideo({
+  prompt: "Test video",
+  async: true
+});
+// Returns: { taskId: "..." }
+```
+
+### Common Parameters
+
+All video generation methods support these common parameters:
+
+- **async**: boolean - Sync (false) or async (true) mode
+- **model**: string - Video model (default: "jimeng-video-3.0")
+- **resolution**: "720p" | "1080p" - Video resolution
+- **videoAspectRatio**: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16"
+- **fps**: number (12-30) - Frame rate
+- **duration**: number (3000-15000) - Duration in milliseconds
+
+### Error Handling
+
+Consistent error format across all methods:
+
+```typescript
+{
+  error: {
+    code: "TIMEOUT" | "CONTENT_VIOLATION" | "API_ERROR" | "INVALID_PARAMS" | "PROCESSING_FAILED" | "UNKNOWN",
+    message: "Human-readable error message",
+    reason: "Detailed explanation",
+    taskId?: string,
+    timestamp: number
+  }
+}
+```
+
+### Migration from Legacy Methods
+
+Legacy `generateVideo` method is deprecated but still functional:
+
+```typescript
+// Legacy method (shows deprecation warning)
+generateVideo({...}) // Automatically redirects to appropriate new method
+
+// New recommended methods
+generateTextToVideo({...})        // For text-based generation
+generateMultiFrameVideo({...})    // For multi-frame generation
+generateMainReferenceVideo({...}) // For multi-image composition
+```
+
+### Timeout and Polling
+
+Synchronous operations use intelligent polling:
+- **Initial Interval**: 2 seconds
+- **Max Interval**: 10 seconds
+- **Backoff Factor**: 1.5x
+- **Total Timeout**: 600 seconds (10 minutes)
+- **Network Recovery**: Automatic retry on transient failures
 
 ## Task Master AI Instructions
 **Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
