@@ -82,3 +82,6 @@ node_modules/
 # Task files
 # tasks.json
 # tasks/
+
+# Claude Code working directory
+.claude/
