@@ -142,22 +142,156 @@ Supports complex image mixing through:
 - **File Path Support**: Local absolute/relative paths and URLs
 - **Strength Control**: Individual strength per reference image
 
-## MCP Tools Available
+## MCP Tools Available (10 Core Tools)
 
-### Image Generation Tools
-- **`generateImage`**: Main image generation with continue generation support
-- **`hello`**: Connection testing and server health check
+### 🎨 Image Generation (2 tools)
+- **`image`**: Generate single image (default: sync)
+  - Fast single image generation with reference image support
+  - Supports up to 4 reference images for style mixing
+  - Default async: `false` (synchronous)
 
-### Video Generation Tools
-- **`generateTextToVideo`**: **NEW!** Text-to-video generation with optional first/last frame support (unified async parameter)
-- **`generateMultiFrameVideo`**: **NEW!** Multi-frame video generation (2-10 frames) with precise control
-- **`generateMainReferenceVideo`**: **NEW!** Main reference video generation - combines subjects from multiple images using [图N] syntax
-- **`generateVideo`**: Legacy video generation (deprecated, redirects to new methods)
-- **`videoPostProcess`**: Unified video post-processing (frame interpolation, super-resolution, audio effects)
+- **`image_batch`**: Series image generation (default: async)
+  - **专用于高相关性系列图片**：同一房子不同空间、故事分镜、绘本画面、产品多角度
+  - **prompts写法**：每个元素是一小段话（不是单个词），重点描述图与图的差异
+  - Final prompt format: `第1张：xxx 第2张：yyy，一共N张图`
+  - Automatic continue generation for counts > 4
+  - Default async: `true` (asynchronous)
 
-### Resource Tools
-- **Greeting**: Personalized server responses
-- **Server Info**: Server status and capabilities
+  **适用场景**：
+  - ✅ 同一套房子的不同空间照片（客厅、卧室、厨房）
+  - ✅ 一个故事的连续分镜（场景1、场景2、场景3）
+  - ✅ 一个绘本的不同画面（第1页、第2页、第3页）
+  - ✅ 同一物品的不同角度照片（正面、侧面、背面）
+
+  **参数说明**：
+  - **prompts**: 每张图的差异描述（一小段话）
+  - **basePrompt**: 整体通用描述（可选），会添加在最终prompt最前面
+    - 房间系列 → 描述整体风格、户型
+    - 产品多角度 → 描述产品材质、颜色、品牌
+    - 故事分镜 → 描述世界观、角色特征
+    - 绘本画面 → 描述画风、色调
+
+  **正确示例1 - 房间系列**：
+  ```json
+  {
+    "basePrompt": "三室两厅现代简约风格，木地板，暖色调照明，简约家具",
+    "prompts": [
+      "客厅，灰色布艺沙发靠窗，落地窗洒入阳光，茶几上放着杂志",
+      "主卧室，米色床品整齐铺展，木质床头柜上有台灯，墙面淡蓝色",
+      "开放式厨房，白色橱柜整齐排列，大理石台面，中岛台上摆放水果篮"
+    ],
+    "async": true
+  }
+  ```
+  **最终prompt**: "三室两厅现代简约风格，木地板，暖色调照明，简约家具 第1张：客厅，灰色布艺沙发靠窗... 第2张：主卧室... 第3张：开放式厨房...，一共3张图"
+
+  **正确示例2 - 产品多角度**：
+  ```json
+  {
+    "basePrompt": "苹果AirPods Pro 2代，白色陶瓷材质，磨砂质感，苹果logo",
+    "prompts": [
+      "正面特写，充电盒开盖，耳机在盒内，LED指示灯可见",
+      "侧面45度角，展示充电盒厚度和圆润边缘，耳机柄露出",
+      "背面视角，充电口特写，序列号区域清晰，磁吸接触点"
+    ]
+  }
+  ```
+
+  **错误示例** ❌：
+  ```json
+  {
+    "prompts": ["客厅", "卧室", "厨房"]  // 过分简短，缺少差异描述
+  }
+  ```
+
+### 🎬 Video Generation (4 tools)
+- **`video`**: Pure text-to-video generation (default: async)
+  - Generate video from text description only
+  - No reference images required
+  - Default async: `true`
+
+- **`video_frame`**: First/last frame controlled video (default: async)
+  - Control video start and/or end frames
+  - Supports first frame only, last frame only, or both
+  - Default async: `true`
+
+- **`video_multi`**: Multi-frame precision control (default: async)
+  - **工作原理**: 提供2-10个关键帧图片，系统在帧间生成平滑过渡动画
+  - **⚠️ 重要**: prompt描述的是"从当前帧到下一帧的过渡动画"，不是当前帧的静态内容
+  - **⚠️ 注意**: 最后一帧的prompt不生效（因为没有下一帧了），可以留空或随意填写
+  - Default async: `true`
+
+  **参数说明**:
+  ```typescript
+  {
+    frames: [
+      {
+        idx: 0,                           // 帧序号，从0开始
+        imagePath: "/abs/path/frame0.jpg", // 绝对路径
+        duration_ms: 2000,                 // 这段过渡动画的时长（毫秒）
+        prompt: "猫从坐姿慢慢站起来"      // 描述0→1的变换过程
+      },
+      {
+        idx: 1,
+        imagePath: "/abs/path/frame1.jpg",
+        duration_ms: 2000,
+        prompt: "猫向前迈步行走，尾巴摇摆"  // 描述1→2的变换过程
+      },
+      {
+        idx: 2,
+        imagePath: "/abs/path/frame2.jpg",
+        duration_ms: 1000,
+        prompt: "（此prompt不生效，可留空）"  // 最后一帧，无下一帧
+      }
+    ],
+    fps: 24,
+    resolution: "720p"
+  }
+  ```
+
+  **生成效果** (总时长5秒):
+  - 0-2秒: 显示frame0 + 执行"站起来"动画 → 渐变到frame1
+  - 2-4秒: 显示frame1 + 执行"行走"动画 → 渐变到frame2
+  - 4-5秒: 显示frame2作为结尾画面
+
+- **`video_mix`**: Multi-image subject fusion (default: async)
+  - Combine subjects from 2-4 reference images into one scene
+  - Use `[图0]`, `[图1]` syntax to reference images
+  - Example: `[图0]的猫在[图1]的地板上跑`
+  - Default async: `true`
+
+### 🔍 Query Tools (2 tools)
+- **`query`**: Query single task status and result
+  - Supports both image and video tasks
+  - Returns status, progress, and URLs when completed
+
+- **`query_batch`**: Batch query multiple tasks
+  - Query up to 10 tasks at once
+  - Efficient for checking multiple tasks
+
+### 🏓 Utility Tools (1 tool)
+- **`ping`**: Test server connection
+  - Health check and connectivity test
+
+### 🗑️ Removed Legacy Tools
+The following tools have been removed in favor of the new unified tools:
+- ❌ `generateImage` → use `image` or `image_batch`
+- ❌ `generateVideo` → use `video`, `video_frame`, or `video_multi`
+- ❌ `generateTextToVideo` → use `video` or `video_frame`
+- ❌ `generateMultiFrameVideo` → use `video_multi`
+- ❌ `generateMainReferenceVideo` → use `video_mix`
+- ❌ `generateMainReferenceVideoUnified` → use `video_mix`
+- ❌ `videoPostProcess` → deprecated
+- ❌ All `*Async` tools → use `async: true` parameter instead
+- ❌ `hello` → use `ping`
+- ❌ `greeting` resource → removed
+- ❌ `info` resource → removed
+
+### Default Async Behavior
+- **Sync by default (1 tool)**: `image` - fast single image generation
+- **Async by default (6 tools)**: All other generation tools default to async mode
+  - `image_batch`, `video`, `video_frame`, `video_multi`, `video_mix`
+  - All support `async: false` to switch to sync mode if needed
 
 ## Testing Strategy
 

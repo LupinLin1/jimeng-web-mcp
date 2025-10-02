@@ -278,32 +278,149 @@ export class VideoService {
     // 按索引排序
     const sortedFrames = [...frames].sort((a, b) => a.idx - b.idx);
 
+    // 计算总时长并验证
+    const totalDuration = sortedFrames.reduce((sum, f) => sum + f.duration_ms, 0);
+    if (totalDuration > 15000) {
+      throw new Error('总时长不能超过15秒');
+    }
+
     // 上传所有帧图片
     const uploadedFrames = await this.uploadFrames(sortedFrames.map(f => f.imagePath));
 
-    // 构建multiFrames参数
+    // 构建完整的multiFrames数组（包含media_info结构）
     const multiFrames = sortedFrames.map((frame, index) => ({
+      type: "",
+      id: this.generateUuid(),
       idx: frame.idx,
       duration_ms: frame.duration_ms,
       prompt: frame.prompt,
-      image_path: uploadedFrames[index].uri
+      media_info: {
+        type: "",
+        id: this.generateUuid(),
+        media_type: 1,
+        image_info: {
+          type: "image",
+          id: this.generateUuid(),
+          source_from: "upload",
+          platform_type: 1,
+          name: "",
+          image_uri: uploadedFrames[index].uri,
+          width: uploadedFrames[index].width,
+          height: uploadedFrames[index].height,
+          format: uploadedFrames[index].format,
+          uri: uploadedFrames[index].uri
+        }
+      }
     }));
 
-    const totalDuration = sortedFrames.reduce((sum, f) => sum + f.duration_ms, 0);
+    // 获取模型标识
+    const actualModel = getModel(model);
+    const componentId = this.generateUuid();
+    const submitId = this.generateUuid();
 
-    const apiParams = {
-      prompt: sortedFrames[0].prompt, // 使用第一帧的提示词作为主提示
-      model: getModel(model),
-      resolution,
-      video_aspect_ratio: videoAspectRatio,
-      fps,
-      duration_ms: totalDuration,
-      multiFrames
+    // 构建metrics_extra
+    const metricsExtra = {
+      isDefaultSeed: 1,
+      originSubmitId: submitId,
+      isRegenerate: false,
+      enterFrom: "result_click_reference",
+      functionMode: "multi_frame"
     };
 
-    return this.submitAndPoll(apiParams, asyncMode, {
-      model, resolution, duration: totalDuration, fps
-    });
+    // 构建draft_content（完整结构）
+    const draftContent = {
+      type: "draft",
+      id: this.generateUuid(),
+      min_version: "3.0.5",
+      min_features: ["AIGC_GenerateType_VideoMultiFrame"],
+      is_from_tsn: true,
+      version: "3.3.3",
+      main_component_id: componentId,
+      component_list: [{
+        type: "video_base_component",
+        id: componentId,
+        min_version: "1.0.0",
+        aigc_mode: "workbench",
+        metadata: {
+          type: "",
+          id: this.generateUuid(),
+          created_platform: 3,
+          created_platform_version: "",
+          created_time_in_ms: Date.now().toString(),
+          created_did: ""
+        },
+        generate_type: "gen_video",
+        abilities: {
+          type: "",
+          id: this.generateUuid(),
+          gen_video: {
+            type: "",
+            id: this.generateUuid(),
+            text_to_video_params: {
+              type: "",
+              id: this.generateUuid(),
+              video_gen_inputs: [{
+                type: "",
+                id: this.generateUuid(),
+                min_version: "3.0.5",
+                prompt: "",
+                video_mode: 1,
+                fps: fps,
+                duration_ms: totalDuration,
+                resolution: resolution,
+                multi_frames: multiFrames
+              }],
+              video_aspect_ratio: videoAspectRatio,
+              seed: Math.floor(Math.random() * 100000000) + 2500000000,
+              model_req_key: actualModel,
+              priority: 0
+            },
+            video_task_extra: JSON.stringify(metricsExtra)
+          }
+        },
+        process_type: 1
+      }]
+    };
+
+    // 构建完整请求体
+    const requestBody = {
+      extend: {
+        root_model: actualModel,
+        m_video_commerce_info: {
+          benefit_type: "basic_video_operation_vgfm_v_three",
+          resource_id: "generate_video",
+          resource_id_type: "str",
+          resource_sub_type: "aigc"
+        },
+        m_video_commerce_info_list: [{
+          benefit_type: "basic_video_operation_vgfm_v_three",
+          resource_id: "generate_video",
+          resource_id_type: "str",
+          resource_sub_type: "aigc"
+        }]
+      },
+      submit_id: submitId,
+      metrics_extra: JSON.stringify(metricsExtra),
+      draft_content: JSON.stringify(draftContent),
+      http_common_info: { aid: 513695 }
+    };
+
+    // 提交任务
+    const taskId = await this.submitTaskWithDraft(requestBody);
+
+    if (asyncMode) {
+      return {
+        taskId,
+        metadata: { model, resolution, duration: totalDuration, fps }
+      };
+    }
+
+    // 同步模式：轮询
+    const videoUrl = await this.pollUntilComplete(taskId);
+    return {
+      videoUrl,
+      metadata: { model, resolution, duration: totalDuration, fps }
+    };
   }
 
   /**
@@ -330,6 +447,8 @@ export class VideoService {
       throw new Error('必须包含至少一个图片引用（如[图0]）');
     }
 
+    const actualModel = getModel(model);
+
     // 上传参考图片
     const uploadedImages = await this.uploadFrames(referenceImages);
 
@@ -339,21 +458,127 @@ export class VideoService {
     // 构建idip_meta_list
     const idip_meta_list = this.buildIdipMetaList(textSegments, imageRefs);
 
-    const apiParams = {
-      prompt: prompt.replace(/\[图\d+\]/g, ''), // 移除图片引用标记
-      model: getModel(model),
-      resolution,
-      video_aspect_ratio: videoAspectRatio,
-      fps,
-      duration_ms: duration,
-      video_mode: 2, // 主参考模式
-      idip_frames: uploadedImages.map(img => ({ uri: img.uri })),
-      idip_meta_list
+    // 构建idip_frames（完整图片对象）
+    const idip_frames = uploadedImages.map(img => ({
+      format: img.format,
+      height: img.height,
+      id: this.generateUuid(),
+      image_uri: img.uri,
+      name: "",
+      platform_type: 1,
+      source_from: "upload",
+      type: "image",
+      uri: img.uri,
+      width: img.width,
+    }));
+
+    // 构建draft_content请求体
+    const componentId = this.generateUuid();
+    const submitId = this.generateUuid();
+    const metricsExtra = {
+      "isDefaultSeed": 1,
+      "originSubmitId": submitId,
+      "isRegenerate": false,
+      "enterFrom": "click",
+      "functionMode": "main_reference"
     };
 
-    return this.submitAndPoll(apiParams, asyncMode, {
-      model, resolution, duration, fps
-    });
+    const draftContent = {
+        "type": "draft",
+        "id": this.generateUuid(),
+        "min_version": "3.0.5",
+        "min_features": ["AIGC_GenerateType_VideoIdipFrame"],
+        "is_from_tsn": true,
+        "version": "3.3.3",
+        "main_component_id": componentId,
+        "component_list": [{
+          "type": "video_base_component",
+          "id": componentId,
+          "min_version": "1.0.0",
+          "aigc_mode": "workbench",
+          "metadata": {
+            "type": "",
+            "id": this.generateUuid(),
+            "created_platform": 3,
+            "created_platform_version": "",
+            "created_time_in_ms": Date.now().toString(),
+            "created_did": ""
+          },
+          "generate_type": "gen_video",
+          "abilities": {
+            "type": "",
+            "id": this.generateUuid(),
+            "gen_video": {
+              "type": "",
+              "id": this.generateUuid(),
+              "text_to_video_params": {
+                "type": "",
+                "id": this.generateUuid(),
+                "video_gen_inputs": [{
+                  "type": "",
+                  "id": this.generateUuid(),
+                  "min_version": "3.0.5",
+                  "prompt": "",
+                  "video_mode": 2,
+                  "fps": fps,
+                  "duration_ms": duration,
+                  "resolution": resolution,
+                  "idip_frames": idip_frames,
+                  "idip_meta_list": idip_meta_list
+                }],
+                "video_aspect_ratio": videoAspectRatio,
+                "seed": Math.floor(Math.random() * 100000000) + 2500000000,
+                "model_req_key": actualModel,
+                "priority": 0
+              },
+              "video_task_extra": JSON.stringify(metricsExtra)
+            }
+          },
+          "process_type": 1
+        }]
+    };
+
+    const requestBody = {
+      "extend": {
+        "root_model": actualModel,
+        "m_video_commerce_info": {
+          "benefit_type": "basic_video_operation_vgfm_v_three",
+          "resource_id": "generate_video",
+          "resource_id_type": "str",
+          "resource_sub_type": "aigc"
+        },
+        "m_video_commerce_info_list": [{
+          "benefit_type": "basic_video_operation_vgfm_v_three",
+          "resource_id": "generate_video",
+          "resource_id_type": "str",
+          "resource_sub_type": "aigc"
+        }]
+      },
+      "submit_id": submitId,
+      "metrics_extra": JSON.stringify(metricsExtra),
+      "draft_content": JSON.stringify(draftContent),
+      "http_common_info": { "aid": 513695 }
+    };
+
+    // 调试：打印请求体
+    console.log('🔍 [主体参考] 请求体:', JSON.stringify(requestBody, null, 2));
+
+    // 提交任务
+    const taskId = await this.submitTaskWithDraft(requestBody);
+
+    if (asyncMode) {
+      return {
+        taskId,
+        metadata: { model, resolution, duration, fps }
+      };
+    }
+
+    // 同步模式：轮询
+    const videoUrl = await this.pollUntilComplete(taskId);
+    return {
+      videoUrl,
+      metadata: { model, resolution, duration, fps }
+    };
   }
 
   // ==================== 私有方法：共享逻辑 ====================
@@ -366,34 +591,7 @@ export class VideoService {
   }
 
   /**
-   * 提交任务并根据模式处理
-   */
-  private async submitAndPoll(
-    apiParams: any,
-    asyncMode: boolean,
-    metadata: { model: string; resolution: string; duration: number; fps: number }
-  ): Promise<VideoResult> {
-    // 提交任务
-    const taskId = await this.submitTask(apiParams);
-
-    if (asyncMode) {
-      // 异步模式：立即返回taskId
-      return {
-        taskId,
-        metadata
-      };
-    }
-
-    // 同步模式：轮询直到完成
-    const videoUrl = await this.pollUntilComplete(taskId);
-    return {
-      videoUrl,
-      metadata
-    };
-  }
-
-  /**
-   * 提交draft格式的视频生成任务（新方法）
+   * 提交draft格式的视频生成任务
    */
   private async submitTaskWithDraft(requestBody: any): Promise<string> {
     const requestParams = this.httpClient.generateRequestParams();
@@ -419,40 +617,21 @@ export class VideoService {
   }
 
   /**
-   * 提交视频生成任务（旧方法，保留用于其他模式）
-   */
-  private async submitTask(params: any): Promise<string> {
-    const requestParams = this.httpClient.generateRequestParams();
-
-    const response = await this.httpClient.request({
-      method: 'POST',
-      url: '/mweb/v1/aigc_draft/generate',
-      params: requestParams,
-      data: params
-    });
-
-    // 视频生成需要使用submit_id进行轮询（与图片不同！）
-    const submitId = response?.data?.aigc_data?.task?.submit_id ||
-                     response?.data?.aigc_data?.submit_id ||
-                     response?.data?.submit_id ||
-                     response?.submit_id;
-
-    if (!submitId) {
-      throw new Error(response.errmsg || '提交视频任务失败：未返回submit_id');
-    }
-
-    return submitId;
-  }
-
-  /**
    * 轮询直到任务完成（内联实现，≤30行）
    */
   private async pollUntilComplete(taskId: string): Promise<string> {
-    let interval = 2000; // 初始2秒
     const startTime = Date.now();
     const timeout = 600000; // 600秒
+    let pollCount = 0;
 
     while (Date.now() - startTime < timeout) {
+      pollCount++;
+
+      // 第一次等待60秒，后续等待5秒（与旧代码一致）
+      const waitTime = pollCount === 1 ? 60000 : 5000;
+      console.log(`🔄 [轮询${pollCount}] 等待 ${waitTime/1000}秒...`);
+      await this.sleep(waitTime);
+
       const status = await this.checkTaskStatus(taskId);
 
       if (status.status === 'completed') {
@@ -469,9 +648,7 @@ export class VideoService {
         throw new Error(status.error || '视频生成失败');
       }
 
-      // 等待后重试
-      await this.sleep(interval);
-      interval = Math.min(interval * 1.5, 10000); // 指数退避，最大10秒
+      // 继续下一轮轮询
     }
 
     throw new Error(`视频生成超时: taskId=${taskId}`);
@@ -542,6 +719,71 @@ export class VideoService {
   }
 
   /**
+   * 查询视频生成结果（单个）
+   */
+  async queryVideo(submitId: string): Promise<any> {
+    const status = await this.checkTaskStatus(submitId);
+    return status;
+  }
+
+  /**
+   * 批量查询视频生成结果
+   */
+  async queryVideoBatch(submitIds: string[]): Promise<Record<string, any>> {
+    const requestParams = this.httpClient.generateRequestParams();
+
+    const response = await this.httpClient.request({
+      method: 'POST',
+      url: '/mweb/v1/get_history_by_ids',
+      params: requestParams,
+      data: { submit_ids: submitIds }
+    });
+
+    const results: Record<string, any> = {};
+
+    for (const submitId of submitIds) {
+      const record = response?.data?.[submitId];
+
+      if (!record) {
+        results[submitId] = { status: 'not_found', error: '记录不存在' };
+        continue;
+      }
+
+      // 解析状态
+      const statusCode = record.status;
+      let mappedStatus: string;
+
+      if (statusCode === 50) {
+        mappedStatus = 'completed';
+      } else if (statusCode === 30) {
+        mappedStatus = 'failed';
+      } else if (statusCode === 20 || statusCode === 42 || statusCode === 45) {
+        mappedStatus = 'processing';
+      } else {
+        mappedStatus = 'unknown';
+      }
+
+      // 提取视频URL（与checkTaskStatus保持一致）
+      let videoUrl = null;
+      if (record.item_list && record.item_list.length > 0) {
+        const item = record.item_list[0];
+        videoUrl = item?.video?.transcoded_video?.origin?.video_url ||
+                  item?.video?.video_url ||
+                  item?.video?.origin?.video_url;
+      }
+
+      results[submitId] = {
+        status: mappedStatus,
+        video_url: videoUrl,
+        error: statusCode === 30 ? (record.fail_code || '生成失败') : null,
+        raw_status: statusCode
+      };
+    }
+
+    return results;
+  }
+
+  /**
    * 解析主参考提示词（提取[图N]引用）
    */
   private parseMainReferencePrompt(prompt: string, imageCount: number): {
@@ -581,21 +823,34 @@ export class VideoService {
 
   /**
    * 构建idip_meta_list（主参考模式参数）
+   * 正确格式参考: generate_zhuti_request.json
    */
   private buildIdipMetaList(textSegments: string[], imageRefs: number[]): any[] {
     const metaList: any[] = [];
 
     for (let i = 0; i < Math.max(textSegments.length, imageRefs.length); i++) {
-      if (i < textSegments.length && textSegments[i].trim()) {
-        metaList.push({
-          type: 'text',
-          content: textSegments[i].trim()
-        });
-      }
+      // 先添加图片引用
       if (i < imageRefs.length) {
         metaList.push({
-          type: 'idip',
-          idip_idx: imageRefs[i]
+          type: "",
+          id: this.generateUuid(),
+          meta_type: "idip_frame",
+          text: "",
+          frame_info: {
+            type: "",
+            id: this.generateUuid(),
+            image_idx: imageRefs[i]
+          }
+        });
+      }
+
+      // 后添加文本段
+      if (i < textSegments.length && textSegments[i].trim()) {
+        metaList.push({
+          type: "",
+          id: this.generateUuid(),
+          meta_type: "text",
+          text: textSegments[i].trim()
         });
       }
     }

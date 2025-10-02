@@ -133,17 +133,25 @@ export class NewJimengClient {
   }
 
   /**
-   * 查询图像生成结果
+   * 查询图像/视频生成结果
+   * 自动判断ID类型：UUID格式使用submit_ids，数字格式使用history_ids
    */
   async getImageResult(historyId: string): Promise<any> {
     const requestParams = this.httpClient.generateRequestParams();
+
+    // UUID格式（如1e06b3c9-bd41-46dd-8889-70f2c61f66bb）使用submit_ids（视频）
+    // 数字格式（如4722540945676）使用history_ids（图片）
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(historyId);
+    const idField = isUUID ? 'submit_ids' : 'history_ids';
+
+    console.log(`🔍 [getImageResult] ID类型: ${isUUID ? 'UUID(视频)' : '数字(图片)'}, 使用字段: ${idField}`);
 
     const response = await this.httpClient.request({
       method: 'POST',
       url: '/mweb/v1/get_history_by_ids',
       params: requestParams,
       data: {
-        history_ids: [historyId],
+        [idField]: [historyId],
         image_info: {
           width: 2048,
           height: 2048,
@@ -169,6 +177,102 @@ export class NewJimengClient {
       return { status: 'failed', error: '记录不存在' };
     }
 
+    return this.parseQueryResult(record, historyId);
+  }
+
+  /**
+   * 批量查询任务结果（真正的批量API）
+   * 自动按ID类型分组：图片用history_ids，视频用submit_ids
+   */
+  async getBatchResults(ids: string[]): Promise<Record<string, any>> {
+    if (!ids || ids.length === 0) {
+      return {};
+    }
+
+    // 按ID类型分组
+    const imageIds: string[] = [];
+    const videoIds: string[] = [];
+
+    for (const id of ids) {
+      if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+        videoIds.push(id);
+      } else {
+        imageIds.push(id);
+      }
+    }
+
+    const results: Record<string, any> = {};
+
+    // 批量查询图片
+    if (imageIds.length > 0) {
+      try {
+        const requestParams = this.httpClient.generateRequestParams();
+        const response = await this.httpClient.request({
+          method: 'POST',
+          url: '/mweb/v1/get_history_by_ids',
+          params: requestParams,
+          data: {
+            history_ids: imageIds,
+            image_info: {
+              width: 2048,
+              height: 2048,
+              format: "webp"
+            }
+          }
+        });
+
+        // 解析图片结果
+        for (const id of imageIds) {
+          const record = response?.data?.[id];
+          if (record) {
+            results[id] = this.parseQueryResult(record, id);
+          } else {
+            results[id] = { status: 'failed', error: '记录不存在' };
+          }
+        }
+      } catch (error) {
+        for (const id of imageIds) {
+          results[id] = { status: 'failed', error: String(error) };
+        }
+      }
+    }
+
+    // 批量查询视频
+    if (videoIds.length > 0) {
+      try {
+        const requestParams = this.httpClient.generateRequestParams();
+        const response = await this.httpClient.request({
+          method: 'POST',
+          url: '/mweb/v1/get_history_by_ids',
+          params: requestParams,
+          data: {
+            submit_ids: videoIds
+          }
+        });
+
+        // 解析视频结果
+        for (const id of videoIds) {
+          const record = response?.data?.[id];
+          if (record) {
+            results[id] = this.parseQueryResult(record, id);
+          } else {
+            results[id] = { status: 'failed', error: '记录不存在' };
+          }
+        }
+      } catch (error) {
+        for (const id of videoIds) {
+          results[id] = { status: 'failed', error: String(error) };
+        }
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * 解析查询结果（提取公共逻辑）
+   */
+  private parseQueryResult(record: any, id: string): any {
     const statusCode = record.status;
     const finishedCount = record.finished_image_count || 0;
     const totalCount = record.total_image_count || 1;
@@ -190,15 +294,23 @@ export class NewJimengClient {
       progress: totalCount > 0 ? Math.round((finishedCount / totalCount) * 100) : 0
     };
 
-    // 提取图片URLs（完成状态）
+    // 提取URLs
     if (status === 'completed' && record.item_list && record.item_list.length > 0) {
-      result.images = record.item_list
-        .map((item: any) => ({
-          url: item.image?.large_images?.[0]?.image_url
+      const firstItem = record.item_list[0];
+
+      if (firstItem.video) {
+        result.videoUrl = firstItem.video?.transcoded_video?.origin?.video_url
+          || firstItem.video?.video_url
+          || firstItem.video?.origin?.video_url;
+      } else if (firstItem.image || firstItem.image_url) {
+        result.imageUrls = record.item_list
+          .map((item: any) =>
+            item.image?.large_images?.[0]?.image_url
             || item.image_url
             || item.image?.url
-        }))
-        .filter((img: any) => img.url);
+          )
+          .filter((url: any) => url);
+      }
     }
 
     // 处理失败状态
@@ -210,23 +322,6 @@ export class NewJimengClient {
     }
 
     return result;
-  }
-
-  /**
-   * 批量查询任务结果
-   */
-  async getBatchResults(historyIds: string[]): Promise<any> {
-    const results: any = {};
-
-    for (const id of historyIds) {
-      try {
-        results[id] = await this.getImageResult(id);
-      } catch (error) {
-        results[id] = { error: String(error) };
-      }
-    }
-
-    return results;
   }
 
   // ==================== 视频生成功能 ====================
@@ -297,6 +392,20 @@ export class NewJimengClient {
    */
   async generateMainReferenceVideoUnified(params: any): Promise<any> {
     return this.videoService.generateMainReference(params);
+  }
+
+  /**
+   * 查询视频生成结果（单个）
+   */
+  async queryVideoResult(submitId: string): Promise<any> {
+    return this.videoService.queryVideo(submitId);
+  }
+
+  /**
+   * 批量查询视频生成结果
+   */
+  async queryVideoResults(submitIds: string[]): Promise<Record<string, any>> {
+    return this.videoService.queryVideoBatch(submitIds);
   }
 
   /**
@@ -552,8 +661,8 @@ export class NewJimengClient {
     while (attempts < maxAttempts) {
       const result = await this.getImageResult(historyId);
 
-      if (result.status === 'completed' && result.images && result.images.length > 0) {
-        return result.images.map((img: any) => img.url).filter(Boolean);
+      if (result.status === 'completed' && result.imageUrls && result.imageUrls.length > 0) {
+        return result.imageUrls;
       }
 
       if (result.status === 'failed') {

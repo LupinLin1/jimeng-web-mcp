@@ -8,25 +8,26 @@
  */
 
 import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { NewJimengClient } from '../../src/api/NewJimengClient.js';
 import type {
   MultiFrameVideoOptions,
   FrameConfiguration,
   VideoTaskResult,
   VideoGenerationError
-} from '../src/types/api.types.js';
+} from '../../src/types/api.types.js';
 
 // 类型定义：待实现的方法签名
 type GenerateMultiFrameVideoFn = (options: MultiFrameVideoOptions) => Promise<VideoTaskResult>;
 
-// Mock实现（测试桩，待替换为真实实现）
+// 使用真实实现
+let client: NewJimengClient;
 let generateMultiFrameVideo: GenerateMultiFrameVideoFn;
 
 describe('generateMultiFrameVideo Contract Tests', () => {
   beforeEach(() => {
-    // TODO: 替换为真实实现
-    generateMultiFrameVideo = async (options: MultiFrameVideoOptions): Promise<VideoTaskResult> => {
-      throw new Error('方法尚未实现 - TDD测试阶段');
-    };
+    // 使用真实实现
+    client = new NewJimengClient();
+    generateMultiFrameVideo = (options: MultiFrameVideoOptions) => client.generateMultiFrameVideo(options);
   });
 
   afterEach(() => {

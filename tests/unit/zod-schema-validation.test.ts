@@ -66,16 +66,14 @@ describe('Schema Validation Integration', () => {
     it('should validate valid multi-frame options', () => {
       const validOptions = {
         frames: [
-          { idx: 0, imagePath: '/frame1.jpg' },
-          { idx: 1, imagePath: '/frame2.jpg' },
-          { idx: 2, imagePath: '/frame3.jpg' }
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Frame 2', image_path: '/frame2.jpg' },
+          { idx: 2, duration_ms: 1000, prompt: 'Frame 3', image_path: '/frame3.jpg' }
         ],
-        prompt: 'Smooth video transition',
         model: 'jimeng-video-3.0',
         resolution: '720p',
         videoAspectRatio: '16:9',
         fps: 24,
-        duration: 5000,
         async: false
       };
 
@@ -85,9 +83,8 @@ describe('Schema Validation Integration', () => {
     it('should reject insufficient frames', () => {
       const invalidOptions = {
         frames: [
-          { idx: 0, imagePath: '/frame1.jpg' }
-        ],
-        prompt: 'Not enough frames'
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' }
+        ]
       };
 
       expect(() => multiFrameVideoOptionsSchema.parse(invalidOptions)).toThrow();
@@ -97,9 +94,10 @@ describe('Schema Validation Integration', () => {
       const invalidOptions = {
         frames: Array(11).fill(null).map((_, i) => ({
           idx: i,
-          imagePath: `/frame${i}.jpg`
-        })),
-        prompt: 'Too many frames'
+          duration_ms: 1000,
+          prompt: `Frame ${i}`,
+          image_path: `/frame${i}.jpg`
+        }))
       };
 
       expect(() => multiFrameVideoOptionsSchema.parse(invalidOptions)).toThrow();
@@ -108,10 +106,9 @@ describe('Schema Validation Integration', () => {
     it('should reject duplicate frame indices', () => {
       const invalidOptions = {
         frames: [
-          { idx: 0, imagePath: '/frame1.jpg' },
-          { idx: 0, imagePath: '/frame2.jpg' } // Duplicate idx
-        ],
-        prompt: 'Duplicate indices'
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' },
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 2', image_path: '/frame2.jpg' } // Duplicate idx
+        ]
       };
 
       expect(() => multiFrameVideoOptionsSchema.parse(invalidOptions)).toThrow();
@@ -120,10 +117,9 @@ describe('Schema Validation Integration', () => {
     it('should reject negative frame indices', () => {
       const invalidOptions = {
         frames: [
-          { idx: -1, imagePath: '/frame1.jpg' },
-          { idx: 0, imagePath: '/frame2.jpg' }
-        ],
-        prompt: 'Negative index'
+          { idx: -1, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' },
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 2', image_path: '/frame2.jpg' }
+        ]
       };
 
       expect(() => multiFrameVideoOptionsSchema.parse(invalidOptions)).toThrow();
@@ -201,8 +197,10 @@ describe('Schema Validation Integration', () => {
       })).not.toThrow();
 
       expect(() => multiFrameVideoOptionsSchema.parse({
-        frames: [{ idx: 0, imagePath: '/frame.jpg' }],
-        prompt: 'Test',
+        frames: [
+          { idx: 0, duration_ms: 2000, prompt: 'Test 1', image_path: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Test 2', image_path: '/frame2.jpg' }
+        ],
         ...commonParams
       })).not.toThrow();
 
@@ -222,8 +220,10 @@ describe('Schema Validation Integration', () => {
       });
 
       const multiFrameResult = multiFrameVideoOptionsSchema.safeParse({
-        frames: [{ idx: 0, imagePath: '/frame.jpg' }],
-        prompt: 'Test',
+        frames: [
+          { idx: 0, duration_ms: 2000, prompt: 'Test 1', image_path: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Test 2', image_path: '/frame2.jpg' }
+        ],
         model: 'jimeng-video-3.0',
         resolution: '1080p',
         videoAspectRatio: '16:9'
@@ -260,15 +260,18 @@ describe('Schema Validation Integration', () => {
       })).not.toThrow();
 
       expect(() => multiFrameVideoOptionsSchema.parse({
-        frames: [{ idx: 0, imagePath: '/frame.jpg' }],
-        ...baseOptions,
+        frames: [
+          { idx: 0, duration_ms: 2000, prompt: 'Test 1', image_path: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Test 2', image_path: '/frame2.jpg' }
+        ],
+        model: baseOptions.model,
         async: false
       })).not.toThrow();
 
       expect(() => mainReferenceVideoOptionsSchema.parse({
         referenceImages: ['/img1.jpg', '/img2.jpg'],
         prompt: '[图0]和[图1]',
-        ...baseOptions,
+        model: baseOptions.model,
         async: false
       })).not.toThrow();
     });

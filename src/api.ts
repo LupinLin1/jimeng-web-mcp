@@ -237,6 +237,83 @@ export const getImageResult = async (
   return await client.getImageResult(historyId);
 };
 
+/**
+ * 批量查询多个生成任务的状态和结果
+ * 自动识别ID类型（图片/视频），智能分组查询
+ *
+ * @param ids - 任务ID数组（支持图片historyId和视频submitId混合）
+ * @param refresh_token - API令牌（可选，默认使用JIMENG_API_TOKEN环境变量）
+ * @returns Promise<Record<string, QueryResultResponse>> 返回ID到结果的映射
+ *
+ * @example
+ * ```typescript
+ * const results = await getBatchResults([
+ *   '12345',  // 图片ID
+ *   '1e06b3c9-bd41-46dd-8889-70f2c61f66bb'  // 视频ID (UUID)
+ * ]);
+ * console.log(results['12345'].imageUrls);
+ * console.log(results['1e06b3c9-bd41-46dd-8889-70f2c61f66bb'].videoUrl);
+ * ```
+ */
+export const getBatchResults = async (
+  ids: string[],
+  refresh_token?: string
+): Promise<Record<string, QueryResultResponse>> => {
+  console.log('🔍 [重构后API] getBatchResults 被调用，查询', ids.length, '个任务');
+
+  const token = refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+
+  const client = getApiClient(token);
+  return await client.getBatchResults(ids);
+};
+
+/**
+ * 查询视频生成结果（单个）
+ *
+ * @param submitId - 视频生成任务的submitId（UUID格式）
+ * @param refresh_token - API令牌（可选）
+ * @returns Promise<QueryResultResponse> 返回视频状态和URL
+ */
+export const queryVideoResult = async (
+  submitId: string,
+  refresh_token?: string
+): Promise<QueryResultResponse> => {
+  console.log('🔍 [重构后API] queryVideoResult 被调用');
+
+  const token = refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+
+  const client = getApiClient(token);
+  return await client.queryVideoResult(submitId);
+};
+
+/**
+ * 批量查询视频生成结果
+ *
+ * @param submitIds - 视频任务submitId数组
+ * @param refresh_token - API令牌（可选）
+ * @returns Promise<Record<string, any>> 返回submitId到结果的映射
+ */
+export const queryVideoResults = async (
+  submitIds: string[],
+  refresh_token?: string
+): Promise<Record<string, any>> => {
+  console.log('🔍 [重构后API] queryVideoResults 被调用，查询', submitIds.length, '个视频');
+
+  const token = refresh_token || process.env.JIMENG_API_TOKEN;
+  if (!token) {
+    throw new Error('JIMENG_API_TOKEN 环境变量未设置');
+  }
+
+  const client = getApiClient(token);
+  return await client.queryVideoResults(submitIds);
+};
+
 // ============== 类型导出（保持兼容性） ==============
 export type {
   ImageGenerationParams,

@@ -1,7 +1,7 @@
-import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { generateImage, generateVideo, videoPostProcess, generateImageAsync, getImageResult, getApiClient } from "./api.js";
+import { generateImage, getImageResult, getApiClient } from "./api.js";
 import { logger } from './utils/logger.js';
 
 // 服务器启动调试信息
@@ -29,8 +29,8 @@ export const createServer = (): McpServer => {
   logger.debug('MCP server instance created successfully');
 
   server.tool(
-    "hello",
-    "🔧 测试服务器连接",
+    "ping",
+    "测试服务器连接",
     {
       name: z.string().describe("姓名")
     },
@@ -39,11 +39,11 @@ export const createServer = (): McpServer => {
     })
   );
 
-  logger.debug('Registering generateImage tool...');
+  logger.debug('Registering image tool...');
 
   server.tool(
-    "generateImage",
-    "🎨 文本生成图像，支持多参考图(最多4张)、异步模式和多帧场景描述。推荐jimeng-4.0模型",
+    "image",
+    "生成单张图像",
     {
       filePath: z.array(z.string()).optional().describe("参考图绝对路径数组，最多4张"),
       prompt: z.string().describe("图像描述文本"),
@@ -52,9 +52,7 @@ export const createServer = (): McpServer => {
       sample_strength: z.number().min(0).max(1).optional().default(0.5).describe("参考图影响强度0-1，默认0.5"),
       negative_prompt: z.string().optional().default("").describe("负向提示词"),
       reference_strength: z.array(z.number().min(0).max(1)).optional().describe("每张参考图的独立强度数组"),
-      async: z.boolean().optional().describe("异步模式: false(默认)同步等待返回URLs，true立即返回historyId"),
-      frames: z.array(z.string()).max(15).optional().describe("多帧场景描述数组，最多15个，会与prompt组合成最终提示词"),
-      count: z.number().min(1).max(15).optional().describe("生成图片数量，默认1张，最大15张"),
+      async: z.boolean().optional().default(false).describe("是否异步模式，默认false（同步）"),
     },
     async (params) => {
       // 🔥 [MCP DEBUG] Tool call entry point - this is the CRITICAL debugging point
@@ -93,8 +91,6 @@ export const createServer = (): McpServer => {
           negative_prompt: params.negative_prompt,
           reference_strength: params.reference_strength,
           async: params.async,
-          frames: params.frames,
-          count: params.count,
           refresh_token: process.env.JIMENG_API_TOKEN
         } as any);
 
@@ -152,220 +148,87 @@ export const createServer = (): McpServer => {
       }
     }
   );
-  
-  logger.debug('generateImage tool registered successfully');
+
+  logger.debug('image tool registered successfully');
+
+  logger.debug('Registering image_batch tool...');
 
   server.tool(
-    "generateVideo",
-    "🎬 视频生成，支持首尾帧和多帧模式(最多10帧)。推荐720p",
+    "image_batch",
+    "系列图片生成 - 用于生成高相关性的连续图片（如：房间系列、故事分镜、绘本画面、产品多角度）",
     {
-      filePath: z.array(z.string()).optional().describe("首尾帧路径，最多2张"),
-      multiFrames: z.array(z.object({
-        idx: z.number().describe("帧序号"),
-        duration_ms: z.number().min(1000).max(5000).describe("帧时长(毫秒)"),
-        prompt: z.string().describe("动作描述"),
-        image_path: z.string().describe("参考图路径")
-      })).max(10).optional().describe("多帧配置数组，最多10帧"),
-      resolution: z.enum(["720p", "1080p"]).optional().describe("分辨率"),
-      model: z.string().optional().describe("模型名称"),
-      prompt: z.string().describe("视频描述文本"),
-      fps: z.number().min(12).max(30).optional().default(24).describe("帧率"),
-      duration_ms: z.number().min(3000).max(15000).optional().default(5000).describe("总时长(毫秒)"),
-      video_aspect_ratio: z.string().optional().describe("宽高比"),
-      refresh_token: z.string().optional().describe("API令牌"),
-      req_key: z.string().optional().describe("兼容性参数")
-    },
-    async (params) => {
-      try {
-        const videoUrl = await generateVideo({
-          filePath: params.filePath,
-          multiFrames: params.multiFrames,
-          resolution: params.resolution,
-          model: params.model,
-          prompt: params.prompt,
-          fps: params.fps,
-          duration_ms: params.duration_ms,
-          video_aspect_ratio: params.video_aspect_ratio,
-          refresh_token: params.refresh_token || process.env.JIMENG_API_TOKEN,
-          req_key: params.req_key
-        });
-        if (!videoUrl) {
-          return {
-            content: [{ type: "text", text: "视频生成失败：未能获取视频URL" }],
-            isError: true
-          };
-        }
-        return {
-          content: [{ type: "text", text: videoUrl }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `视频生成失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "generateMainReferenceVideo",
-    "🎬 主体参考视频生成 - 组合多图主体到一个场景，支持[图0]、[图1]语法引用",
-    {
-      referenceImages: z.array(z.string()).min(2).max(4).describe("参考图片绝对路径数组，2-4张"),
-      prompt: z.string().describe("提示词，用[图N]引用图片，如：[图0]中的猫在[图1]的地板上跑"),
-      model: z.string().optional().describe("模型名称，默认jimeng-video-3.0"),
-      resolution: z.enum(["720p", "1080p"]).optional().describe("分辨率，默认720p"),
-      videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().describe("视频比例，默认16:9"),
-      fps: z.number().min(12).max(30).optional().describe("帧率，默认24"),
-      duration: z.number().min(3000).max(15000).optional().describe("时长(毫秒)，默认5000")
-    },
-    async (params) => {
-      try {
-        // 获取sessionId（从环境变量）
-        const sessionId = process.env.JIMENG_API_TOKEN;
-        if (!sessionId) {
-          return {
-            content: [{ type: "text", text: "错误：未设置JIMENG_API_TOKEN环境变量" }],
-            isError: true
-          };
-        }
-
-        const client = getApiClient();
-        const videoUrl = await client.generateMainReferenceVideo({
-          referenceImages: params.referenceImages,
-          prompt: params.prompt,
-          model: params.model,
-          resolution: params.resolution,
-          videoAspectRatio: params.videoAspectRatio,
-          fps: params.fps,
-          duration: params.duration,
-          refresh_token: sessionId
-        } as any);
-
-        if (!videoUrl) {
-          return {
-            content: [{ type: "text", text: "主体参考视频生成失败：未能获取视频URL" }],
-            isError: true
-          };
-        }
-
-        return {
-          content: [{ type: "text", text: videoUrl }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `主体参考视频生成失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  server.tool(
-    "videoPostProcess",
-    "🎬 视频后处理: 补帧/超分辨率/音效生成",
-    {
-      operation: z.enum(["frame_interpolation", "super_resolution", "audio_effect"]).describe("操作类型"),
-      videoId: z.string().describe("视频ID"),
-      originHistoryId: z.string().describe("原始历史记录ID"),
-      targetFps: z.union([z.literal(30), z.literal(60)]).optional().describe("目标帧率(补帧用)"),
-      originFps: z.number().optional().describe("原始帧率(补帧用)"),
-      targetWidth: z.number().min(768).max(2560).optional().describe("目标宽度(超分用)"),
-      targetHeight: z.number().min(768).max(2560).optional().describe("目标高度(超分用)"),
-      originWidth: z.number().optional().describe("原始宽度(超分用)"),
-      originHeight: z.number().optional().describe("原始高度(超分用)"),
-      duration: z.number().optional().describe("时长(毫秒)")
-    },
-    async (params) => {
-      try {
-        const videoUrl = await videoPostProcess({
-          operation: params.operation,
-          videoId: params.videoId,
-          originHistoryId: params.originHistoryId,
-          targetFps: params.targetFps,
-          originFps: params.originFps,
-          targetWidth: params.targetWidth,
-          targetHeight: params.targetHeight,
-          originWidth: params.originWidth,
-          originHeight: params.originHeight,
-          duration: params.duration
-        });
-        
-        if (!videoUrl) {
-          return {
-            content: [{ type: "text", text: `视频后处理失败：未能获取处理后的视频URL` }],
-            isError: true
-          };
-        }
-        
-        return {
-          content: [{ type: "text", text: videoUrl }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `视频后处理失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  // ============== 异步查询工具 ==============
-
-  logger.debug('Registering generateImageAsync tool...');
-
-  server.tool(
-    "generateImageAsync",
-    "🚀 异步提交图像生成任务（立即返回historyId，不等待完成）",
-    {
-      filePath: z.array(z.string()).optional().describe("参考图绝对路径数组，最多4张"),
-      prompt: z.string().describe("图像描述文本"),
-      model: z.string().optional().describe("模型名称，默认jimeng-4.0"),
+      prompts: z.array(z.string()).min(1).max(15).describe("每张图片的完整描述数组（1-15个）。⚠️重要：每个描述应该是一小段话（不是单个词），重点描述该图与其他图的差异部分。示例：[\"现代客厅，灰色沙发靠窗，阳光洒入\", \"温馨卧室，米色床品，木质床头柜\"]"),
+      basePrompt: z.string().optional().default("").describe("整体通用描述，会添加在最终prompt最前面。用于描述：产品基础信息（材质、颜色）、房子整体风格（三室两厅现代简约）、故事背景设定（赛博朋克世界观）等通用信息。示例：\"三室两厅现代简约风格，木地板，暖色调照明\""),
+      async: z.boolean().optional().default(true).describe("是否异步模式，默认true（异步）"),
+      filePath: z.array(z.string()).optional().describe("可选参考图路径（影响整体风格，最多4张）"),
       aspectRatio: z.string().optional().default("auto").describe("宽高比: auto/1:1/16:9/9:16/3:4/4:3/3:2/2:3/21:9"),
+      model: z.string().optional().describe("模型名称，默认jimeng-4.0"),
       sample_strength: z.number().min(0).max(1).optional().default(0.5).describe("参考图影响强度0-1，默认0.5"),
       negative_prompt: z.string().optional().default("").describe("负向提示词"),
       reference_strength: z.array(z.number().min(0).max(1)).optional().describe("每张参考图的独立强度数组"),
-      count: z.number().int().min(1).max(15).optional().default(1).describe("生成图片数量，默认1张，最大15张（即梦API限制），超过4张会自动触发继续生成"),
     },
     async (params) => {
       try {
-        logger.debug('generateImageAsync tool called with params:', JSON.stringify(params, null, 2));
+        logger.debug('image_batch tool called with params:', JSON.stringify(params, null, 2));
 
-        const hasToken = !!process.env.JIMENG_API_TOKEN;
-        logger.debug('Environment token available:', hasToken);
+        // 使用prompts数组和其长度
+        const count = params.prompts.length;
 
-        const historyId = await generateImageAsync({
-          ...params,
+        const result = await generateImage({
+          prompt: params.basePrompt || '', // 使用basePrompt作为基础prompt
+          frames: params.prompts, // 使用prompts作为frames
+          count: count, // 数量由prompts.length决定
+          filePath: params.filePath,
+          model: params.model,
+          aspectRatio: params.aspectRatio,
+          sample_strength: params.sample_strength,
+          negative_prompt: params.negative_prompt,
+          reference_strength: params.reference_strength,
+          async: params.async,
           refresh_token: process.env.JIMENG_API_TOKEN!
-        });
+        } as any);
 
-        return {
-          content: [{
-            type: "text",
-            text: `异步任务已提交成功！\n\nhistoryId: ${historyId}\n\n请使用 getImageResult 工具查询生成结果。`
-          }]
-        };
+        // 异步模式返回taskId
+        if (params.async !== false) {
+          const taskId = typeof result === 'string' ? result : (result as any).taskId || result;
+          return {
+            content: [{
+              type: "text",
+              text: `✅ 批量图像生成任务已提交！\n\n📋 任务ID: ${taskId}\n🖼️  数量: ${count}张\n\n💡 使用 query 工具查询状态`
+            }]
+          };
+        } else {
+          // 同步模式返回URLs
+          const imageUrls = Array.isArray(result) ? result : [result];
+          return {
+            content: [{
+              type: "text",
+              text: imageUrls.join('\n')
+            }]
+          };
+        }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        logger.error('generateImageAsync failed:', errorMessage);
+        logger.error('image_batch failed:', errorMessage);
         return {
-          content: [{ type: "text", text: `❌ 提交失败: ${errorMessage}` }],
+          content: [{ type: "text", text: `❌ 批量生成失败: ${errorMessage}` }],
           isError: true
         };
       }
     }
   );
 
-  logger.debug('Registering getImageResult tool...');
+  logger.debug('image_batch tool registered successfully');
+
+  // ============== 查询工具 ==============
+
+  logger.debug('Registering query tool...');
 
   server.tool(
-    "getImageResult",
-    "🔍 查询生成任务的当前状态和结果",
+    "query",
+    "查询任务状态和结果",
     {
-      historyId: z.string().regex(/^([0-9]+|h[a-zA-Z0-9]+)$/).describe("生成任务ID（从generateImageAsync获取）")
+      historyId: z.string().regex(/^([0-9]+|h[a-zA-Z0-9]+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i).describe("任务ID")
     },
     async ({ historyId }) => {
       try {
@@ -419,222 +282,72 @@ export const createServer = (): McpServer => {
     }
   );
 
-  logger.debug('Registering generateVideoAsync tool...');
+  logger.debug('query tool registered successfully');
+
+  // logger.debug('Registering query_batch tool...');
+
+  // server.tool(
+  //   "query_batch",
+  //   "批量查询多个任务",
+  //   {
+  //     historyIds: z.array(z.string().regex(/^([0-9]+|h[a-zA-Z0-9]+)$/)).max(10).describe("任务ID数组，最多10个")
+  //   },
+  //   async ({ historyIds }) => {
+  //     try {
+  //       const client = getApiClient();
+  //       const results = await client.getBatchResults(historyIds);
+
+  //       // 格式化响应
+  //       let resultText = `📊 批量查询结果 (${Object.keys(results).length}/${historyIds.length})\n\n`;
+
+  //       for (const [id, result] of Object.entries(results)) {
+  //         const typedResult = result as any; // Type assertion for DTS build
+  //         if ('error' in typedResult) {
+  //           resultText += `❌ ${id}: ${typedResult.error}\n\n`;
+  //         } else {
+  //           const statusEmoji = typedResult.status === 'completed' ? '✅' : typedResult.status === 'failed' ? '❌' : '🔄';
+  //           resultText += `${statusEmoji} ${id}:\n`;
+  //           resultText += `  状态: ${typedResult.status}\n`;
+  //           resultText += `  进度: ${typedResult.progress}%\n`;
+
+  //           if (typedResult.videoUrl) {
+  //             resultText += `  视频: ${typedResult.videoUrl}\n`;
+  //           } else if (typedResult.imageUrls && typedResult.imageUrls.length > 0) {
+  //             resultText += `  图片: ${typedResult.imageUrls.length}张\n`;
+  //           }
+
+  //           if (typedResult.error) {
+  //             resultText += `  错误: ${typedResult.error}\n`;
+  //           }
+  //           resultText += `\n`;
+  //         }
+  //       }
+
+  //       return {
+  //         content: [{ type: "text", text: resultText }]
+  //       };
+  //     } catch (error) {
+  //       const errorMessage = error instanceof Error ? error.message : String(error);
+  //       return {
+  //         content: [{ type: "text", text: `❌ 批量查询失败: ${errorMessage}` }],
+  //         isError: true
+  //       };
+  //     }
+  //   }
+  // );
+
+  // logger.debug('query_batch tool registered successfully');
+
+  // ============== 新的视频生成工具 ==============
+
+  logger.debug('Registering video tool...');
 
   server.tool(
-    "generateVideoAsync",
-    "🚀 异步视频生成 - 立即返回任务ID，支持首尾帧和多帧模式",
-    {
-      filePath: z.array(z.string()).optional().describe("首尾帧路径，最多2张"),
-      multiFrames: z.array(z.object({
-        idx: z.number().describe("帧序号"),
-        duration_ms: z.number().min(1000).max(5000).describe("帧时长(毫秒)"),
-        prompt: z.string().describe("动作描述"),
-        image_path: z.string().describe("参考图路径")
-      })).max(10).optional().describe("多帧配置数组，最多10帧"),
-      resolution: z.enum(["720p", "1080p"]).optional().describe("分辨率"),
-      model: z.string().optional().describe("模型名称"),
-      prompt: z.string().describe("视频描述文本"),
-      fps: z.number().min(12).max(30).optional().default(24).describe("帧率"),
-      duration_ms: z.number().min(3000).max(15000).optional().default(5000).describe("总时长(毫秒)"),
-      video_aspect_ratio: z.string().optional().describe("宽高比"),
-      refresh_token: z.string().optional().describe("API令牌"),
-      req_key: z.string().optional().describe("兼容性参数")
-    },
-    async (params) => {
-      try {
-        const client = getApiClient();
-        // Use generateVideo which returns historyId in async mode
-        const result: any = await client.generateVideo({
-          filePath: params.filePath,
-          multiFrames: params.multiFrames,
-          resolution: params.resolution,
-          model: params.model,
-          prompt: params.prompt,
-          fps: params.fps,
-          duration_ms: params.duration_ms,
-          video_aspect_ratio: params.video_aspect_ratio,
-          req_key: params.req_key,
-          refresh_token: params.refresh_token || process.env.JIMENG_API_TOKEN
-        } as any);
-        const historyId = result.taskId || result; // Handle both formats
-
-        return {
-          content: [{
-            type: "text",
-            text: `✅ 视频生成任务已提交！\n\n任务ID: ${historyId}\n\n使用 getImageResult 工具查询状态:\n- historyId: ${historyId}`
-          }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `❌ 提交失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  logger.debug('Registering generateMainReferenceVideoAsync tool...');
-
-  server.tool(
-    "generateMainReferenceVideoAsync",
-    "🚀 异步主体参考视频生成 - 立即返回任务ID，组合多图主体",
-    {
-      referenceImages: z.array(z.string()).min(2).max(4).describe("参考图片路径数组(2-4张)"),
-      prompt: z.string().describe("提示词，使用[图0][图1]引用图片"),
-      model: z.string().optional().default("jimeng-video-3.0").describe("模型名称"),
-      resolution: z.enum(["720p", "1080p"]).optional().default("720p").describe("分辨率"),
-      videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().default("16:9").describe("视频比例"),
-      fps: z.number().min(12).max(30).optional().default(24).describe("帧率"),
-      duration: z.number().min(3000).max(15000).optional().default(5000).describe("时长(毫秒)")
-    },
-    async (params) => {
-      try {
-        const client = getApiClient();
-        const result: any = await client.generateMainReferenceVideoUnified({
-          referenceImages: params.referenceImages,
-          prompt: params.prompt,
-          model: params.model,
-          resolution: params.resolution,
-          videoAspectRatio: params.videoAspectRatio,
-          fps: params.fps,
-          duration: params.duration,
-          async: true,
-          refresh_token: process.env.JIMENG_API_TOKEN
-        });
-        const historyId = result.taskId || result;
-
-        return {
-          content: [{
-            type: "text",
-            text: `✅ 主体参考视频任务已提交！\n\n任务ID: ${historyId}\n\n使用 getImageResult 工具查询状态:\n- historyId: ${historyId}`
-          }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `❌ 提交失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  logger.debug('Registering videoPostProcessAsync tool...');
-
-  server.tool(
-    "videoPostProcessAsync",
-    "🚀 异步视频后处理 - 立即返回任务ID，支持补帧/超分/音效",
-    {
-      operation: z.enum(["frame_interpolation", "super_resolution", "audio_effect"]).describe("操作类型"),
-      videoId: z.string().describe("原始视频ID"),
-      originHistoryId: z.string().describe("原始生成任务ID"),
-      targetFps: z.number().optional().describe("目标帧率(补帧用)"),
-      originFps: z.number().optional().describe("原始帧率(补帧用)"),
-      targetWidth: z.number().optional().describe("目标宽度(超分用)"),
-      targetHeight: z.number().optional().describe("目标高度(超分用)"),
-      originWidth: z.number().optional().describe("原始宽度(超分用)"),
-      originHeight: z.number().optional().describe("原始高度(超分用)"),
-      duration: z.number().optional().describe("视频时长(毫秒)")
-    },
-    async (params) => {
-      try {
-        const client = getApiClient();
-        const result: any = await client.videoPostProcess({
-          operation: params.operation,
-          videoId: params.videoId,
-          originHistoryId: params.originHistoryId,
-          targetFps: params.targetFps as 30 | 60 | undefined,
-          originFps: params.originFps,
-          targetWidth: params.targetWidth,
-          targetHeight: params.targetHeight,
-          originWidth: params.originWidth,
-          originHeight: params.originHeight,
-          duration: params.duration
-        } as any);
-        const historyId = result.taskId || result;
-
-        return {
-          content: [{
-            type: "text",
-            text: `✅ 视频后处理任务已提交！\n\n任务ID: ${historyId}\n操作类型: ${params.operation}\n\n使用 getImageResult 工具查询状态:\n- historyId: ${historyId}`
-          }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `❌ 提交失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  logger.debug('Registering getBatchResults tool...');
-
-  server.tool(
-    "getBatchResults",
-    "🔍 批量查询多个任务状态 - 单次查询多个任务(建议≤10个)",
-    {
-      historyIds: z.array(z.string().regex(/^([0-9]+|h[a-zA-Z0-9]+)$/)).max(10).describe("任务ID数组，最多10个")
-    },
-    async ({ historyIds }) => {
-      try {
-        const client = getApiClient();
-        const results = await client.getBatchResults(historyIds);
-
-        // 格式化响应
-        let resultText = `📊 批量查询结果 (${Object.keys(results).length}/${historyIds.length})\n\n`;
-
-        for (const [id, result] of Object.entries(results)) {
-          const typedResult = result as any; // Type assertion for DTS build
-          if ('error' in typedResult) {
-            resultText += `❌ ${id}: ${typedResult.error}\n\n`;
-          } else {
-            const statusEmoji = typedResult.status === 'completed' ? '✅' : typedResult.status === 'failed' ? '❌' : '🔄';
-            resultText += `${statusEmoji} ${id}:\n`;
-            resultText += `  状态: ${typedResult.status}\n`;
-            resultText += `  进度: ${typedResult.progress}%\n`;
-
-            if (typedResult.videoUrl) {
-              resultText += `  视频: ${typedResult.videoUrl}\n`;
-            } else if (typedResult.imageUrls && typedResult.imageUrls.length > 0) {
-              resultText += `  图片: ${typedResult.imageUrls.length}张\n`;
-            }
-
-            if (typedResult.error) {
-              resultText += `  错误: ${typedResult.error}\n`;
-            }
-            resultText += `\n`;
-          }
-        }
-
-        return {
-          content: [{ type: "text", text: resultText }]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [{ type: "text", text: `❌ 批量查询失败: ${errorMessage}` }],
-          isError: true
-        };
-      }
-    }
-  );
-
-  // ============== 新的视频生成工具 (Feature 005-3-1-2) ==============
-
-  logger.debug('Registering generateTextToVideo tool...');
-
-  server.tool(
-    "generateTextToVideo",
-    "🎬 文生视频 - 根据文本描述生成视频，支持首尾帧图片（统一async参数版本）",
+    "video",
+    "纯文字生成视频",
     {
       prompt: z.string().min(1).describe("视频描述文本"),
-      firstFrameImage: z.string().optional().describe("首帧图片路径（可选）"),
-      lastFrameImage: z.string().optional().describe("尾帧图片路径（可选）"),
-      async: z.boolean().optional().default(false).describe("是否异步模式，默认false（同步）"),
+      async: z.boolean().optional().default(true).describe("是否异步模式，默认true（异步）"),
       resolution: z.enum(["720p", "1080p"]).optional().default("720p").describe("分辨率"),
       videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().default("16:9").describe("视频宽高比"),
       fps: z.number().min(12).max(30).optional().default(24).describe("帧率(12-30)"),
@@ -651,7 +364,7 @@ export const createServer = (): McpServer => {
           return {
             content: [{
               type: "text",
-              text: `🚀 [异步] 文生视频任务已提交\n\n📋 任务ID: ${result.taskId}\n\n💡 使用 getImageResult 查询状态`
+              text: `✅ 视频生成任务已提交！\n\n📋 任务ID: ${result.taskId}\n\n💡 使用 query 工具查询状态`
             }]
           };
         } else {
@@ -659,45 +372,81 @@ export const createServer = (): McpServer => {
           return {
             content: [{
               type: "text",
-              text: `✅ 文生视频生成完成\n\n🎥 视频URL: ${result.videoUrl}\n\n📊 元数据:\n` +
-                `  - 时长: ${result.metadata?.duration}ms\n` +
-                `  - 分辨率: ${result.metadata?.resolution}\n` +
-                `  - 模型: ${result.metadata?.generationParams.model}`
+              text: `✅ 视频生成完成\n\n🎥 视频URL: ${result.videoUrl}`
             }]
           };
         }
       } catch (error) {
-        let errorMessage: string;
-        if (error && typeof error === 'object' && 'error' in error) {
-          // VideoGenerationError格式
-          const err = (error as any).error;
-          errorMessage = `${err.message}\n原因: ${err.reason}${err.taskId ? `\n任务ID: ${err.taskId}` : ''}`;
-        } else if (error instanceof Error) {
-          errorMessage = error.message;
-        } else {
-          errorMessage = JSON.stringify(error);
-        }
+        const errorMessage = error instanceof Error ? error.message : String(error);
         return {
-          content: [{ type: "text", text: `❌ 文生视频失败: ${errorMessage}` }],
+          content: [{ type: "text", text: `❌ 视频生成失败: ${errorMessage}` }],
           isError: true
         };
       }
     }
   );
 
-  logger.debug('Registering generateMultiFrameVideo tool...');
+  logger.debug('video tool registered successfully');
+
+  logger.debug('Registering video_frame tool...');
 
   server.tool(
-    "generateMultiFrameVideo",
-    "🎞️ 多帧视频 - 根据多个关键帧配置生成视频（2-10帧，统一async参数版本）",
+    "video_frame",
+    "首尾帧控制视频",
+    {
+      prompt: z.string().min(1).describe("视频描述文本"),
+      firstFrameImage: z.string().optional().describe("首帧图片路径"),
+      lastFrameImage: z.string().optional().describe("尾帧图片路径"),
+      async: z.boolean().optional().default(true).describe("是否异步模式，默认true（异步）"),
+      resolution: z.enum(["720p", "1080p"]).optional().default("720p").describe("分辨率"),
+      videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().default("16:9").describe("视频宽高比"),
+      fps: z.number().min(12).max(30).optional().default(24).describe("帧率(12-30)"),
+      duration: z.number().min(3000).max(15000).optional().default(5000).describe("时长(毫秒，3-15秒)"),
+      model: z.string().optional().default("jimeng-video-3.0").describe("模型名称")
+    },
+    async (params: any) => {
+      try {
+        const client = getApiClient();
+        const result = await client.generateTextToVideo(params as any);
+
+        if (result.taskId) {
+          return {
+            content: [{
+              type: "text",
+              text: `✅ 首尾帧视频任务已提交！\n\n📋 任务ID: ${result.taskId}\n\n💡 使用 query 工具查询状态`
+            }]
+          };
+        } else {
+          return {
+            content: [{
+              type: "text",
+              text: `✅ 首尾帧视频生成完成\n\n🎥 视频URL: ${result.videoUrl}`
+            }]
+          };
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return {
+          content: [{ type: "text", text: `❌ 首尾帧视频失败: ${errorMessage}` }],
+          isError: true
+        };
+      }
+    }
+  );
+
+  logger.debug('video_frame tool registered successfully');
+
+  server.tool(
+    "video_multi",
+    "关键帧动画视频 - 提供2-10个关键帧图片，系统在帧间生成平滑过渡动画",
     {
       frames: z.array(z.object({
-        idx: z.number().int().min(0).describe("帧序号（0-based）"),
-        duration_ms: z.number().min(1000).max(5000).describe("帧时长(毫秒，1-5秒)"),
-        prompt: z.string().min(1).describe("帧描述文本"),
-        image_path: z.string().describe("参考图片路径")
-      })).min(2).max(10).describe("帧配置数组（2-10个）"),
-      async: z.boolean().optional().default(false).describe("是否异步模式，默认false（同步）"),
+        idx: z.number().int().min(0).describe("帧序号（0-based，从0开始连续递增）"),
+        imagePath: z.string().describe("关键帧图片绝对路径（必须是本地绝对路径）"),
+        duration_ms: z.number().min(1000).max(5000).describe("从当前帧过渡到下一帧的动画时长（毫秒，1000-5000），总时长≤15000"),
+        prompt: z.string().min(1).describe("⚠️关键：描述从此帧到下一帧的过渡动画（如：猫从坐姿站起来）。最后一帧的prompt会被忽略")
+      })).min(2).max(10).describe("关键帧数组（2-10个）。每帧包含图片、过渡时长、动画描述。⚠️注意：最后一帧的prompt不生效。示例：[{idx:0,imagePath:\"/path/1.jpg\",duration_ms:2000,prompt:\"从静止到站起\"},{idx:1,imagePath:\"/path/2.jpg\",duration_ms:1000,prompt:\"忽略\"}]"),
+      async: z.boolean().optional().default(true).describe("是否异步模式，默认true（异步）"),
       resolution: z.enum(["720p", "1080p"]).optional().default("720p").describe("分辨率"),
       videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().default("16:9").describe("视频宽高比"),
       fps: z.number().min(12).max(30).optional().default(24).describe("帧率(12-30)"),
@@ -709,55 +458,22 @@ export const createServer = (): McpServer => {
         const result = await client.generateMultiFrameVideo(params as any);
 
         if (result.taskId) {
-          // 异步模式
           return {
             content: [{
               type: "text",
-              text: `🚀 [异步] 多帧视频任务已提交\n\n📋 任务ID: ${result.taskId}\n` +
-                `🎬 帧数: ${params.frames.length}\n\n💡 使用 getImageResult 查询状态`
+              text: `✅ 多帧视频任务已提交！\n\n📋 任务ID: ${result.taskId}\n🎬 帧数: ${params.frames.length}\n\n💡 使用 query 工具查询状态`
             }]
           };
         } else {
-          // 同步模式
           return {
             content: [{
               type: "text",
-              text: `✅ 多帧视频生成完成\n\n🎥 视频URL: ${result.videoUrl}\n\n📊 元数据:\n` +
-                `  - 帧数: ${params.frames.length}\n` +
-                `  - 总时长: ${result.metadata?.duration}ms\n` +
-                `  - 分辨率: ${result.metadata?.resolution}`
+              text: `✅ 多帧视频生成完成\n\n🎥 视频URL: ${result.videoUrl}\n🎬 帧数: ${params.frames.length}`
             }]
           };
         }
       } catch (error) {
-        // 详细错误日志记录
-        console.error('🔍 [MCP Server] Error caught in generateMultiFrameVideo tool:');
-        console.error('🔍 [MCP Server] Error type:', error?.constructor?.name);
-        console.error('🔍 [MCP Server] Full error object:', JSON.stringify(error, null, 2));
-
-        let errorMessage = '未知错误';
-        if (error instanceof Error) {
-          errorMessage = error.message;
-        } else if (typeof error === 'string') {
-          errorMessage = error;
-        } else if (error && typeof error === 'object') {
-          // 尝试提取错误对象的各个属性
-          const errorObj = error as any;
-          if (errorObj.error) {
-            errorMessage = JSON.stringify(errorObj.error);
-          } else if (errorObj.message) {
-            errorMessage = errorObj.message;
-          } else if (errorObj.reason) {
-            errorMessage = errorObj.reason;
-          } else {
-            errorMessage = JSON.stringify(error);
-          }
-        } else {
-          errorMessage = String(error);
-        }
-
-        console.error('🔍 [MCP Server] Extracted error message:', errorMessage);
-
+        const errorMessage = error instanceof Error ? error.message : String(error);
         return {
           content: [{ type: "text", text: `❌ 多帧视频失败: ${errorMessage}` }],
           isError: true
@@ -766,15 +482,15 @@ export const createServer = (): McpServer => {
     }
   );
 
-  logger.debug('Registering generateMainReferenceVideo tool...');
+  logger.debug('video_multi tool registered successfully');
 
   server.tool(
-    "generateMainReferenceVideoUnified",
-    "🎨 主体参考视频 - 组合多张图片的主体生成视频（2-4张，使用[图N]语法，统一async参数版本）",
+    "video_mix",
+    "融合多张图片主体到一个场景",
     {
       referenceImages: z.array(z.string()).min(2).max(4).describe("参考图片路径数组（2-4张）"),
       prompt: z.string().min(1).describe("提示词，使用[图N]语法引用图片，例如：[图0]的猫在[图1]的地板上跑"),
-      async: z.boolean().optional().default(false).describe("是否异步模式，默认false（同步）"),
+      async: z.boolean().optional().default(true).describe("是否异步模式，默认true（异步）"),
       resolution: z.enum(["720p", "1080p"]).optional().default("720p").describe("分辨率"),
       videoAspectRatio: z.enum(["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]).optional().default("16:9").describe("视频宽高比"),
       fps: z.number().min(12).max(30).optional().default(24).describe("帧率(12-30)"),
@@ -787,65 +503,31 @@ export const createServer = (): McpServer => {
         const result = await client.generateMainReferenceVideoUnified(params as any);
 
         if (result.taskId) {
-          // 异步模式
           return {
             content: [{
               type: "text",
-              text: `🚀 [异步] 主体参考视频任务已提交\n\n📋 任务ID: ${result.taskId}\n` +
-                `🖼️  参考图: ${params.referenceImages.length}张\n\n💡 使用 getImageResult 查询状态`
+              text: `✅ 多图融合视频任务已提交！\n\n📋 任务ID: ${result.taskId}\n🖼️  参考图: ${params.referenceImages.length}张\n\n💡 使用 query 工具查询状态`
             }]
           };
         } else {
-          // 同步模式
           return {
             content: [{
               type: "text",
-              text: `✅ 主体参考视频生成完成\n\n🎥 视频URL: ${result.videoUrl}\n\n📊 元数据:\n` +
-                `  - 参考图: ${params.referenceImages.length}张\n` +
-                `  - 时长: ${result.metadata?.duration}ms\n` +
-                `  - 分辨率: ${result.metadata?.resolution}`
+              text: `✅ 多图融合视频生成完成\n\n🎥 视频URL: ${result.videoUrl}\n🖼️  参考图: ${params.referenceImages.length}张`
             }]
           };
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         return {
-          content: [{ type: "text", text: `❌ 主体参考视频失败: ${errorMessage}` }],
+          content: [{ type: "text", text: `❌ 多图融合视频失败: ${errorMessage}` }],
           isError: true
         };
       }
     }
   );
 
-  // 添加一个问候资源
-  server.resource(
-    "greeting",
-    new ResourceTemplate("greeting://{name}", { list: undefined }),
-    async (uri, { name }) => ({
-      contents: [{
-        uri: uri.href,
-        text: `欢迎使用Jimeng MCP服务器，${name}！`
-      }]
-    })
-  );
-
-  // 添加一个静态信息资源
-  server.resource(
-    "info",
-    "info://server",
-    async (uri) => ({
-      contents: [{
-        uri: uri.href,
-        text: `
-            Jimeng MCP 服务器
-            版本: 1.0.0
-            运行于: ${process.platform}
-            Node版本: ${process.version}
-        `
-      }]
-    })
-  );
-
+  logger.debug('video_mix tool registered successfully');
 
   return server;
 };
