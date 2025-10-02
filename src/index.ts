@@ -18,7 +18,6 @@ export {
   ImageDimensionCalculator,
   // 导出新的类和函数（Phase 2重构）
   JimengClient,
-  NewJimengClient,
   HttpClient,
   ImageUploader,
   VideoService,

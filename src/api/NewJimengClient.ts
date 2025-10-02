@@ -14,6 +14,7 @@ import { NewCreditService } from './NewCreditService.js';
 import { VideoService } from './VideoService.js';
 import { getModel, DEFAULT_MODEL, DRAFT_VERSION, WEB_ID } from '../types/models.js';
 import { generateUuid, jsonEncode, urlEncode } from '../utils/index.js';
+import { ImageDimensionCalculator } from '../utils/dimensions.js';
 import type {
   ImageGenerationParams,
   VideoGenerationParams,
@@ -72,7 +73,7 @@ export class NewJimengClient {
 
     // 构建API参数
     const apiParams: any = {
-      prompt: this.buildPromptWithPrefix(prompt, uploadedImages.length),
+      prompt: prompt,  // prompt不在这里添加前缀，而是在buildAbilities中处理
       model_name: getModel(model),
       count: Math.min(count, 4), // API限制单次最多4张
       aspect_ratio: aspectRatio,
@@ -129,9 +130,9 @@ export class NewJimengClient {
 
     const response = await this.httpClient.request({
       method: 'POST',
-      url: '/mweb/v1/query_result',
+      url: '/mweb/v1/get_history_by_ids',
       params: requestParams,
-      data: { history_id: historyId }
+      data: { history_ids: [historyId] }
     });
 
     return response;
@@ -282,32 +283,166 @@ export class NewJimengClient {
   // ==================== 私有辅助方法 ====================
 
   /**
-   * 构建带前缀的提示词（参考图逻辑）
-   */
-  private buildPromptWithPrefix(prompt: string, imageCount: number): string {
-    if (imageCount === 0) return prompt;
-    if (imageCount === 1) return `##${prompt}`;
-    return `####${prompt}`;
-  }
-
-  /**
    * 提交图片生成任务
    */
   private async submitImageTask(params: any): Promise<string> {
     const requestParams = this.httpClient.generateRequestParams();
 
-    const response = await this.httpClient.request({
-      method: 'POST',
-      url: '/mweb/v1/image_generate',
-      params: requestParams,
-      data: params
-    });
+    // 构建完整的请求体结构（兼容即梦API）
+    const submitId = generateUuid();
+    const componentId = generateUuid();
+    const hasRefImages = params.reference_images && params.reference_images.length > 0;
 
-    if (!response.history_id) {
-      throw new Error(response.errmsg || '提交图片任务失败');
+    const requestBody: any = {
+      extend: {
+        root_model: params.model_name
+      },
+      submit_id: submitId,
+      metrics_extra: jsonEncode({
+        promptSource: "custom",
+        generateCount: params.count || 1,
+        enterFrom: "click",
+        generateId: submitId,
+        isRegenerate: false
+      }),
+      draft_content: jsonEncode({
+        type: "draft",
+        id: generateUuid(),
+        min_version: params.draft_version || DRAFT_VERSION,
+        min_features: [],
+        is_from_tsn: true,
+        version: "3.3.2",
+        main_component_id: componentId,
+        component_list: [{
+          type: "image_base_component",
+          id: componentId,
+          min_version: hasRefImages ? "3.0.2" : (params.draft_version || DRAFT_VERSION),
+          aigc_mode: "workbench",
+          gen_type: 1,
+          metadata: {
+            type: "",
+            id: generateUuid(),
+            created_platform: 3,
+            created_platform_version: "",
+            created_time_in_ms: Date.now().toString(),
+            created_did: ""
+          },
+          generate_type: hasRefImages ? "blend" : "generate",
+          abilities: this.buildAbilities(params, hasRefImages)
+        }]
+      }),
+      http_common_info: {
+        aid: 513695
+      }
+    };
+
+    // 如果有history_id，说明是继续生成
+    if (params.history_id) {
+      requestBody.action = 2;
+      requestBody.history_id = params.history_id;
     }
 
-    return response.history_id;
+    const response = await this.httpClient.request({
+      method: 'POST',
+      url: '/mweb/v1/aigc_draft/generate',
+      params: requestParams,
+      data: requestBody
+    });
+
+    const historyId = response?.data?.aigc_data?.history_record_id;
+    if (!historyId) {
+      throw new Error(response?.errmsg || '提交图片任务失败');
+    }
+
+    return historyId;
+  }
+
+  /**
+   * 构建abilities结构
+   */
+  private buildAbilities(params: any, hasRefImages: boolean): any {
+    const { prompt, model_name, aspect_ratio, negative_prompt, reference_images } = params;
+
+    // 使用ImageDimensionCalculator获取正确的尺寸和imageRatio
+    const dimensions = ImageDimensionCalculator.calculateDimensions(aspect_ratio || 'auto');
+    const aspectRatioPreset = ImageDimensionCalculator.getAspectRatioPreset(aspect_ratio || 'auto');
+    const imageRatio = aspectRatioPreset?.imageRatio || 1; // 默认1:1的imageRatio
+
+    if (hasRefImages) {
+      // blend模式
+      const promptPrefix = reference_images.length === 1 ? "##" : "####";
+      return {
+        type: "",
+        id: generateUuid(),
+        blend: {
+          type: "",
+          id: generateUuid(),
+          min_features: [],
+          core_param: {
+            type: "",
+            id: generateUuid(),
+            model: model_name,
+            prompt: promptPrefix + prompt,
+            sample_strength: params.sample_strength || 0.5,
+            image_ratio: imageRatio,
+            large_image_info: {
+              type: "",
+              id: generateUuid(),
+              height: dimensions.height,
+              width: dimensions.width,
+              resolution_type: "2k"
+            },
+            intelligent_ratio: false
+          },
+          ability_list: reference_images.map((ref: any, index: number) => ({
+            type: "",
+            id: generateUuid(),
+            name: "byte_edit",
+            image_uri_list: [ref.uri],
+            image_list: [{
+              type: "image",
+              id: generateUuid(),
+              source_from: "upload",
+              platform_type: 1,
+              name: "",
+              image_uri: ref.uri,
+              width: ref.width || 1024,
+              height: ref.height || 1024,
+              format: ref.format || "png",
+              uri: ref.uri
+            }],
+            strength: ref.strength
+          })),
+          "negative_prompt": negative_prompt || ""
+        }
+      };
+    } else {
+      // generate模式
+      return {
+        type: "",
+        id: generateUuid(),
+        generate: {
+          type: "",
+          id: generateUuid(),
+          core_param: {
+            type: "",
+            id: generateUuid(),
+            model: model_name,
+            prompt: prompt,
+            image_ratio: imageRatio,
+            large_image_info: {
+              type: "",
+              id: generateUuid(),
+              height: dimensions.height,
+              width: dimensions.width,
+              resolution_type: "2k"
+            },
+            intelligent_ratio: false
+          },
+          "negative_prompt": negative_prompt || ""
+        }
+      };
+    }
   }
 
   /**
