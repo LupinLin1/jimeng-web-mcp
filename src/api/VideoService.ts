@@ -405,14 +405,17 @@ export class VideoService {
       data: requestBody
     });
 
-    // 正确的响应路径（与图片生成一致）
-    const historyId = response?.data?.aigc_data?.history_record_id;
+    // 视频生成需要使用submit_id进行轮询（与图片不同！）
+    const submitId = response?.data?.aigc_data?.task?.submit_id ||
+                     response?.data?.aigc_data?.submit_id ||
+                     response?.data?.submit_id ||
+                     response?.submit_id;
 
-    if (!historyId) {
-      throw new Error(response.errmsg || '提交视频任务失败');
+    if (!submitId) {
+      throw new Error(response.errmsg || '提交视频任务失败：未返回submit_id');
     }
 
-    return historyId;
+    return submitId;
   }
 
   /**
@@ -428,14 +431,17 @@ export class VideoService {
       data: params
     });
 
-    // 正确的响应路径（与图片生成一致）
-    const historyId = response?.data?.aigc_data?.history_record_id;
+    // 视频生成需要使用submit_id进行轮询（与图片不同！）
+    const submitId = response?.data?.aigc_data?.task?.submit_id ||
+                     response?.data?.aigc_data?.submit_id ||
+                     response?.data?.submit_id ||
+                     response?.submit_id;
 
-    if (!historyId) {
-      throw new Error(response.errmsg || '提交视频任务失败');
+    if (!submitId) {
+      throw new Error(response.errmsg || '提交视频任务失败：未返回submit_id');
     }
 
-    return historyId;
+    return submitId;
   }
 
   /**
@@ -475,7 +481,7 @@ export class VideoService {
       method: 'POST',
       url: '/mweb/v1/get_history_by_ids',
       params: requestParams,
-      data: { submit_ids: [taskId] }
+      data: { submit_ids: [taskId] }  // 视频轮询使用submit_ids
     });
 
     const record = response?.data?.[taskId];
