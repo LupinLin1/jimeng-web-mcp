@@ -62,41 +62,65 @@ yarn start:api        # or npm run start:api
 ## Architecture Overview
 
 ### Core Module Structure
-The project follows a modular architecture after refactoring from a 2800+ line monolithic file:
+The project follows a **composition-based architecture** after a comprehensive refactoring that reduced code by 74.6% (from 5,268 to 1,335 lines):
 
 - **`src/api.ts`** - Main entry point with backward-compatible exports
 - **`src/server.ts`** - MCP server implementation with tool definitions
-- **`src/api/BaseClient.ts`** - Base client class with shared HTTP and upload methods (582 lines)
-- **`src/api/JimengClient.ts`** - Image generation client with video delegation (1644 lines)
-- **`src/api/video/VideoGenerator.ts`** - Dedicated video generation module (1121 lines)
-- **`src/api/video/TextToVideoGenerator.ts`** - **NEW!** Text-to-video generation with first/last frame support
-- **`src/api/video/MultiFrameVideoGenerator.ts`** - **NEW!** Multi-frame video generation (2-10 frames)
-- **`src/api/video/MainReferenceVideoGenerator.ts`** - Main reference video generation with [图N] syntax
-- **`src/api/ApiClient.ts`** - Legacy HTTP client for JiMeng API
-- **`src/api/CreditService.ts`** - Credit/point management service
+- **`src/api/NewJimengClient.ts`** - Main API client using composition pattern (351 lines)
+- **`src/api/HttpClient.ts`** - Centralized HTTP client with authentication (256 lines)
+- **`src/api/ImageUploader.ts`** - Image upload service using image-size library (221 lines)
+- **`src/api/NewCreditService.ts`** - Credit management using composition (114 lines)
+- **`src/api/VideoService.ts`** - Unified video generation service (393 lines)
+  - Merges all video generation modes (text-to-video, multi-frame, main reference)
+  - Inline polling logic (~25 lines, replacing 249-line timeout abstraction)
 - **`src/types/api.types.ts`** - Complete API type definitions (200 lines)
 - **`src/types/models.ts`** - Model mappings and constants (80 lines)
 - **`src/utils/`** - Authentication, dimension calculation, logging utilities
-- **`src/utils/timeout.ts`** - **NEW!** Timeout handling and polling logic (600s timeout, exponential backoff)
-- **`src/utils/deprecation.ts`** - **NEW!** Deprecation warning system with warnOnce support
-- **`src/schemas/video.schemas.ts`** - **NEW!** Zod validation schemas for video generation tools
+- **`src/schemas/video.schemas.ts`** - Zod validation schemas for MCP tool parameters only
+
+**Removed Components** (74.6% code reduction):
+- ❌ `BaseClient.ts` (748 lines) - Replaced by HttpClient + ImageUploader
+- ❌ `VideoGenerator.ts` (1,676 lines) - Merged into VideoService
+- ❌ `TextToVideoGenerator.ts` (378 lines) - Merged into VideoService
+- ❌ `MultiFrameVideoGenerator.ts` (467 lines) - Merged into VideoService
+- ❌ `MainReferenceVideoGenerator.ts` (710 lines) - Merged into VideoService
+- ❌ `timeout.ts` (249 lines) - Inlined polling logic (~25 lines)
+- ❌ `deprecation.ts` (150 lines) - Completely removed
 
 ### Key Architectural Patterns
 
+**Composition Over Inheritance**: The architecture uses dependency injection instead of inheritance chains:
+```typescript
+class NewJimengClient {
+  private httpClient: HttpClient
+  private imageUploader: ImageUploader
+  private creditService: NewCreditService
+  private videoService: VideoService
+
+  constructor(token?: string) {
+    this.httpClient = new HttpClient(token);
+    this.imageUploader = new ImageUploader(this.httpClient);
+    this.creditService = new NewCreditService(this.httpClient);
+    this.videoService = new VideoService(this.httpClient, this.imageUploader);
+  }
+}
+```
+
+**Single Responsibility**: Each service class has a clear, focused purpose:
+- **HttpClient**: HTTP requests and authentication (no inheritance)
+- **ImageUploader**: Image upload and format detection using image-size library
+- **NewCreditService**: Credit/point management (composition, not inheritance)
+- **VideoService**: All video generation modes in one unified service
+- **NewJimengClient**: Main API facade, delegates to specialized services
+
+**Unified Service Pattern**: VideoService consolidates all video generation:
+- Text-to-video with optional first/last frame support
+- Multi-frame video generation (2-10 frames)
+- Main reference video with [图N] syntax
+- Shared internal methods for upload, submission, and polling
+- Inline polling logic with exponential backoff (2s → 10s, 1.5x factor, 600s timeout)
+
 **Singleton Pattern**: The `getApiClient()` function maintains a global client instance for backward compatibility.
-
-**Inheritance Hierarchy**: `CreditService` → `BaseClient` → `JimengClient` / `VideoGenerator`
-- **CreditService**: Handles point management
-- **BaseClient**: Provides shared HTTP requests, image upload, and logging methods
-- **JimengClient**: Manages image generation, delegates video operations to specialized generators
-- **VideoGenerator**: Base class for video generation with shared polling logic
-
-**Modular Generator Pattern**: Specialized generators for each video generation mode
-- **TextToVideoGenerator**: Handles text-to-video and first/last frame generation
-- **MultiFrameVideoGenerator**: Manages multi-frame video generation (2-10 frames)
-- **MainReferenceVideoGenerator**: Handles main reference video generation with [图N] syntax
-
-**Delegation Pattern**: JimengClient delegates video operations to appropriate specialized generators, maintaining clean separation of concerns and enabling independent development of each mode.
 
 **Unified Async/Sync Pattern**: All new video generation methods support a single `async` parameter instead of separate async methods. When `async=false`, the system uses conditional polling with 600s timeout and exponential backoff (2s→10s, 1.5x factor).
 
