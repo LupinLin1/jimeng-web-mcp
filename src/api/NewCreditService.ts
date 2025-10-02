@@ -71,12 +71,18 @@ export class NewCreditService {
       // 检查返回状态
       if (credit?.ret && credit.ret !== '0') {
         if (credit.ret === '1014' && credit.errmsg === 'system busy') {
-          throw new Error('系统繁忙，请稍后重试');
+          console.log("🟡 积分系统繁忙，跳过积分领取（这通常不会影响图片生成）");
+          return; // 不抛错，继续执行
+        } else {
+          console.log(`⚠️ 积分领取异常: ret=${credit.ret}, errmsg=${credit.errmsg || '未知错误'}`);
+          return; // 不抛错，继续执行
         }
-        throw new Error(credit.errmsg || '领取积分失败');
       }
+
+      console.log("✅ 积分领取成功", credit);
     } catch (error) {
-      throw new Error(`领取积分失败: ${error}`);
+      console.log("⚠️ 积分领取请求失败，但不影响图片生成:", (error as Error).message);
+      // 不抛错，允许图片生成继续进行
     }
   }
 

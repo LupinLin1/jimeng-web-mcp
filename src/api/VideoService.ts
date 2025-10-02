@@ -263,16 +263,16 @@ export class VideoService {
 
     const response = await this.httpClient.request({
       method: 'POST',
-      url: '/mweb/v1/video_generate',
+      url: '/mweb/v1/aigc_draft/generate',
       params: requestParams,
       data: params
     });
 
-    if (!response.task_id) {
+    if (!response.history_id) {
       throw new Error(response.errmsg || '提交视频任务失败');
     }
 
-    return response.task_id;
+    return response.history_id;
   }
 
   /**
@@ -310,15 +310,20 @@ export class VideoService {
 
     const response = await this.httpClient.request({
       method: 'POST',
-      url: '/mweb/v1/video_query',
+      url: '/mweb/v1/get_history_by_ids',
       params: requestParams,
-      data: { task_id: taskId }
+      data: { submit_ids: [taskId] }
     });
 
+    const history = response?.data?.[taskId];
+    if (!history) {
+      return { status: 'processing' };
+    }
+
     return {
-      status: response.status,
-      video_url: response.video_url,
-      error: response.errmsg
+      status: history.status === 2 ? 'completed' : history.status === 3 ? 'failed' : 'processing',
+      video_url: history.resource_url,
+      error: history.errmsg
     };
   }
 

@@ -143,6 +143,11 @@ export class HttpClient {
     const timestamp = now.toISOString().replace(/[:\-]|\.\d{3}/g, '').slice(0, 15) + 'Z';
     const uri = '/';
 
+    // 计算Body SHA256
+    const bodyHash = data && Object.keys(data).length > 0 ?
+      crypto.createHash('sha256').update(JSON.stringify(data)).digest('hex') :
+      crypto.createHash('sha256').update('').digest('hex');
+
     // 计算请求签名
     const authorization = await this.generateAuthorization(
       accessKeyId,
@@ -158,16 +163,15 @@ export class HttpClient {
     );
 
     return {
-      'Host': 'imagex.bytedanceapi.com',
-      'Authorization': authorization,
-      'X-Date': timestamp,
-      'X-Security-Token': sessionToken,
-      'Content-Type': 'application/json'
+      'X-Amz-Date': timestamp,
+      'X-Amz-Security-Token': sessionToken,
+      'X-Amz-Content-Sha256': bodyHash,
+      'Authorization': authorization
     };
   }
 
   /**
-   * 生成Authorization签名
+   * 生成Authorization签名（完整AWS4-HMAC-SHA256算法）
    */
   private async generateAuthorization(
     accessKeyId: string,
@@ -181,35 +185,85 @@ export class HttpClient {
     data?: Record<string, any>,
     timestamp?: string
   ): Promise<string> {
-    const date = timestamp || String(unixTimestamp());
-    const shortDate = date.slice(0, 8);
+    const amzDate = timestamp || new Date().toISOString().replace(/[:\-]|\.\d{3}/g, '').slice(0, 15) + 'Z';
+    const amzDay = amzDate.substring(0, 8);
 
-    // 1. 创建规范请求
+    // 构建请求头（包含所有需要签名的header）
+    const requestHeaders: Record<string, string> = {
+      'x-amz-date': amzDate,
+      'x-amz-security-token': sessionToken,
+    };
+
+    if (data && Object.keys(data).length > 0) {
+      requestHeaders['x-amz-content-sha256'] = crypto
+        .createHash('sha256')
+        .update(JSON.stringify(data))
+        .digest('hex');
+    }
+
+    // 1. 生成 Canonical Request
     const canonicalQueryString = params ? this.httpBuildQuery(params) : '';
-    const canonicalHeaders = `host:imagex.bytedanceapi.com\nx-date:${date}\n`;
-    const signedHeaders = 'host;x-date';
-
-    const bodyHash = data ?
+    const canonicalHeaders = this.buildCanonicalHeaders(requestHeaders);
+    const signedHeaders = this.buildSignedHeaders(requestHeaders);
+    const bodyHash = data && Object.keys(data).length > 0 ?
       crypto.createHash('sha256').update(JSON.stringify(data)).digest('hex') :
       crypto.createHash('sha256').update('').digest('hex');
 
-    const canonicalRequest = `${method}\n${uri}\n${canonicalQueryString}\n${canonicalHeaders}\n${signedHeaders}\n${bodyHash}`;
+    const canonicalRequest = [
+      method.toUpperCase(),
+      uri,
+      canonicalQueryString,
+      canonicalHeaders,
+      signedHeaders,
+      bodyHash
+    ].join('\n');
 
-    // 2. 创建待签名字符串
-    const algorithm = 'HMAC-SHA256';
-    const credentialScope = `${shortDate}/${region}/${service}/request`;
-    const requestHash = crypto.createHash('sha256').update(canonicalRequest).digest('hex');
-    const stringToSign = `${algorithm}\n${date}\n${credentialScope}\n${requestHash}`;
+    // 2. 生成 String To Sign
+    const credentialScope = `${amzDay}/${region}/${service}/aws4_request`;
+    const stringToSign = [
+      'AWS4-HMAC-SHA256',
+      amzDate,
+      credentialScope,
+      crypto.createHash('sha256').update(canonicalRequest).digest('hex')
+    ].join('\n');
 
     // 3. 计算签名
-    const kDate = crypto.createHmac('sha256', `${secretAccessKey}`).update(shortDate).digest();
+    const kDate = crypto.createHmac('sha256', 'AWS4' + secretAccessKey).update(amzDay).digest();
     const kRegion = crypto.createHmac('sha256', kDate).update(region).digest();
     const kService = crypto.createHmac('sha256', kRegion).update(service).digest();
-    const kSigning = crypto.createHmac('sha256', kService).update('request').digest();
-    const signature = crypto.createHmac('sha256', kSigning).update(stringToSign).digest('hex');
+    const signingKey = crypto.createHmac('sha256', kService).update('aws4_request').digest();
+    const signature = crypto.createHmac('sha256', signingKey).update(stringToSign).digest('hex');
 
-    // 4. 构建Authorization header
-    return `${algorithm} Credential=${accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+    // 4. 构建 Authorization Header
+    const authorizationParams = [
+      'AWS4-HMAC-SHA256 Credential=' + accessKeyId + '/' + credentialScope,
+      'SignedHeaders=' + signedHeaders,
+      'Signature=' + signature
+    ];
+
+    return authorizationParams.join(', ');
+  }
+
+  /**
+   * 构建规范化的请求头字符串
+   */
+  private buildCanonicalHeaders(headers: Record<string, string>): string {
+    const headerKeys = Object.keys(headers).sort();
+    const canonicalHeaders: string[] = [];
+
+    for (const key of headerKeys) {
+      canonicalHeaders.push(key.toLowerCase() + ':' + headers[key]);
+    }
+
+    return canonicalHeaders.join('\n') + '\n';
+  }
+
+  /**
+   * 构建已签名的请求头列表
+   */
+  private buildSignedHeaders(headers: Record<string, string>): string {
+    const headerKeys = Object.keys(headers).map(k => k.toLowerCase()).sort();
+    return headerKeys.join(';');
   }
 
   /**
