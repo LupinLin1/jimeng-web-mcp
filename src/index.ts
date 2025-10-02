@@ -7,15 +7,23 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // 导出API函数供测试使用
-export { 
-  generateImage, 
-  generateVideo, 
+export {
+  generateImage,
+  generateVideo,
   videoPostProcess,
   frameInterpolation,
   superResolution,
   generateAudioEffect,
-  ASPECT_RATIO_PRESETS, 
-  ImageDimensionCalculator 
+  ASPECT_RATIO_PRESETS,
+  ImageDimensionCalculator,
+  // 导出新的类和函数（Phase 2重构）
+  JimengClient,
+  NewJimengClient,
+  HttpClient,
+  ImageUploader,
+  VideoService,
+  NewCreditService,
+  getApiClient
 } from './api.js';
 
 // 处理未捕获的异常
