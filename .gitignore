@@ -85,3 +85,6 @@ node_modules/
 
 # Claude Code working directory
 .claude/
+
+# Specify workflow directory
+.specify/
