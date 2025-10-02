@@ -1,7 +1,8 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { generateImage, generateVideo, videoPostProcess, generateImageAsync, getImageResult, getApiClient } from "./api.js";
+import { generateImage, generateVideo, videoPostProcess, generateImageAsync, getImageResult, VideoGenerator, getApiClient } from "./api.js";
+import { MainReferenceVideoGenerator } from "./api/video/MainReferenceVideoGenerator.js";
 import { logger } from './utils/logger.js';
 
 // 服务器启动调试信息
@@ -231,17 +232,16 @@ export const createServer = (): McpServer => {
           };
         }
 
-        const client = getApiClient();
-        const videoUrl = await client.generateMainReferenceVideo({
+        const generator = new MainReferenceVideoGenerator(sessionId);
+        const videoUrl = await generator.generate({
           referenceImages: params.referenceImages,
           prompt: params.prompt,
           model: params.model,
           resolution: params.resolution,
           videoAspectRatio: params.videoAspectRatio,
           fps: params.fps,
-          duration: params.duration,
-          refresh_token: sessionId
-        } as any);
+          duration: params.duration
+        });
 
         if (!videoUrl) {
           return {
@@ -443,9 +443,8 @@ export const createServer = (): McpServer => {
     },
     async (params) => {
       try {
-        const client = getApiClient();
-        // Use generateVideo which returns historyId in async mode
-        const result: any = await client.generateVideo({
+        const videoGen = new VideoGenerator(params.refresh_token || process.env.JIMENG_API_TOKEN);
+        const historyId = await videoGen.generateVideoAsync({
           filePath: params.filePath,
           multiFrames: params.multiFrames,
           resolution: params.resolution,
@@ -454,10 +453,8 @@ export const createServer = (): McpServer => {
           fps: params.fps,
           duration_ms: params.duration_ms,
           video_aspect_ratio: params.video_aspect_ratio,
-          req_key: params.req_key,
-          refresh_token: params.refresh_token || process.env.JIMENG_API_TOKEN
-        } as any);
-        const historyId = result.taskId || result; // Handle both formats
+          req_key: params.req_key
+        });
 
         return {
           content: [{
@@ -491,19 +488,16 @@ export const createServer = (): McpServer => {
     },
     async (params) => {
       try {
-        const client = getApiClient();
-        const result: any = await client.generateMainReferenceVideoUnified({
+        const videoGen = new VideoGenerator(process.env.JIMENG_API_TOKEN);
+        const historyId = await videoGen.generateMainReferenceVideoAsync({
           referenceImages: params.referenceImages,
           prompt: params.prompt,
           model: params.model,
           resolution: params.resolution,
           videoAspectRatio: params.videoAspectRatio,
           fps: params.fps,
-          duration: params.duration,
-          async: true,
-          refresh_token: process.env.JIMENG_API_TOKEN
+          duration: params.duration
         });
-        const historyId = result.taskId || result;
 
         return {
           content: [{
@@ -540,8 +534,8 @@ export const createServer = (): McpServer => {
     },
     async (params) => {
       try {
-        const client = getApiClient();
-        const result: any = await client.videoPostProcess({
+        const videoGen = new VideoGenerator(process.env.JIMENG_API_TOKEN);
+        const historyId = await videoGen.videoPostProcessAsync({
           operation: params.operation,
           videoId: params.videoId,
           originHistoryId: params.originHistoryId,
@@ -552,8 +546,7 @@ export const createServer = (): McpServer => {
           originWidth: params.originWidth,
           originHeight: params.originHeight,
           duration: params.duration
-        } as any);
-        const historyId = result.taskId || result;
+        });
 
         return {
           content: [{
@@ -588,23 +581,22 @@ export const createServer = (): McpServer => {
         let resultText = `📊 批量查询结果 (${Object.keys(results).length}/${historyIds.length})\n\n`;
 
         for (const [id, result] of Object.entries(results)) {
-          const typedResult = result as any; // Type assertion for DTS build
-          if ('error' in typedResult) {
-            resultText += `❌ ${id}: ${typedResult.error}\n\n`;
+          if ('error' in result) {
+            resultText += `❌ ${id}: ${result.error}\n\n`;
           } else {
-            const statusEmoji = typedResult.status === 'completed' ? '✅' : typedResult.status === 'failed' ? '❌' : '🔄';
+            const statusEmoji = result.status === 'completed' ? '✅' : result.status === 'failed' ? '❌' : '🔄';
             resultText += `${statusEmoji} ${id}:\n`;
-            resultText += `  状态: ${typedResult.status}\n`;
-            resultText += `  进度: ${typedResult.progress}%\n`;
+            resultText += `  状态: ${result.status}\n`;
+            resultText += `  进度: ${result.progress}%\n`;
 
-            if (typedResult.videoUrl) {
-              resultText += `  视频: ${typedResult.videoUrl}\n`;
-            } else if (typedResult.imageUrls && typedResult.imageUrls.length > 0) {
-              resultText += `  图片: ${typedResult.imageUrls.length}张\n`;
+            if (result.videoUrl) {
+              resultText += `  视频: ${result.videoUrl}\n`;
+            } else if (result.imageUrls && result.imageUrls.length > 0) {
+              resultText += `  图片: ${result.imageUrls.length}张\n`;
             }
 
-            if (typedResult.error) {
-              resultText += `  错误: ${typedResult.error}\n`;
+            if (result.error) {
+              resultText += `  错误: ${result.error}\n`;
             }
             resultText += `\n`;
           }
@@ -706,7 +698,7 @@ export const createServer = (): McpServer => {
     async (params: any) => {
       try {
         const client = getApiClient();
-        const result = await client.generateMultiFrameVideo(params as any);
+        const result = await client.generateMultiFrameVideoNew(params as any);
 
         if (result.taskId) {
           // 异步模式

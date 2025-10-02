@@ -25,6 +25,7 @@ export class JimengApiClient {
    */
   protected getModel(model: string): string {
     const mappedModel = getModel(model);
+    console.log(`🔍 模型映射调试: ${model} -> ${mappedModel} (更新时间: ${new Date().toISOString()})`);
     return mappedModel;
   }
 

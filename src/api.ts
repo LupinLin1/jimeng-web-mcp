@@ -23,7 +23,8 @@ export { ImageDimensionCalculator } from './utils/dimensions.js';
 export { generateCookie } from './utils/auth.js';
 
 // ============== API功能导出 ==============
-import { JimengClient } from './api/JimengClient.js';
+// REFACTOR: Using new composition-based implementation
+import { NewJimengClient } from './api/NewJimengClient.js';
 import {
   ImageGenerationParams,
   VideoGenerationParams,
@@ -38,12 +39,15 @@ import {
   BatchQueryResponse
 } from './types/api.types.js';
 
-// 创建单例实例以保持向后兼容
-let globalApiClient: JimengClient | null = null;
+// Export NewJimengClient as JimengClient for backward compatibility
+export { NewJimengClient as JimengClient };
 
-const getApiClient = (token?: string): JimengClient => {
+// 创建单例实例以保持向后兼容
+let globalApiClient: NewJimengClient | null = null;
+
+const getApiClient = (token?: string): NewJimengClient => {
   if (!globalApiClient || (token && token !== globalApiClient.getRefreshToken())) {
-    globalApiClient = new JimengClient(token);
+    globalApiClient = new NewJimengClient(token);
   }
   return globalApiClient;
 };
@@ -122,50 +126,50 @@ export const generateMainReferenceVideo = (params: MainReferenceVideoParams): Pr
 
 export async function frameInterpolation(params: FrameInterpolationParams): Promise<string> {
   console.log('🔍 [重构后API] frameInterpolation 被调用');
-  
+
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
     throw new Error('JIMENG_API_TOKEN 环境变量未设置');
   }
-  
-  const client = new JimengClient(token);
+
+  const client = new NewJimengClient(token);
   return await client.frameInterpolation(params);
 }
 
 export async function superResolution(params: SuperResolutionParams): Promise<string> {
   console.log('🔍 [重构后API] superResolution 被调用');
-  
+
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
     throw new Error('JIMENG_API_TOKEN 环境变量未设置');
   }
-  
-  const client = new JimengClient(token);
+
+  const client = new NewJimengClient(token);
   return await client.superResolution(params);
 }
 
 export async function generateAudioEffect(params: AudioEffectGenerationParams): Promise<string> {
   console.log('🔍 [重构后API] generateAudioEffect 被调用');
-  
+
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
     throw new Error('JIMENG_API_TOKEN 环境变量未设置');
   }
-  
-  const client = new JimengClient(token);
+
+  const client = new NewJimengClient(token);
   return await client.generateAudioEffect(params);
 }
 
 export async function videoPostProcess(params: VideoPostProcessUnifiedParams): Promise<string> {
   console.log('🔍 [重构后API] videoPostProcess 被调用');
   console.log('🔍 [参数] 操作类型:', params.operation);
-  
+
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
     throw new Error('JIMENG_API_TOKEN 环境变量未设置');
   }
-  
-  const client = new JimengClient(token);
+
+  const client = new NewJimengClient(token);
   return await client.videoPostProcess(params);
 }
 
@@ -250,19 +254,19 @@ export type {
 
 // ============== 高级用户API ==============
 /**
- * 直接导出JimengClient供需要更多控制的用户使用
- */
-export { JimengClient };
-
-/**
  * 导出getApiClient函数用于获取单例客户端实例
  */
 export { getApiClient };
 
 /**
- * 导出VideoGenerator供高级用户直接使用
+ * 导出新的服务类供高级用户使用
  */
-export { VideoGenerator } from './api/video/VideoGenerator.js';
+export { HttpClient } from './api/HttpClient.js';
+export { ImageUploader } from './api/ImageUploader.js';
+export { VideoService } from './api/VideoService.js';
+export { NewCreditService } from './api/NewCreditService.js';
+
+// VideoGenerator removed - use VideoService instead from new implementation
 
 // ============== 重构完成 ==============
 // 移除了启动时的重构提示信息，避免在生产环境产生不必要的日志输出
