@@ -1,176 +1,607 @@
-# JiMeng Web MCP 服务器
+# JiMeng Web MCP Server
 
-使用TypeScript实现的Model Context Protocol (MCP) 服务器项目，集成了即梦AI图像生成服务，通过逆向工程直接调用即梦官方API。
+<div align="center">
 
-## 🎯 最新更新 (v1.12.0)
+[![npm version](https://img.shields.io/npm/v/jimeng-web-mcp.svg)](https://www.npmjs.com/package/jimeng-web-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
+[![MCP Protocol](https://img.shields.io/badge/MCP-1.10-green.svg)](https://modelcontextprotocol.io/)
 
-**重大架构优化** - 采用组合模式重构，代码量减少74.6%：
-- ✅ **5,268行代码** → **1,335行代码** (净减少3,933行)
-- ✅ 从复杂继承改为清晰的组合模式
-- ✅ 100%向后兼容，无需修改现有代码
-- ✅ 更快的构建速度和更好的性能
-- ✅ 更易于理解和维护的代码结构
+基于TypeScript的Model Context Protocol (MCP) 服务器，集成即梦AI图像和视频生成服务
 
-详见 [CHANGELOG.md](./CHANGELOG.md) 获取完整更新日志
+**🚀 直接对接官方API | 零第三方依赖 | 组合模式架构 | 100%类型安全**
 
-## 功能
+[English](./README.en.md) | 中文
 
-- 基于TypeScript构建
-- 使用tsup作为构建工具
-- 实现了MCP协议，支持标准的stdio通信
-- 直接调用即梦AI图像生成服务，无需第三方API
-- 提供多种即梦模型的图像生成工具
-- **支持继续生成功能**：当需要生成超过4张图片时自动触发，一次性返回所有图片
-- 支持多种图像参数调整，如尺寸、精细度、负面提示词等
-- 支持多参考图混合生成（通过filePath参数，支持本地图片和网络图片）
-- 支持视频生成，包括智能多帧模式和传统首尾帧模式
-- 支持视频后处理：帧插值、超分辨率、音效生成
-- **现代化架构**：组合模式设计，代码简洁高效
+</div>
 
-## 安装
+---
 
-### 通过npx自动安装（推荐）
+## ✨ 核心特性
 
-**零安装配置** - 只需在Claude Desktop中配置MCP，无需手动安装：
+### 🎨 图像生成
+- **智能继续生成** - prompt自动识别数量（如"生成9张图片"），一次返回全部结果
+- **系列图生成** - 专用于高相关性场景：房间系列、故事分镜、产品多角度
+- **多参考图混合** - 支持最多4张参考图，可控制每张强度
+- **同步/异步模式** - 灵活选择即时返回或后台生成
+
+### 🎬 视频生成
+- **纯文本生成** - 从prompt直接创建视频
+- **首尾帧控制** - 精确控制视频起止画面
+- **多帧动画** - 2-10个关键帧，系统自动补间平滑过渡
+- **主体融合** - 将多张图片的主体组合到一个场景（使用`[图0]`语法）
+
+### 🏗️ 现代化架构
+- **组合模式设计** - 74.6%代码减少（5,268行 → 1,335行）
+- **零安装部署** - npx自动安装，无需手动配置
+- **TypeScript + Zod** - 完整类型定义和运行时验证
+- **100%向后兼容** - 无缝升级，现有代码无需修改
+
+---
+
+## 🚀 快速开始
+
+### 1. 获取API Token
+
+1. 访问 [即梦AI官网](https://jimeng.jianying.com) 并登录
+2. 按 `F12` 打开开发者工具
+3. 进入 `Application` > `Cookies`
+4. 复制 `sessionid` 的值
+
+### 2. 配置Claude Desktop
+
+编辑Claude Desktop配置文件：
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+添加以下配置：
 
 ```json
 {
   "mcpServers": {
     "jimeng-web-mcp": {
       "command": "npx",
-      "args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
+      "args": ["-y", "jimeng-web-mcp"],
       "env": {
-        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
+        "JIMENG_API_TOKEN": "你的sessionid"
       }
     }
   }
 }
 ```
 
-**优势：**
-- ✅ 完全自动安装，无需手动步骤
-- ✅ 始终获取最新版本
-- ✅ 跨平台兼容
-- ✅ 零维护成本
+### 3. 重启Claude Desktop
 
-### 通过MCPHub安装
+配置完成！现在可以在Claude中使用即梦AI生成功能。
 
-MCPHub是新一代MCP服务器管理平台，提供更好的安装体验：
+---
 
-```bash
-# 安装MCPHub CLI
-npm install -g mcphub
+## 🛠️ MCP工具列表
 
-# 通过MCPHub安装jimeng-web-mcp
-mcphub install jimeng-web-mcp
+### 图像生成 (2个工具)
 
-# 或者一键安装并配置到Claude Desktop
-mcphub install jimeng-web-mcp --client claude
-```
+| 工具 | 默认模式 | 适用场景 | 说明 |
+|------|---------|---------|------|
+| `image` | 同步 | 单图/智能多图生成 | prompt自动识别数量，如"生成9张图片" |
+| `image_batch` | 异步 | 高相关性系列图 | 房间系列、故事分镜、产品多角度 |
 
-### 手动安装
-```bash
-# 使用yarn安装依赖
-yarn install
+### 视频生成 (4个工具)
 
-# 或使用npm安装依赖
-npm install
-```
+| 工具 | 默认模式 | 适用场景 | 说明 |
+|------|---------|---------|------|
+| `video` | 异步 | 纯文本生成视频 | 从prompt直接创建 |
+| `video_frame` | 异步 | 首尾帧控制 | 支持首帧、尾帧或两者 |
+| `video_multi` | 异步 | 多帧动画 | 2-10个关键帧，系统补间 |
+| `video_mix` | 异步 | 主体融合 | 用`[图0]`语法引用多张图 |
 
-## 环境配置
+### 查询与工具 (3个工具)
 
-### npx自动安装配置
+| 工具 | 说明 |
+|------|------|
+| `query` | 查询单个任务状态和结果 |
+| `query_batch` | 批量查询最多10个任务 |
+| `ping` | 测试服务器连接 |
 
-使用npx方式无需额外配置，已包含在MCP配置中。只需获取JIMENG_API_TOKEN（见下方说明）。
+### 后处理 (1个工具)
 
-### MCPHub配置
+| 工具 | 说明 |
+|------|------|
+| `video_post_process` | 帧插值、超分辨率、音效生成（开发中） |
 
-使用MCPHub安装后，只需设置环境变量：
+---
 
-```bash
-# 设置JiMeng API Token
-mcphub config set JIMENG_API_TOKEN your_jimeng_session_id_here
+## 📸 图像生成详解
 
-# 查看配置状态
-mcphub status jimeng-web-mcp
-```
+### `image` - 单图/智能多图生成
 
-### 手动安装配置
+#### 核心特性
+- ✅ **智能数量识别** - prompt中的"生成N张图片"会被自动识别
+- ✅ **继续生成自动触发** - 当N>4时，完成前4张后自动确认继续
+- ✅ **一次性返回** - 等待所有图片完成，统一返回结果
+- ✅ **多参考图支持** - 最多4张参考图，可单独控制强度
 
-对于手动安装，您可以直接配置Claude Desktop：
+#### 参数说明
 
-```json
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `prompt` | string | ✅ | - | 图片描述，可包含数量（如"生成9张图片"） |
+| `filePath` | string[] | ❌ | - | 参考图路径数组（最多4张） |
+| `model` | string | ❌ | jimeng-4.0 | 模型名称 |
+| `aspectRatio` | string | ❌ | auto | 宽高比：auto/1:1/16:9/9:16/3:4/4:3/3:2/2:3/21:9 |
+| `sample_strength` | number | ❌ | 0.5 | 参考图影响强度 (0-1) |
+| `reference_strength` | number[] | ❌ | - | 每张参考图独立强度 |
+| `negative_prompt` | string | ❌ | - | 负面提示词 |
+| `async` | boolean | ❌ | false | 是否异步模式 |
+
+#### 使用示例
+
+**示例1: 智能继续生成**
+```typescript
+// Claude中直接说：
+"请用image工具生成9张不同角度的可爱橘猫图片"
+
+// 工具调用：
 {
-  "mcpServers": {
-    "jimeng-web-mcp": {
-      "command": "node",
-      "args": ["path/to/jimeng-web-mcp/lib/index.js"],
-      "env": {
-        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
-      }
-    }
-  }
+  "prompt": "帮我生成9张图片，可爱的橘猫，分别是：正面、侧面、背面、俯视、仰视、左卧、右玩、奔跑、睡觉",
+  "model": "jimeng-4.0",
+  "async": false
+}
+
+// 结果：一次性返回9张图片URL ✅
+```
+
+**示例2: 多参考图混合**
+```typescript
+{
+  "prompt": "梵高星空风格的城市夜景",
+  "filePath": [
+    "/path/to/starry-night.jpg",
+    "/path/to/city.jpg"
+  ],
+  "reference_strength": [0.7, 0.3],
+  "async": false
 }
 ```
 
-### 获取JIMENG_API_TOKEN
+#### 继续生成机制说明
 
-1. 访问 [即梦AI官网](https://jimeng.jianying.com) 并登录账号
-2. 按F12打开浏览器开发者工具
-3. 在Application > Cookies中找到`sessionid`的值
-4. 将找到的sessionid值配置为JIMENG_API_TOKEN环境变量
+**工作原理**：
+1. API根据prompt识别总数量（如"生成9张" → totalCount=9）
+2. 先生成前4张图片
+3. 完成第4张时暂停，等待确认
+4. 系统自动发送`action=2`确认
+5. API继续生成剩余5张图片
+6. 返回全部9张结果
 
-## 开发
+**重要特性**：
+- ✅ **单次确认**：只发送一次继续请求，不是循环生成
+- ✅ **智能识别**：从prompt自动解析数量，无需count参数
+- ✅ **完整等待**：同步模式会等待所有图片完成
 
-```bash
-# 开发模式运行
-yarn dev
+---
 
-# 使用nodemon开发并自动重启
-yarn start:dev
+### `image_batch` - 系列图生成
+
+#### 适用场景
+
+**✅ 推荐使用场景**：
+- 同一房子的不同空间（客厅、卧室、厨房、书房）
+- 故事连续分镜（场景1、场景2、场景3）
+- 绘本不同页面（第1页、第2页、第3页）
+- 产品多角度展示（正面、侧面、背面、细节）
+
+**❌ 不适用场景**：
+- 完全无关的独立图片
+- 单张图片生成（请用`image`）
+
+#### 参数说明
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `prompts` | string[] | ✅ | - | 每张图的差异描述（1-15个） |
+| `basePrompt` | string | ❌ | - | 整体通用描述，添加在最前面 |
+| `filePath` | string[] | ❌ | - | 可选参考图（影响整体风格） |
+| `model` | string | ❌ | jimeng-4.0 | 模型名称 |
+| `aspectRatio` | string | ❌ | auto | 宽高比 |
+| `sample_strength` | number | ❌ | 0.5 | 参考图强度 |
+| `async` | boolean | ❌ | true | 是否异步模式 |
+
+#### 使用示例
+
+**示例1: 房间系列**
+```typescript
+{
+  "basePrompt": "三室两厅现代简约风格，木地板，暖色调照明，简约家具",
+  "prompts": [
+    "客厅，灰色布艺沙发靠窗，落地窗洒入阳光，茶几上放着杂志和遥控器",
+    "主卧室，米色床品整齐铺展，木质床头柜上有台灯，墙面淡蓝色乳胶漆",
+    "开放式厨房，白色橱柜整齐排列，大理石台面，中岛台上摆放水果篮",
+    "书房，木质书架靠墙摆放，书桌上有笔记本电脑，窗外绿植清晰可见",
+    "儿童房，彩色玩具收纳柜，小床上铺着卡通床品，墙上贴着儿童画"
+  ],
+  "async": true
+}
+
+// 最终prompt格式：
+// "三室两厅现代简约风格，木地板，暖色调照明，简约家具 第1张：客厅... 第2张：主卧室... 一共5张图"
 ```
 
-## 构建
+**示例2: 产品多角度**
+```typescript
+{
+  "basePrompt": "苹果AirPods Pro 2代，白色陶瓷材质，磨砂质感，苹果logo清晰",
+  "prompts": [
+    "正面特写，充电盒开盖状态，耳机在盒内，LED指示灯可见",
+    "侧面45度角，展示充电盒厚度和圆润边缘，耳机柄部分露出",
+    "背面视角，充电口特写，序列号区域清晰，磁吸接触点可见"
+  ],
+  "async": false
+}
+```
+
+**⚠️ 错误示例**：
+```typescript
+// ❌ prompts过于简短，缺少差异描述
+{
+  "prompts": ["客厅", "卧室", "厨房"]  // 太简单！
+}
+
+// ✅ 正确做法：每个prompt应该是一小段话
+{
+  "prompts": [
+    "客厅，灰色沙发靠窗，阳光洒入...",
+    "卧室，米色床品，木质床头柜...",
+    "厨房，白色橱柜，大理石台面..."
+  ]
+}
+```
+
+---
+
+## 🎬 视频生成详解
+
+### `video` - 纯文本生成视频
+
+#### 参数说明
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `prompt` | string | ✅ | - | 视频描述 |
+| `model` | string | ❌ | jimeng-video-3.0 | 视频模型 |
+| `resolution` | string | ❌ | 720p | 分辨率：720p/1080p |
+| `fps` | number | ❌ | 24 | 帧率 (12-30) |
+| `duration` | number | ❌ | 5000 | 时长（毫秒，3000-15000） |
+| `videoAspectRatio` | string | ❌ | 16:9 | 宽高比 |
+| `async` | boolean | ❌ | true | 是否异步 |
+
+#### 使用示例
+
+```typescript
+{
+  "prompt": "一只小狗在草地上奔跑，阳光明媚，镜头跟随，高清画质",
+  "resolution": "1080p",
+  "fps": 30,
+  "duration": 5000,
+  "async": true
+}
+```
+
+---
+
+### `video_frame` - 首尾帧控制
+
+#### 参数说明
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `prompt` | string | ✅ | - | 视频描述 |
+| `firstFrameImage` | string | ❌ | - | 首帧图片路径 |
+| `lastFrameImage` | string | ❌ | - | 尾帧图片路径 |
+| 其他参数 | - | - | - | 同`video` |
+
+#### 使用示例
+
+```typescript
+{
+  "prompt": "从白天到夜晚的城市延时摄影",
+  "firstFrameImage": "/path/to/day.jpg",
+  "lastFrameImage": "/path/to/night.jpg",
+  "resolution": "1080p",
+  "async": true
+}
+```
+
+---
+
+### `video_multi` - 多帧动画
+
+#### 核心概念
+
+**关键帧过渡动画**：提供2-10个关键帧图片，系统在帧间生成平滑过渡。
+
+**⚠️ 重要**：每帧的`prompt`描述的是"从当前帧到下一帧的过渡过程"，包括：
+1. **镜头移动**：推进、拉远、摇移、跟随
+2. **画面变化**：主体动作、场景变化、光影变化
+3. **转场效果**：淡入淡出、切换方式
+
+**最后一帧的prompt不生效**（因为没有下一帧），可以留空或随意填写。
+
+#### 参数说明
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `frames` | Frame[] | ✅ | 关键帧数组（2-10个） |
+| `frames[].idx` | number | ✅ | 帧序号（从0开始） |
+| `frames[].imagePath` | string | ✅ | 帧图片绝对路径 |
+| `frames[].duration_ms` | number | ✅ | 过渡时长（1000-6000毫秒） |
+| `frames[].prompt` | string | ✅ | 过渡过程描述 |
+| 其他参数 | - | - | 同`video` |
+
+#### 使用示例
+
+```typescript
+{
+  "frames": [
+    {
+      "idx": 0,
+      "imagePath": "/path/frame0.jpg",
+      "duration_ms": 2000,
+      "prompt": "镜头从正面缓慢推进，猫从坐姿站起，光线从左侧照入"
+    },
+    {
+      "idx": 1,
+      "imagePath": "/path/frame1.jpg",
+      "duration_ms": 2000,
+      "prompt": "猫向前迈步行走，尾巴自然摇摆，背景虚化效果增强"
+    },
+    {
+      "idx": 2,
+      "imagePath": "/path/frame2.jpg",
+      "duration_ms": 1000,
+      "prompt": "（最后一帧，此prompt不生效）"
+    }
+  ],
+  "fps": 24,
+  "resolution": "720p",
+  "async": true
+}
+
+// 生成效果（总时长5秒）：
+// 0-2秒：显示frame0 + 执行"站起来"动画 → 渐变到frame1
+// 2-4秒：显示frame1 + 执行"行走"动画 → 渐变到frame2
+// 4-5秒：显示frame2作为结尾画面
+```
+
+---
+
+### `video_mix` - 主体融合
+
+#### 核心特性
+
+将多张图片的主体组合到一个场景中，使用`[图0]`、`[图1]`语法引用。
+
+#### 参数说明
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `referenceImages` | string[] | ✅ | 参考图路径数组（2-4张） |
+| `prompt` | string | ✅ | 必须包含`[图N]`引用 |
+| 其他参数 | - | - | 同`video` |
+
+#### 使用示例
+
+**示例1: 角色换场景**
+```typescript
+{
+  "referenceImages": [
+    "/path/cat.jpg",
+    "/path/floor.jpg"
+  ],
+  "prompt": "[图0]中的猫在[图1]的地板上奔跑",
+  "async": true
+}
+```
+
+**示例2: 多元素组合**
+```typescript
+{
+  "referenceImages": [
+    "/path/person.jpg",
+    "/path/car.jpg",
+    "/path/beach.jpg"
+  ],
+  "prompt": "[图0]中的人坐在[图1]的车里，背景是[图2]的海滩日落景色",
+  "resolution": "1080p",
+  "async": true
+}
+```
+
+---
+
+## 🔍 查询工具
+
+### `query` - 查询单个任务
+
+```typescript
+{
+  "historyId": "4761818115596"
+}
+
+// 返回：
+{
+  "status": "completed",
+  "progress": 100,
+  "imageUrls": ["https://...", "https://...", ...]
+}
+```
+
+### `query_batch` - 批量查询
+
+```typescript
+{
+  "historyIds": [
+    "4761818115596",
+    "4761818115597",
+    "1e06b3c9-bd41-46dd-8889-70f2c61f66bb"  // 视频ID
+  ]
+}
+
+// 返回：
+{
+  "4761818115596": { "status": "completed", "imageUrls": [...] },
+  "4761818115597": { "status": "processing", "progress": 45 },
+  "1e06b3c9-...": { "status": "completed", "videoUrl": "https://..." }
+}
+```
+
+---
+
+## 💻 本地开发
+
+### 安装依赖
 
 ```bash
+# 使用npm
+npm install
+
+# 或使用yarn
+yarn install
+```
+
+### 开发命令
+
+```bash
+# 开发模式（热重载）
+npm run dev
+
+# 类型检查
+npm run type-check
+
 # 构建项目
-yarn build
-```
+npm run build
 
-## 运行
+# 运行测试
+npm test
 
-```bash
-# 启动服务器
-yarn start
+# 测试覆盖率
+npm run test:coverage
 
 # 测试MCP服务器
-yarn test
+npm run test:mcp
 ```
 
-## Claude Desktop 配置示例
+### 启动服务器
 
-### 推荐配置（npx自动安装）
+```bash
+# MCP stdio模式
+npm start
 
-**零配置安装** - 推荐使用此配置，无需手动安装任何依赖：
+# HTTP API服务模式
+npm run start:api
+```
 
-```json
-{
-  "mcpServers": {
-    "jimeng-web-mcp": {
-      "command": "npx",
-      "args": ["-y", "--package=jimeng-web-mcp", "jimeng-web-mcp"],
-      "env": {
-        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
-      }
-    }
+---
+
+## 🤔 常见问题
+
+### 1. 图像生成失败
+
+**检查清单**：
+- ✅ `JIMENG_API_TOKEN`是否正确配置
+- ✅ 即梦账号积分是否充足（[登录查看](https://jimeng.jianying.com)）
+- ✅ 提示词是否包含敏感内容
+- ✅ 参考图路径是否有效（网络图需可公开访问）
+
+### 2. 继续生成未触发
+
+**排查步骤**：
+- ✅ prompt中是否明确指定数量（如"生成9张图片"）
+- ✅ 查看API返回的`totalCount`是否正确识别
+- ✅ 检查是否在同步模式下（async: false）
+- ✅ 查看日志中的`[智能继续生成检测]`信息
+
+### 3. 服务器无法启动
+
+**解决方法**：
+- ✅ 确保Node.js版本 ≥ 16.0
+- ✅ 重新安装依赖：`rm -rf node_modules && npm install`
+- ✅ 检查环境变量是否正确设置
+
+### 4. 视频生成超时
+
+**调整建议**：
+- ✅ 使用异步模式（async: true）
+- ✅ 降低分辨率（720p代替1080p）
+- ✅ 减少视频时长（推荐5秒）
+- ✅ 简化prompt描述
+
+---
+
+## 🎯 支持的模型
+
+### 图片模型
+
+| 模型名称 | 说明 | 推荐场景 |
+|---------|------|---------|
+| `jimeng-4.0` | 最新第四代模型（默认） | 全场景推荐 |
+| `jimeng-3.0` | 第三代模型，画面鲜明 | 风格化创作 |
+| `jimeng-2.1` | 稳定版本 | 常规生成 |
+| `jimeng-2.0-pro` | Pro版本 | 高质量需求 |
+
+### 视频模型
+
+| 模型名称 | 说明 | 推荐场景 |
+|---------|------|---------|
+| `jimeng-video-3.0` | 主力模型（默认） | 全场景推荐 |
+| `jimeng-video-3.0-pro` | Pro高质量版本 | 专业级作品 |
+| `jimeng-video-2.0-pro` | 兼容性好 | 多场景适配 |
+
+---
+
+## 📊 架构亮点
+
+### 组合模式设计
+
+```typescript
+class NewJimengClient {
+  private httpClient: HttpClient              // HTTP请求和认证
+  private imageUploader: ImageUploader        // 图片上传
+  private creditService: NewCreditService     // 积分管理
+  private videoService: VideoService          // 视频生成
+
+  constructor(token?: string) {
+    this.httpClient = new HttpClient(token);
+    this.imageUploader = new ImageUploader(this.httpClient);
+    this.creditService = new NewCreditService(this.httpClient);
+    this.videoService = new VideoService(this.httpClient, this.imageUploader);
   }
 }
 ```
 
-### 手动安装配置
+### 代码减少对比
 
-如果您选择手动安装，可以使用以下配置：
+| 指标 | 重构前 | 重构后 | 改进 |
+|------|-------|-------|------|
+| 总代码行数 | 5,268行 | 1,335行 | **-74.6%** |
+| 核心类数量 | 9个 | 5个 | **-44.4%** |
+| 继承层级 | 3层 | 0层 | **扁平化** |
+| 类型安全 | 部分 | 完整 | **100%** |
 
+---
+
+## 📦 手动安装（可选）
+
+如果不使用npx方式，可以手动安装：
+
+```bash
+# 全局安装
+npm install -g jimeng-web-mcp
+
+# 或项目内安装
+npm install jimeng-web-mcp
+```
+
+**Claude Desktop配置**：
 ```json
 {
   "mcpServers": {
@@ -178,263 +609,40 @@ yarn test
       "command": "node",
       "args": ["/path/to/jimeng-web-mcp/lib/index.js"],
       "env": {
-        "JIMENG_API_TOKEN": "your_jimeng_session_id_here"
+        "JIMENG_API_TOKEN": "你的sessionid"
       }
     }
   }
 }
 ```
 
-## 即梦AI图像生成
+---
 
-本MCP服务器直接调用即梦AI图像生成API，提供图像生成工具：
+## 🤝 贡献
 
-`generateImage` - 提交图像生成请求并返回图像URL列表，支持继续生成功能
-- 参数：
-  - `prompt`：生成图像的文本描述（必填）**提示：在提示词中明确指定需要多张图片可触发继续生成**
-  - `filePath`：多参考图路径数组，支持本地图片和网络URL（可选）
-  - `model`：模型名称，可选值: jimeng-4.0, jimeng-3.0, jimeng-2.1, jimeng-2.0-pro, jimeng-2.0, jimeng-1.4, jimeng-xl-pro（可选，默认为jimeng-4.0）
-  - `aspectRatio`：图像宽高比，支持auto, 1:1, 16:9, 9:16, 3:4, 4:3, 3:2, 2:3, 21:9（可选，默认auto）
-  - `sample_strength`：参考图影响强度，默认值：0.5，范围0-1（可选）
-  - `reference_strength`：多参考图独立强度数组，与filePath对应（可选）
-  - `negative_prompt`：反向提示词，告诉模型不要生成什么内容（可选）
+欢迎提交Issue和Pull Request！
 
-> **注意：**
-> - `filePath` 支持本地绝对/相对路径和图片URL。
-> - 若指定 `filePath`，将自动进入图片混合/参考图生成模式，底层模型自动切换为 `jimeng-2.0-pro`。
-> - 网络图片需保证可公开访问。
+---
 
-### 继续生成功能 ✨
+## 📄 许可证
 
-当您在提示词中明确要求生成多张图片时（如"生成8张不同角度的图片"、"制作10个阶段的系列图"），系统会自动检测并触发继续生成：
+[MIT License](./LICENSE)
 
-- **自动触发**：当API返回`total_image_count > 4`时自动激活
-- **单次执行**：只发送一次继续生成请求，避免重复调用
-- **完整等待**：等待所有图片生成完成后一次性返回
-- **无缝体验**：对用户透明，无需额外配置
+---
 
-#### 示例提示词：
-```
-生成8张不同角度的可爱橘猫：正面、侧面、背面、俯视、仰视、左卧、右玩、奔跑
-```
+## 🔗 相关链接
 
-```  
-创作12种风格的头像：写实、卡通、水彩、油画、素描、3D、像素、日系、欧美、国画、波普、科幻
-```
+- **GitHub仓库**: [LupinLin1/jimeng-web-mcp](https://github.com/LupinLin1/jimeng-web-mcp)
+- **npm包**: [jimeng-web-mcp](https://www.npmjs.com/package/jimeng-web-mcp)
+- **即梦AI官网**: [jimeng.jianying.com](https://jimeng.jianying.com)
+- **MCP协议**: [modelcontextprotocol.io](https://modelcontextprotocol.io)
 
-### 多参考图混合生成功能
+---
 
-如需基于图片进行混合生成，只需传入`filePath`参数（支持本地路径或图片URL），即可实现图片风格融合、参考图生成等高级玩法。
+<div align="center">
 
-#### 示例：
+**⭐ 如果这个项目对你有帮助，请给个Star支持一下！**
 
-```javascript
-// 参考图片混合生成
-client.callTool({
-  name: "generateImage",
-  arguments: {
-    prompt: "梵高风格的猫",
-    filePath: "./test.png", // 本地图片路径
-    sample_strength: 0.6
-  }
-});
-```
+Made with ❤️ by [LupinLin1](https://github.com/LupinLin1)
 
-或
-
-```javascript
-// 使用网络图片作为参考
-client.callTool({
-  name: "generateImage",
-  arguments: {
-    prompt: "未来城市",
-    filePath: "https://example.com/your-image.png"
-  }
-});
-```
-
-### 支持的模型
-
-服务器支持以下即梦AI模型：
-
-- 图片模型
-- `jimeng-3.1`：即梦第三代模型，丰富的美学多样性，画面更鲜明生动 （默认）
-- `jimeng-3.0`：即梦第三代模型，效果更好，支持更强的图像生成能力
-- `jimeng-2.1`：即梦2.1版本模型，默认模型
-- `jimeng-2.0-pro`：即梦2.0 Pro版本
-- `jimeng-2.0`：即梦2.0标准版本
-- `jimeng-1.4`：即梦1.4版本
-- `jimeng-xl-pro`：即梦XL Pro特殊版本
-- 视频模型
-- `jimeng-video-3.0-pro`：即梦视频3.0 Pro模型，适合高质量视频生成
-- `jimeng-video-3.0`：即梦视频3.0标准模型，主力视频生成模型（默认）
-- `jimeng-video-2.0-pro`：即梦视频2.0 Pro模型，兼容性好，适合多场景
-- `jimeng-video-2.0`：即梦视频2.0标准模型，适合基础视频生成
-
-### 技术实现
-
-- 直接调用即梦官方API，无需第三方服务
-- 逆向工程API调用流程，实现完整的图像生成过程
-- 支持积分自动领取和使用
-- 基于面向对象设计，将API实现封装为类
-- 返回高质量图像URL列表
-- 支持图片上传，自动处理本地/网络图片，自动切换混合模型
-- 图片混合时自动上传图片到即梦云端，流程全自动
-
-### 使用示例
-
-通过MCP协议调用图像生成功能：
-
-```javascript
-// 生成图像（文本生成）
-client.callTool({
-  name: "generateImage",
-  arguments: {
-    prompt: "一只可爱的猫咪在草地上",
-    model: "jimeng-3.0",
-    width: 1024,
-    height: 1024,
-    sample_strength: 0.7,
-    negative_prompt: "模糊，扭曲，低质量"
-  }
-});
-
-// 生成图像（图片混合/参考图生成）
-client.callTool({
-  name: "generateImage",
-  arguments: {
-    prompt: "未来城市",
-    filePath: "https://example.com/your-image.png"
-  }
-});
-```
-
-## 响应格式
-
-API将返回生成的图像URL数组，可以直接在各类客户端中显示：
-
-```javascript
-[
-  "https://example.com/generated-image-1.jpg",
-  "https://example.com/generated-image-2.jpg",
-  "https://example.com/generated-image-3.jpg",
-  "https://example.com/generated-image-4.jpg"
-]
-```
-
-## 资源
-
-服务器还提供了以下信息资源：
-
-- `greeting://{name}` - 提供个性化问候
-- `info://server` - 提供服务器基本信息
-- `jimeng-ai://info` - 提供即梦AI图像生成服务的使用说明
-
-## Cursor或Claude使用提示
-
-在Cursor或Claude中，你可以这样使用Jimeng图像生成服务：
-
-1. **配置MCP服务器**（推荐使用npx自动安装方式，见上方配置示例）
-2. **获取API Token**（在即梦官网登录后从cookies获取sessionid）
-3. **开始使用**，例如：
-   ```
-   请生成一张写实风格的日落下的山脉图片
-   ```
-   ```
-   生成8张不同角度的可爱橘猫图片
-   ```
-4. Claude/Cursor会自动调用Jimeng MCP服务器生成图像并显示
-
-**优势：** 
-- npx方式无需手动安装，配置后即可使用
-- 支持继续生成功能，可以一次生成多张图片
-- 支持多种模型和参数调整
-
-## 常见问题
-
-1. **图像生成失败**
-   - 检查JIMENG_API_TOKEN是否正确配置
-   - 登录即梦官网检查账号积分是否充足
-   - 尝试更换提示词，避免敏感内容
-   - 若为图片混合，检查filePath路径/URL是否有效、图片是否可访问
-   - 网络图片建议使用https直链，避免防盗链/权限问题
-
-2. **服务器无法启动**
-   - 确保已安装所有依赖
-   - 确保环境变量正确设置
-   - 检查Node.js版本是否为14.0或更高
-
-## 许可证
-
-MIT 
-
-## 即梦AI视频生成
-
-本MCP服务器集成了即梦AI视频生成API，提供视频生成工具：
-
-`generateVideo` - 提交视频生成请求并返回视频URL
-- 参数：
-  - `prompt`：生成视频的文本描述（必填）
-  - `filePath`：首帧和尾帧图片路径，支持数组，最多2个元素，分别为首帧和尾帧（可选）
-  - `model`：模型名称，默认jimeng-video-3.0（可选）
-  - `resolution`：分辨率，可选720p或1080p，默认720p（可选）
-  - `width`：视频宽度，默认值：1024（可选）
-  - `height`：视频高度，默认值：1024（可选）
-  - `refresh_token`：即梦API令牌（可选，通常从环境变量读取）
-  - `req_key`：自定义参数，兼容旧接口（可选）
-
-> **注意：**
-> - `filePath` 支持本地绝对/相对路径和图片URL。
-> - 若指定 `filePath`，可实现首帧/尾帧定制的视频生成。
-> - 网络图片需保证可公开访问。
-
-### 使用示例
-
-通过MCP协议调用视频生成功能：
-
-```javascript
-// 生成视频（文本生成）
-client.callTool({
-  name: "generateVideo",
-  arguments: {
-    prompt: "一只小狗在草地上奔跑，阳光明媚，高清",
-    model: "jimeng-video-3.0",
-    resolution: "720p",
-    width: 1024,
-    height: 1024
-  }
-});
-
-// 生成视频（首帧/尾帧定制）
-client.callTool({
-  name: "generateVideo",
-  arguments: {
-    prompt: "城市夜景延时摄影",
-    filePath: ["./first.png", "./last.png"],
-    resolution: "1080p"
-  }
-});
-```
-
-## 视频响应格式
-
-API将返回生成的视频URL字符串，可以直接在各类客户端中播放：
-
-```javascript
-"https://example.com/generated-video.mp4"
-``` 
-
-
-## 支持api服务启动
-
-如需以API服务方式启动（适合HTTP接口调用）：
-
-```bash
-cp .env.example .env   # 复制环境变量模板
-# 根据需要编辑.env，填写JIMENG_API_TOKEN等配置
-
-# 启动API服务
-yarn start:api
-```
-
-API服务启动后将监听配置端口，支持通过HTTP接口调用即梦AI图像和视频生成功能。 
+</div>
