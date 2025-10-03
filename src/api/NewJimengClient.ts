@@ -8,27 +8,32 @@
  * - 旧方法静默重定向到新方法（无警告）
  */
 
-import { HttpClient } from './HttpClient.js';
-import { ImageUploader } from './ImageUploader.js';
-import { NewCreditService } from './NewCreditService.js';
-import { VideoService } from './VideoService.js';
-import { CacheManager } from '../utils/cache-manager.js';
-import { logger } from '../utils/logger.js';
-import { PromptValidator } from '../utils/prompt-validator.js';
-import { getModel, DEFAULT_MODEL, DRAFT_VERSION, WEB_ID } from '../types/models.js';
-import { generateUuid, jsonEncode, urlEncode } from '../utils/index.js';
-import { ImageDimensionCalculator } from '../utils/dimensions.js';
+import { HttpClient } from "./HttpClient.js";
+import { ImageUploader } from "./ImageUploader.js";
+import { NewCreditService } from "./NewCreditService.js";
+import { VideoService } from "./VideoService.js";
+import { CacheManager } from "../utils/cache-manager.js";
+import { logger } from "../utils/logger.js";
+import { PromptValidator } from "../utils/prompt-validator.js";
+import {
+  getModel,
+  DEFAULT_MODEL,
+  DRAFT_VERSION,
+  WEB_ID,
+} from "../types/models.js";
+import { generateUuid, jsonEncode, urlEncode } from "../utils/index.js";
+import { ImageDimensionCalculator } from "../utils/dimensions.js";
 import {
   MAX_IMAGES_PER_REQUEST,
   STATUS_CODES,
   POLLING,
-  CONTINUATION_ACTION
-} from '../types/constants.js';
+  CONTINUATION_ACTION,
+} from "../types/constants.js";
 import type {
   ImageGenerationParams,
   VideoGenerationParams,
-  MainReferenceVideoParams
-} from '../types/api.types.js';
+  MainReferenceVideoParams,
+} from "../types/api.types.js";
 
 /**
  * JimengClient - 组合模式实现
@@ -56,53 +61,46 @@ export class NewJimengClient {
    * 图片生成（保持100%向后兼容）
    * 支持继续生成功能（>4张自动触发）
    */
-  async generateImage(params: ImageGenerationParams & { async: true }): Promise<string>;
-  async generateImage(params: ImageGenerationParams & { async?: false }): Promise<string[]>;
-  async generateImage(params: ImageGenerationParams): Promise<string[] | string> {
+  async generateImage(
+    params: ImageGenerationParams & { async: true },
+  ): Promise<string>;
+  async generateImage(
+    params: ImageGenerationParams & { async?: false },
+  ): Promise<string[]>;
+  async generateImage(
+    params: ImageGenerationParams,
+  ): Promise<string[] | string> {
     const {
       prompt,
-      count = 1,
       model = DEFAULT_MODEL,
-      aspectRatio = 'auto',
+      aspectRatio = "auto",
       filePath,
       reference_strength,
       sample_strength,
       negative_prompt,
       frames,
-      async: asyncMode = false
+      async: asyncMode = false,
     } = params;
-
-    // 验证参数
-    if (count < 1 || count > 15) {
-      throw new Error('count必须在1-15之间');
-    }
 
     // 处理frames参数（与旧代码一致）
     const validFrames = this.validateAndFilterFrames(frames);
-    let finalPrompt = this.buildPromptWithFrames(prompt, validFrames, count);
-
-    // 🔥 关键修复：多张图必须在prompt中明确说明总数
-    // 使用PromptValidator防止重复添加
-    if (count > 1 && validFrames.length === 0) {
-      finalPrompt = this.promptValidator.appendCountIfMissing(finalPrompt, count);
-    }
+    let finalPrompt = this.buildPromptWithFrames(prompt, validFrames);
 
     // 处理参考图
     let uploadedImages: any[] = [];
     if (filePath && filePath.length > 0) {
-      logger.debug(`📤 [参考图] 开始上传 ${filePath.length} 张参考图`);
+      logger.debug(`[参考图] 开始上传 ${filePath.length} 张参考图`);
       uploadedImages = await this.imageUploader.uploadBatch(filePath);
-      logger.debug(`✅ [参考图] 上传完成:`, uploadedImages);
+      logger.debug(`[参考图] 上传完成:`, uploadedImages);
     }
 
     // 构建API参数
     const apiParams: any = {
-      prompt: finalPrompt,  // 使用处理后的prompt
+      prompt: finalPrompt, // 使用处理后的prompt
       model_name: getModel(model),
-      count: Math.min(count, 4), // API限制单次最多4张
       aspect_ratio: aspectRatio,
-      negative_prompt: negative_prompt || '',
-      draft_version: DRAFT_VERSION
+      negative_prompt: negative_prompt || "",
+      draft_version: DRAFT_VERSION,
     };
 
     // 添加参考图参数（包含完整的图片元数据）
@@ -112,49 +110,117 @@ export class NewJimengClient {
         width: img.width,
         height: img.height,
         format: img.format,
-        strength: reference_strength?.[idx] ?? sample_strength ?? 0.5
+        strength: reference_strength?.[idx] ?? sample_strength ?? 0.5,
       }));
     }
 
     if (asyncMode) {
       // 异步模式：提交任务并缓存参数（用于智能继续生成）
       // Cache will be created inside submitImageTask with full data including requestBody
-      const historyId = await this.submitImageTask(apiParams, params, uploadedImages);
+      const historyId = await this.submitImageTask(
+        apiParams,
+        params,
+        uploadedImages,
+      );
 
-      logger.debug(`💾 [异步生成] CacheManager已缓存参数, historyId: ${historyId}, count: ${count}`);
+      logger.debug(
+        `💾 [异步生成] CacheManager已缓存参数, historyId: ${historyId}`,
+      );
 
       return historyId;
     }
 
     // 同步模式：等待完成
-    const historyId = await this.submitImageTask(apiParams, params, uploadedImages);
+    const historyId = await this.submitImageTask(
+      apiParams,
+      params,
+      uploadedImages,
+    );
 
-    logger.debug(`💾 [同步生成] CacheManager已缓存参数, historyId: ${historyId}`);
+    logger.debug(
+      `💾 [同步生成] CacheManager已缓存参数, historyId: ${historyId}`,
+    );
 
-    // Note: Cache cleanup will happen in waitForImageCompletion when task completes
+    try {
+      let firstBatch = await this.waitForImageCompletion(historyId);
 
-    let images = await this.waitForImageCompletion(historyId);
+      // 🔥 继续生成逻辑
+      // 当 totalCount > 4 且完成了第4张时，API 会暂停等待用户确认
+      // 需要发送一次"继续生成"请求，告诉 API 继续完成所有剩余图片
 
-    // 继续生成逻辑（>MAX_IMAGES_PER_REQUEST张）
-    // 🔥 关键修复：检查是否智能继续生成已经完成了所有图片
-    if (count > MAX_IMAGES_PER_REQUEST && images.length < count) {
-      logger.debug(`🔄 [手动继续生成] 已获得${images.length}张，目标${count}张，需要继续生成`);
+      const targetCount = firstBatch.totalCount || 1; // 默认1张（单图场景）
+      logger.debug(
+        `[同步模式检测] 目标数量=${targetCount}, 已获得=${firstBatch.imageUrls.length}, 是否部分完成=${firstBatch.isPartial}`,
+      );
 
-      const remainingCount = count - images.length;
-      const continueParams = {
-        ...apiParams,
-        count: Math.min(remainingCount, MAX_IMAGES_PER_REQUEST),
-        history_id: historyId
-      };
+      // 如果检测到部分完成（API 在等待确认）
+      if (firstBatch.isPartial && targetCount > MAX_IMAGES_PER_REQUEST) {
+        logger.debug(`[继续生成] API 暂停等待确认，发送继续生成请求`);
+        logger.debug(
+          `[继续生成] 目标${targetCount}张，已完成${firstBatch.imageUrls.length}张，还需${targetCount - firstBatch.imageUrls.length}张`,
+        );
 
-      const continueHistoryId = await this.submitImageTask(continueParams);
-      const continueImages = await this.waitForImageCompletion(continueHistoryId);
-      images = [...images, ...continueImages];
-    } else if (count > MAX_IMAGES_PER_REQUEST) {
-      logger.debug(`✅ [继续生成] 智能继续生成已完成，实际获得${images.length}张图片`);
+        // 发送一次继续生成请求（使用原 historyId + action=2）
+        await this.performSyncContinueGeneration(historyId);
+
+        // 继续轮询原任务，等待所有剩余图片完成
+        logger.debug(`[继续生成] 继续生成请求已发送，等待所有剩余图片完成...`);
+
+        let attempts = 0;
+        const maxAttempts = POLLING.MAX_ATTEMPTS * 2; // 给更多时间等待剩余图片
+
+        while (attempts < maxAttempts) {
+          await this.sleep(POLLING.INTERVAL_MS);
+          const result = await this.getImageResult(historyId);
+
+          logger.debug(
+            `[继续生成轮询] 第${attempts + 1}次，状态=${result.status}, 已完成=${result.finishedCount}/${result.totalCount}, 当前返回=${result.imageUrls?.length || 0}张`,
+          );
+
+          // 所有图片都完成了
+          if (
+            result.status === "completed" &&
+            result.imageUrls &&
+            result.imageUrls.length >= targetCount
+          ) {
+            logger.debug(
+              `[继续生成] 全部完成！共获得${result.imageUrls.length}张图片`,
+            );
+            return result.imageUrls;
+          }
+
+          // 检查是否已经完成了所有图片（即使 status 不是 completed）
+          if (
+            result.finishedCount &&
+            result.finishedCount >= targetCount &&
+            result.imageUrls &&
+            result.imageUrls.length > 0
+          ) {
+            logger.debug(
+              `[继续生成] 检测到所有图片已完成（finished=${result.finishedCount}/${targetCount}），返回${result.imageUrls.length}张`,
+            );
+            return result.imageUrls;
+          }
+
+          if (result.status === "failed") {
+            throw new Error(result.error || "继续生成失败");
+          }
+
+          attempts++;
+        }
+
+        throw new Error(
+          `继续生成超时: 目标${targetCount}张，超时前已获得${firstBatch.imageUrls.length}张`,
+        );
+      }
+
+      // 没有继续生成需求，直接返回
+      return firstBatch.imageUrls;
+    } finally {
+      // 🔥 确保清理原始任务的缓存（延迟到此处以支持手动继续生成）
+      CacheManager.cleanup(historyId);
+      logger.debug(`[Cleanup] 同步生成完成，已清理缓存: ${historyId}`);
     }
-
-    return images;
   }
 
   /**
@@ -173,14 +239,19 @@ export class NewJimengClient {
 
     // UUID格式（如1e06b3c9-bd41-46dd-8889-70f2c61f66bb）使用submit_ids（视频）
     // 数字格式（如4722540945676）使用history_ids（图片）
-    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(historyId);
-    const idField = isUUID ? 'submit_ids' : 'history_ids';
+    const isUUID =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        historyId,
+      );
+    const idField = isUUID ? "submit_ids" : "history_ids";
 
-    logger.debug(`🔍 [getImageResult] ID类型: ${isUUID ? 'UUID(视频)' : '数字(图片)'}, 使用字段: ${idField}`);
+    logger.debug(
+      `[getImageResult] ID类型: ${isUUID ? "UUID(视频)" : "数字(图片)"}, 使用字段: ${idField}`,
+    );
 
     const response = await this.httpClient.request({
-      method: 'POST',
-      url: '/mweb/v1/get_history_by_ids',
+      method: "POST",
+      url: "/mweb/v1/get_history_by_ids",
       params: requestParams,
       data: {
         [idField]: [historyId],
@@ -189,24 +260,72 @@ export class NewJimengClient {
           height: 2048,
           format: "webp",
           image_scene_list: [
-            { scene: "smart_crop", width: 360, height: 360, uniq_key: "smart_crop-w:360-h:360", format: "webp" },
-            { scene: "smart_crop", width: 480, height: 480, uniq_key: "smart_crop-w:480-h:480", format: "webp" },
-            { scene: "smart_crop", width: 720, height: 720, uniq_key: "smart_crop-w:720-h:720", format: "webp" },
-            { scene: "normal", width: 2400, height: 2400, uniq_key: "2400", format: "webp" },
-            { scene: "normal", width: 1080, height: 1080, uniq_key: "1080", format: "webp" },
-            { scene: "normal", width: 720, height: 720, uniq_key: "720", format: "webp" },
-            { scene: "normal", width: 480, height: 480, uniq_key: "480", format: "webp" },
-            { scene: "normal", width: 360, height: 360, uniq_key: "360", format: "webp" }
-          ]
+            {
+              scene: "smart_crop",
+              width: 360,
+              height: 360,
+              uniq_key: "smart_crop-w:360-h:360",
+              format: "webp",
+            },
+            {
+              scene: "smart_crop",
+              width: 480,
+              height: 480,
+              uniq_key: "smart_crop-w:480-h:480",
+              format: "webp",
+            },
+            {
+              scene: "smart_crop",
+              width: 720,
+              height: 720,
+              uniq_key: "smart_crop-w:720-h:720",
+              format: "webp",
+            },
+            {
+              scene: "normal",
+              width: 2400,
+              height: 2400,
+              uniq_key: "2400",
+              format: "webp",
+            },
+            {
+              scene: "normal",
+              width: 1080,
+              height: 1080,
+              uniq_key: "1080",
+              format: "webp",
+            },
+            {
+              scene: "normal",
+              width: 720,
+              height: 720,
+              uniq_key: "720",
+              format: "webp",
+            },
+            {
+              scene: "normal",
+              width: 480,
+              height: 480,
+              uniq_key: "480",
+              format: "webp",
+            },
+            {
+              scene: "normal",
+              width: 360,
+              height: 360,
+              uniq_key: "360",
+              format: "webp",
+            },
+          ],
         },
-        http_common_info: { aid: 513695 }
-      }
+        http_common_info: { aid: 513695 },
+      },
     });
 
     // 解析响应
     const record = response?.data?.[historyId];
     if (!record) {
-      return { status: 'failed', error: '记录不存在' };
+      return { status: "failed", error: "记录不存在" };
     }
 
     // 解析基础结果
@@ -220,34 +339,40 @@ export class NewJimengClient {
       const finishedCount = record.finished_image_count || 0;
       const itemCount = record.item_list?.length || 0;
 
-      logger.debug(`🔍 [智能继续生成检测] historyId=${historyId}, status=${result.status}(${statusCode}), total=${totalCount}, finished=${finishedCount}, items=${itemCount}`);
+      logger.debug(
+        `[智能继续生成检测] historyId=${historyId}, status=${result.status}(${statusCode}), total=${totalCount}, finished=${finishedCount}, items=${itemCount}`,
+      );
 
       const cacheEntry = CacheManager.get(historyId);
-      logger.debug(`🔍 [缓存检查] 是否有缓存: ${!!cacheEntry}, 是否已发送: ${cacheEntry?.continuationSent || false}`);
+      logger.debug(
+        `[缓存检查] 是否有缓存: ${!!cacheEntry}, 是否已发送: ${cacheEntry?.continuationSent || false}`,
+      );
 
-      // 判断是否需要继续生成（与旧代码一致）
+      // 判断是否需要继续生成
       // 1. totalCount > MAX_IMAGES_PER_REQUEST - 需要生成超过4张
-      // 2. finishedCount >= MAX_IMAGES_PER_REQUEST - 已完成至少4张
-      // 3. finishedCount < totalCount - 还没全部完成
-      // 4. statusCode !== STATUS_CODES.FAILED - 没有失败
-      // 5. 未发送过继续生成请求（防重复）
-      const needsContinuation = totalCount > MAX_IMAGES_PER_REQUEST &&
-                               finishedCount >= MAX_IMAGES_PER_REQUEST &&
-                               finishedCount < totalCount &&
-                               statusCode !== STATUS_CODES.FAILED &&
-                               cacheEntry &&
-                               !cacheEntry.continuationSent;
+      // 2. finishedCount === MAX_IMAGES_PER_REQUEST - 精确等于4张（避免重复触发）
+      // 3. cacheEntry - 必须有缓存才能构建继续生成请求
+      // 4. 未发送过继续生成请求（防重复）
+      const needsContinuation =
+        totalCount > MAX_IMAGES_PER_REQUEST &&
+        finishedCount === MAX_IMAGES_PER_REQUEST &&
+        cacheEntry &&
+        !cacheEntry.continuationSent;
 
-      logger.debug(`🔍 [判断结果] needsContinuation=${needsContinuation} (total>${MAX_IMAGES_PER_REQUEST}: ${totalCount > MAX_IMAGES_PER_REQUEST}, finished>=${MAX_IMAGES_PER_REQUEST}: ${finishedCount >= MAX_IMAGES_PER_REQUEST}, finished<total: ${finishedCount < totalCount}, notFailed: ${statusCode !== STATUS_CODES.FAILED}, notSent: ${!cacheEntry?.continuationSent})`);
+      logger.debug(
+        `[判断结果] needsContinuation=${needsContinuation} (total>${MAX_IMAGES_PER_REQUEST}: ${totalCount > MAX_IMAGES_PER_REQUEST}, finished===${MAX_IMAGES_PER_REQUEST}: ${finishedCount === MAX_IMAGES_PER_REQUEST}, hasCache: ${!!cacheEntry}, notSent: ${!cacheEntry?.continuationSent})`,
+      );
 
       if (needsContinuation && cacheEntry) {
-        logger.debug(`🔄 [智能继续生成] 检测到需要继续: 目标${totalCount}张, 已完成${finishedCount}张, 当前${itemCount}张`);
+        logger.debug(
+          `[智能继续生成] 检测到需要继续: 目标${totalCount}张, 已完成${finishedCount}张, 当前${itemCount}张`,
+        );
 
         // 标记为已处理，防止重复（更新CacheEntry）
         cacheEntry.continuationSent = true;
 
         // 异步发送继续生成请求（不等待完成，与旧代码一致）
-        this.performAsyncContinueGeneration(historyId).catch(err => {
+        this.performAsyncContinueGeneration(historyId).catch((err) => {
           logger.error(`❌ [智能继续生成] 失败:`, err);
           // 失败时清除标记，允许重试
           const entry = CacheManager.get(historyId);
@@ -259,7 +384,11 @@ export class NewJimengClient {
         // 提示用户需要再次查询
         result.needs_more = true;
         result.message = `已触发继续生成（${finishedCount}/${totalCount}），请稍后再次查询以获取所有图片`;
-      } else if (result.status === 'completed' && totalCount > itemCount && finishedCount === totalCount) {
+      } else if (
+        result.status === "completed" &&
+        totalCount > itemCount &&
+        finishedCount === totalCount
+      ) {
         // 所有图片已完成，但item_list不完整（可能需要多次查询）
         result.needs_more = true;
         result.message = `生成完成（${totalCount}张），但当前只返回${itemCount}张，可能需要再次查询`;
@@ -283,7 +412,11 @@ export class NewJimengClient {
     const videoIds: string[] = [];
 
     for (const id of ids) {
-      if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+      if (
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          id,
+        )
+      ) {
         videoIds.push(id);
       } else {
         imageIds.push(id);
@@ -297,17 +430,17 @@ export class NewJimengClient {
       try {
         const requestParams = this.httpClient.generateRequestParams();
         const response = await this.httpClient.request({
-          method: 'POST',
-          url: '/mweb/v1/get_history_by_ids',
+          method: "POST",
+          url: "/mweb/v1/get_history_by_ids",
           params: requestParams,
           data: {
             history_ids: imageIds,
             image_info: {
               width: 2048,
               height: 2048,
-              format: "webp"
-            }
-          }
+              format: "webp",
+            },
+          },
         });
 
         // 解析图片结果
@@ -316,12 +449,12 @@ export class NewJimengClient {
           if (record) {
             results[id] = this.parseQueryResult(record, id);
           } else {
-            results[id] = { status: 'failed', error: '记录不存在' };
+            results[id] = { status: "failed", error: "记录不存在" };
           }
         }
       } catch (error) {
         for (const id of imageIds) {
-          results[id] = { status: 'failed', error: String(error) };
+          results[id] = { status: "failed", error: String(error) };
         }
       }
     }
@@ -331,12 +464,12 @@ export class NewJimengClient {
       try {
         const requestParams = this.httpClient.generateRequestParams();
         const response = await this.httpClient.request({
-          method: 'POST',
-          url: '/mweb/v1/get_history_by_ids',
+          method: "POST",
+          url: "/mweb/v1/get_history_by_ids",
           params: requestParams,
           data: {
-            submit_ids: videoIds
-          }
+            submit_ids: videoIds,
+          },
         });
 
         // 解析视频结果
@@ -345,12 +478,12 @@ export class NewJimengClient {
           if (record) {
             results[id] = this.parseQueryResult(record, id);
           } else {
-            results[id] = { status: 'failed', error: '记录不存在' };
+            results[id] = { status: "failed", error: "记录不存在" };
           }
         }
       } catch (error) {
         for (const id of videoIds) {
-          results[id] = { status: 'failed', error: String(error) };
+          results[id] = { status: "failed", error: String(error) };
         }
       }
     }
@@ -369,107 +502,157 @@ export class NewJimengClient {
     // 映射状态码
     let status: string;
     if (statusCode === STATUS_CODES.COMPLETED) {
-      status = 'completed';
+      status = "completed";
     } else if (statusCode === STATUS_CODES.FAILED) {
-      status = 'failed';
-    } else if (statusCode === STATUS_CODES.PENDING || statusCode === 42 || statusCode === 45) {
-      status = finishedCount === 0 ? 'pending' : 'processing';
+      status = "failed";
+    } else if (
+      statusCode === STATUS_CODES.PENDING ||
+      statusCode === 42 ||
+      statusCode === 45
+    ) {
+      status = finishedCount === 0 ? "pending" : "processing";
     } else {
-      status = 'processing';
+      status = "processing";
     }
 
     const result: any = {
       status,
-      progress: totalCount > 0 ? Math.round((finishedCount / totalCount) * 100) : 0
+      progress:
+        totalCount > 0 ? Math.round((finishedCount / totalCount) * 100) : 0,
+      // 🔥 添加调试信息
+      totalCount,
+      finishedCount,
+      itemCount: record.item_list?.length || 0,
+      // 🔧 智能继续生成调试信息
+      _debug: {
+        hasCacheEntry: !!CacheManager.get(id),
+        continuationSent: CacheManager.get(id)?.continuationSent || false,
+        shouldTriggerContinuation:
+          totalCount > MAX_IMAGES_PER_REQUEST &&
+          finishedCount === MAX_IMAGES_PER_REQUEST,
+      },
     };
 
     // 提取URLs
-    if (status === 'completed' && record.item_list && record.item_list.length > 0) {
+    if (
+      status === "completed" &&
+      record.item_list &&
+      record.item_list.length > 0
+    ) {
       const firstItem = record.item_list[0];
 
       if (firstItem.video) {
-        result.videoUrl = firstItem.video?.transcoded_video?.origin?.video_url
-          || firstItem.video?.video_url
-          || firstItem.video?.origin?.video_url;
+        result.videoUrl =
+          firstItem.video?.transcoded_video?.origin?.video_url ||
+          firstItem.video?.video_url ||
+          firstItem.video?.origin?.video_url;
       } else if (firstItem.image || firstItem.image_url) {
         result.imageUrls = record.item_list
-          .map((item: any) =>
-            item.image?.large_images?.[0]?.image_url
-            || item.image_url
-            || item.image?.url
+          .map(
+            (item: any) =>
+              item.image?.large_images?.[0]?.image_url ||
+              item.image_url ||
+              item.image?.url,
           )
           .filter((url: any) => url);
       }
     }
 
     // 处理失败状态
-    if (status === 'failed') {
+    if (status === "failed") {
       const failCode = record.fail_code;
-      result.error = failCode === '2038' ? '内容被过滤'
-        : failCode ? `生成失败 (错误码: ${failCode})`
-        : '生成失败';
+      result.error =
+        failCode === "2038"
+          ? "内容被过滤"
+          : failCode
+            ? `生成失败 (错误码: ${failCode})`
+            : "生成失败";
     }
 
     return result;
   }
 
   /**
-   * 执行异步继续生成（智能继续生成核心方法）
-   * [CONSTITUTION-EXCEPTION: Tech Debt] 重构以使用CacheManager
+   * 执行同步继续生成（用于同步模式）
+   * 发送一次继续生成确认，告诉 API 继续完成所有剩余图片
+   * 不等待完成，让调用者继续轮询原始 historyId
    */
-  private async performAsyncContinueGeneration(historyId: string): Promise<void> {
-    logger.debug(`🔄 [AsyncContinue] 开始执行继续生成, historyId: ${historyId}`);
+  private async performSyncContinueGeneration(
+    historyId: string,
+  ): Promise<void> {
+    logger.debug(`[SyncContinue] 发送继续生成确认, historyId: ${historyId}`);
 
     // 从CacheManager获取原始参数
     const cacheEntry = CacheManager.get(historyId);
 
     if (!cacheEntry) {
-      logger.error(`❌ [AsyncContinue] 未找到缓存参数, historyId: ${historyId}`);
+      logger.error(`❌ [SyncContinue] 未找到缓存参数, historyId: ${historyId}`);
       throw new Error(`无法找到historyId对应的原始参数: ${historyId}`);
     }
 
-    logger.debug(`💾 [AsyncContinue] 从CacheManager获取参数成功, count: ${cacheEntry.params.count}`);
-
-    // 计算剩余数量
-    const totalCount = cacheEntry.params.count || 1;
-    const remainingCount = totalCount - MAX_IMAGES_PER_REQUEST;
-
-    if (remainingCount <= 0) {
-      logger.debug(`⏭️  [AsyncContinue] 无需继续生成, totalCount: ${totalCount}`);
-      return;
-    }
-
-    // 构建继续生成请求
+    // 构建继续生成请求（action=2，告诉 API 继续完成剩余图片）
     const continueParams = {
       ...cacheEntry.apiParams,
-      count: Math.min(remainingCount, MAX_IMAGES_PER_REQUEST),
-      history_id: historyId  // 关键：使用原始historyId触发继续生成
+      history_id: historyId, // 关键：使用原始 historyId
     };
 
-    logger.debug(`📤 [AsyncContinue] 提交继续生成请求: count=${continueParams.count}, history_id=${historyId}`);
+    logger.debug(
+      `[SyncContinue] 提交继续生成确认请求, history_id=${historyId}`,
+    );
 
-    // 提交继续生成任务
     try {
-      const newHistoryId = await this.submitImageTask(continueParams);
-      logger.debug(`✅ [AsyncContinue] 继续生成任务已提交, 新historyId: ${newHistoryId}`);
-
-      // 如果还有更多图片需要生成，缓存新任务的参数
-      if (remainingCount > MAX_IMAGES_PER_REQUEST) {
-        CacheManager.set(newHistoryId, {
-          historyId: newHistoryId,
-          params: {
-            ...cacheEntry.params,
-            count: remainingCount
-          },
-          uploadedImages: cacheEntry.uploadedImages,
-          apiParams: cacheEntry.apiParams,
-          requestBody: { submitId: '', draftContent: '', metricsExtra: '', extend: { root_model: '' } }, // Will be filled by submitImageTask
-          continuationSent: false
-        });
-        logger.debug(`💾 [AsyncContinue] 已缓存新任务参数到CacheManager, historyId: ${newHistoryId}, remaining: ${remainingCount - MAX_IMAGES_PER_REQUEST}`);
-      }
+      // 提交继续生成任务，不等待结果
+      await this.submitImageTask(continueParams);
+      logger.debug(
+        `[SyncContinue] 继续生成确认已发送，API 将继续生成所有剩余图片`,
+      );
     } catch (error) {
-      logger.error(`❌ [AsyncContinue] 提交失败:`, error);
+      logger.error(`❌ [SyncContinue] 提交失败`, error as Record<string, any>);
+      throw error;
+    }
+  }
+
+  /**
+   * 执行异步继续生成（智能继续生成核心方法）
+   * [CONSTITUTION-EXCEPTION: Tech Debt] 重构以使用CacheManager
+   */
+  private async performAsyncContinueGeneration(
+    historyId: string,
+  ): Promise<void> {
+    logger.debug(`[AsyncContinue] 开始执行继续生成, historyId: ${historyId}`);
+
+    // 从CacheManager获取原始参数
+    const cacheEntry = CacheManager.get(historyId);
+
+    if (!cacheEntry) {
+      logger.error(
+        `❌ [AsyncContinue] 未找到缓存参数, historyId: ${historyId}`,
+      );
+      throw new Error(`无法找到historyId对应的原始参数: ${historyId}`);
+    }
+
+    logger.debug(
+      `💾 [AsyncContinue] 从CacheManager获取参数成功`,
+    );
+
+    // 构建继续生成请求 - API会根据原始prompt中的totalCount自动完成剩余所有图片
+    const continueParams = {
+      ...cacheEntry.apiParams,
+      history_id: historyId, // 关键：使用原始historyId触发继续生成
+    };
+
+    logger.debug(
+      `[AsyncContinue] 提交继续生成请求 (action=2), history_id=${historyId}`,
+    );
+
+    // 提交继续生成任务 - 一次性完成所有剩余图片
+    try {
+      await this.submitImageTask(continueParams);
+      logger.debug(
+        `✅ [AsyncContinue] 继续生成请求已提交 (API将自动完成所有剩余图片)`,
+      );
+    } catch (error) {
+      logger.error(`❌ [AsyncContinue] 提交失败`, error as Record<string, any>);
       throw error;
     }
   }
@@ -485,10 +668,10 @@ export class NewJimengClient {
       // 多帧模式
       const result = await this.videoService.generateMultiFrame({
         frames: params.multiFrames as any, // Type compatibility
-        resolution: params.resolution as '720p' | '1080p' | undefined,
+        resolution: params.resolution as "720p" | "1080p" | undefined,
         fps: params.fps,
         model: params.model,
-        async: false
+        async: false,
       });
       return result.videoUrl!;
     }
@@ -498,11 +681,11 @@ export class NewJimengClient {
       prompt: params.prompt,
       firstFrameImage: params.filePath?.[0],
       lastFrameImage: params.filePath?.[1],
-      resolution: params.resolution as '720p' | '1080p' | undefined,
+      resolution: params.resolution as "720p" | "1080p" | undefined,
       fps: params.fps,
       duration: params.duration_ms,
       model: params.model,
-      async: false
+      async: false,
     });
     return result.videoUrl!;
   }
@@ -524,7 +707,9 @@ export class NewJimengClient {
   /**
    * 主参考视频（新API）
    */
-  async generateMainReferenceVideo(params: MainReferenceVideoParams): Promise<string> {
+  async generateMainReferenceVideo(
+    params: MainReferenceVideoParams,
+  ): Promise<string> {
     const result = await this.videoService.generateMainReference({
       referenceImages: params.referenceImages,
       prompt: params.prompt,
@@ -532,7 +717,7 @@ export class NewJimengClient {
       fps: params.fps,
       duration: params.duration,
       model: params.model,
-      async: false
+      async: false,
     });
     return result.videoUrl!;
   }
@@ -563,7 +748,7 @@ export class NewJimengClient {
    */
   async videoPostProcess(params: any): Promise<any> {
     // TODO: 实现视频后处理逻辑
-    throw new Error('视频后处理功能待实现');
+    throw new Error("视频后处理功能待实现");
   }
 
   /**
@@ -571,7 +756,7 @@ export class NewJimengClient {
    */
   async frameInterpolation(params: any): Promise<string> {
     // TODO: 实现帧插值逻辑
-    throw new Error('帧插值功能待实现');
+    throw new Error("帧插值功能待实现");
   }
 
   /**
@@ -579,7 +764,7 @@ export class NewJimengClient {
    */
   async superResolution(params: any): Promise<string> {
     // TODO: 实现超分辨率逻辑
-    throw new Error('超分辨率功能待实现');
+    throw new Error("超分辨率功能待实现");
   }
 
   /**
@@ -587,7 +772,7 @@ export class NewJimengClient {
    */
   async generateAudioEffect(params: any): Promise<string> {
     // TODO: 实现音效生成逻辑
-    throw new Error('音效生成功能待实现');
+    throw new Error("音效生成功能待实现");
   }
 
   // ==================== 积分管理 ====================
@@ -626,26 +811,27 @@ export class NewJimengClient {
   private async submitImageTask(
     apiParams: any,
     originalParams?: ImageGenerationParams,
-    uploadedImages?: any[]
+    uploadedImages?: any[],
   ): Promise<string> {
     const requestParams = this.httpClient.generateRequestParams();
 
     // 🔥 关键修复：继续生成必须重用原始请求参数
-    const isContinuation = apiParams.history_id && CacheManager.has(apiParams.history_id);
+    const isContinuation =
+      apiParams.history_id && CacheManager.has(apiParams.history_id);
     const requestBody = isContinuation
       ? this.buildContinuationRequest(apiParams)
       : this.buildInitialRequest(apiParams);
 
     const response = await this.httpClient.request({
-      method: 'POST',
-      url: '/mweb/v1/aigc_draft/generate',
+      method: "POST",
+      url: "/mweb/v1/aigc_draft/generate",
       params: requestParams,
-      data: requestBody
+      data: requestBody,
     });
 
     const historyId = response?.data?.aigc_data?.history_record_id;
     if (!historyId) {
-      throw new Error(response?.errmsg || '提交图片任务失败');
+      throw new Error(response?.errmsg || "提交图片任务失败");
     }
 
     // 🔥 使用CacheManager缓存首次请求的完整参数（用于继续生成）
@@ -659,9 +845,9 @@ export class NewJimengClient {
           submitId: requestBody.submit_id,
           draftContent: requestBody.draft_content,
           metricsExtra: requestBody.metrics_extra,
-          extend: requestBody.extend
+          extend: requestBody.extend,
         },
-        continuationSent: false
+        continuationSent: false,
       });
       logger.debug(`💾 [CacheManager] 已保存完整缓存, historyId: ${historyId}`);
     }
@@ -673,22 +859,25 @@ export class NewJimengClient {
    * 构建初始请求参数（首次生成）
    *
    * [CONSTITUTION-EXCEPTION: Tech Debt] 提取自submitImageTask方法以降低复杂度
+   * @param params - API parameters
    */
   private buildInitialRequest(params: any): any {
-    const hasRefImages = !!(params.reference_images && params.reference_images.length > 0);
+    const hasRefImages = !!(
+      params.reference_images && params.reference_images.length > 0
+    );
     const submitId = generateUuid();
     const componentId = generateUuid();
 
     const extend = {
-      root_model: params.model_name
+      root_model: params.model_name,
     };
 
+    // metricsExtra不包含generateCount，让API根据prompt自动决定总数量
     const metricsExtra = jsonEncode({
       promptSource: "custom",
-      generateCount: params.count || 1,
       enterFrom: "click",
       generateId: submitId,
-      isRegenerate: false
+      isRegenerate: false,
     });
 
     const draftContent = jsonEncode({
@@ -699,27 +888,31 @@ export class NewJimengClient {
       is_from_tsn: true,
       version: "3.3.2",
       main_component_id: componentId,
-      component_list: [{
-        type: "image_base_component",
-        id: componentId,
-        min_version: hasRefImages ? "3.0.2" : (params.draft_version || DRAFT_VERSION),
-        aigc_mode: "workbench",
-        gen_type: 1,
-        metadata: {
-          type: "",
-          id: generateUuid(),
-          created_platform: 3,
-          created_platform_version: "",
-          created_time_in_ms: Date.now().toString(),
-          created_did: ""
+      component_list: [
+        {
+          type: "image_base_component",
+          id: componentId,
+          min_version: hasRefImages
+            ? "3.0.2"
+            : params.draft_version || DRAFT_VERSION,
+          aigc_mode: "workbench",
+          gen_type: 1,
+          metadata: {
+            type: "",
+            id: generateUuid(),
+            created_platform: 3,
+            created_platform_version: "",
+            created_time_in_ms: Date.now().toString(),
+            created_did: "",
+          },
+          generate_type: hasRefImages ? "blend" : "generate",
+          abilities: {
+            type: "",
+            id: generateUuid(),
+            ...this.buildAbilities(params, hasRefImages),
+          },
         },
-        generate_type: hasRefImages ? "blend" : "generate",
-        abilities: {
-          type: "",
-          id: generateUuid(),
-          ...this.buildAbilities(params, hasRefImages)
-        }
-      }]
+      ],
     });
 
     return {
@@ -728,8 +921,8 @@ export class NewJimengClient {
       metrics_extra: metricsExtra,
       draft_content: draftContent,
       http_common_info: {
-        aid: 513695
-      }
+        aid: 513695,
+      },
     };
   }
 
@@ -741,27 +934,30 @@ export class NewJimengClient {
   private buildContinuationRequest(params: any): any {
     const cacheEntry = CacheManager.get(params.history_id);
     if (!cacheEntry) {
-      throw new Error(`Cache entry not found for history_id: ${params.history_id}`);
+      throw new Error(
+        `Cache entry not found for history_id: ${params.history_id}`,
+      );
     }
 
     const cached = cacheEntry.requestBody;
-    logger.debug(`🔄 [继续生成] 重用原始请求参数, historyId: ${params.history_id}, count: ${params.count}`);
+    logger.debug(
+      `[继续生成] 重用原始请求参数, historyId: ${params.history_id}`,
+    );
 
-    // 🔥 关键修复：更新metrics_extra中的generateCount为剩余数量
-    const originalMetrics = JSON.parse(cached.metricsExtra);
-    originalMetrics.generateCount = params.count || 1;  // 更新为剩余数量
-    const updatedMetricsExtra = jsonEncode(originalMetrics);
+    // 继续生成直接使用原始的metrics_extra，不需要更新generateCount
+    // API会根据原始prompt中的总数量自动完成所有剩余图片
+    const updatedMetricsExtra = cached.metricsExtra;
 
     return {
       extend: cached.extend,
-      submit_id: cached.submitId,          // ⚠️ 使用原始submit_id
-      metrics_extra: updatedMetricsExtra,  // ⚠️ 使用更新后的metrics_extra
-      draft_content: cached.draftContent,  // ⚠️ 使用原始draft_content
+      submit_id: cached.submitId, // ⚠️ 使用原始submit_id
+      metrics_extra: updatedMetricsExtra, // ⚠️ 使用更新后的metrics_extra
+      draft_content: cached.draftContent, // ⚠️ 使用原始draft_content
       http_common_info: {
-        aid: 513695
+        aid: 513695,
       },
       action: CONTINUATION_ACTION.CONTINUE, // ✅ 继续生成标识
-      history_id: params.history_id         // ✅ 原始任务ID
+      history_id: params.history_id, // ✅ 原始任务ID
     };
   }
 
@@ -769,11 +965,21 @@ export class NewJimengClient {
    * 构建abilities结构
    */
   private buildAbilities(params: any, hasRefImages: boolean): any {
-    const { prompt, model_name, aspect_ratio, negative_prompt, reference_images } = params;
+    const {
+      prompt,
+      model_name,
+      aspect_ratio,
+      negative_prompt,
+      reference_images,
+    } = params;
 
     // 使用ImageDimensionCalculator获取正确的尺寸和imageRatio
-    const dimensions = ImageDimensionCalculator.calculateDimensions(aspect_ratio || 'auto');
-    const aspectRatioPreset = ImageDimensionCalculator.getAspectRatioPreset(aspect_ratio || 'auto');
+    const dimensions = ImageDimensionCalculator.calculateDimensions(
+      aspect_ratio || "auto",
+    );
+    const aspectRatioPreset = ImageDimensionCalculator.getAspectRatioPreset(
+      aspect_ratio || "auto",
+    );
     const imageRatio = aspectRatioPreset?.imageRatio || 1; // 默认1:1的imageRatio
 
     if (hasRefImages) {
@@ -799,40 +1005,44 @@ export class NewJimengClient {
               id: generateUuid(),
               height: dimensions.height,
               width: dimensions.width,
-              resolution_type: "2k"
+              resolution_type: "2k",
             },
-            intelligent_ratio: false
+            intelligent_ratio: false,
           },
           ability_list: reference_images.map((ref: any, index: number) => ({
             type: "",
             id: generateUuid(),
             name: "byte_edit",
             image_uri_list: [ref.uri],
-            image_list: [{
-              type: "image",
+            image_list: [
+              {
+                type: "image",
+                id: generateUuid(),
+                source_from: "upload",
+                platform_type: 1,
+                name: "",
+                image_uri: ref.uri,
+                width: ref.width,
+                height: ref.height,
+                format: ref.format,
+                uri: ref.uri,
+              },
+            ],
+            strength: ref.strength,
+          })),
+          prompt_placeholder_info_list: reference_images.map(
+            (_: any, index: number) => ({
+              type: "",
               id: generateUuid(),
-              source_from: "upload",
-              platform_type: 1,
-              name: "",
-              image_uri: ref.uri,
-              width: ref.width,
-              height: ref.height,
-              format: ref.format,
-              uri: ref.uri
-            }],
-            strength: ref.strength
-          })),
-          prompt_placeholder_info_list: reference_images.map((_: any, index: number) => ({
-            type: "",
-            id: generateUuid(),
-            ability_index: index
-          })),
+              ability_index: index,
+            }),
+          ),
           postedit_param: {
             type: "",
             id: generateUuid(),
-            generate_type: 0
-          }
-        }
+            generate_type: 0,
+          },
+        },
       };
 
       // 多参考图需要添加 min_version
@@ -863,61 +1073,83 @@ export class NewJimengClient {
               id: generateUuid(),
               height: dimensions.height,
               width: dimensions.width,
-              resolution_type: "2k"
+              resolution_type: "2k",
             },
-            intelligent_ratio: false
-          }
-        }
+            intelligent_ratio: false,
+          },
+        },
       };
     }
   }
 
   /**
    * 等待图片生成完成
-   * [CONSTITUTION-EXCEPTION: Tech Debt] 添加缓存清理以防止内存泄漏
+   * 注意：缓存清理延迟到 generateImage 末尾，以支持手动继续生成
+   *
+   * @returns { imageUrls, totalCount, isPartial }
+   *   - imageUrls: 已生成的图片URL数组
+   *   - totalCount: API返回的总目标数量
+   *   - isPartial: 是否为部分完成（需要继续生成）
    */
-  private async waitForImageCompletion(historyId: string): Promise<string[]> {
+  private async waitForImageCompletion(historyId: string): Promise<{
+    imageUrls: string[];
+    totalCount?: number;
+    isPartial: boolean;
+  }> {
     let attempts = 0;
 
-    try {
-      while (attempts < POLLING.MAX_ATTEMPTS) {
-        const result = await this.getImageResult(historyId);
+    while (attempts < POLLING.MAX_ATTEMPTS) {
+      const result = await this.getImageResult(historyId);
 
-        if (result.status === 'completed' && result.imageUrls && result.imageUrls.length > 0) {
-          // 🔥 任务完成，清理缓存防止内存泄漏
-          CacheManager.cleanup(historyId);
-          logger.debug(`🧹 [Cleanup] 任务完成，已清理缓存: ${historyId}`);
-          return result.imageUrls;
-        }
-
-        if (result.status === 'failed') {
-          // 🔥 任务失败，清理缓存
-          CacheManager.cleanup(historyId);
-          logger.debug(`🧹 [Cleanup] 任务失败，已清理缓存: ${historyId}`);
-          throw new Error(result.error || '图片生成失败');
-        }
-
-        await this.sleep(POLLING.INTERVAL_MS);
-        attempts++;
+      if (
+        result.status === "completed" &&
+        result.imageUrls &&
+        result.imageUrls.length > 0
+      ) {
+        return {
+          imageUrls: result.imageUrls,
+          totalCount: result.totalCount,
+          isPartial: false,
+        };
       }
 
-      // 🔥 超时，清理缓存
-      CacheManager.cleanup(historyId);
-      logger.debug(`🧹 [Cleanup] 任务超时，已清理缓存: ${historyId}`);
-      throw new Error(`图片生成超时: historyId=${historyId}`);
-    } catch (error) {
-      // 🔥 异常发生，确保清理缓存
-      CacheManager.cleanup(historyId);
-      logger.debug(`🧹 [Cleanup] 异常发生，已清理缓存: ${historyId}`);
-      throw error;
+      // 🔥 检测部分完成场景（继续生成场景）
+      // 当totalCount>4且finishedCount===4时，API不会返回completed
+      // 但已有4张图片可以返回，让手动继续生成接管
+      if (
+        result.totalCount &&
+        result.finishedCount &&
+        result.totalCount > MAX_IMAGES_PER_REQUEST &&
+        result.finishedCount === MAX_IMAGES_PER_REQUEST &&
+        result.imageUrls &&
+        result.imageUrls.length > 0
+      ) {
+        logger.debug(
+          `[部分完成] 检测到继续生成场景: total=${result.totalCount}, finished=${result.finishedCount}, 返回${result.imageUrls.length}张图片，标记为部分完成`,
+        );
+        return {
+          imageUrls: result.imageUrls,
+          totalCount: result.totalCount,
+          isPartial: true,
+        };
+      }
+
+      if (result.status === "failed") {
+        throw new Error(result.error || "图片生成失败");
+      }
+
+      await this.sleep(POLLING.INTERVAL_MS);
+      attempts++;
     }
+
+    throw new Error(`图片生成超时: historyId=${historyId}`);
   }
 
   /**
    * 睡眠函数
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -930,8 +1162,8 @@ export class NewJimengClient {
 
     // 过滤无效元素
     const valid = frames
-      .filter(f => f != null && typeof f === 'string' && f.trim() !== '')
-      .map(f => f.trim());
+      .filter((f) => f != null && typeof f === "string" && f.trim() !== "")
+      .map((f) => f.trim());
 
     // 长度限制
     if (valid.length > 15) {
@@ -945,18 +1177,16 @@ export class NewJimengClient {
   /**
    * 构建包含frames的最终prompt（与旧代码一致）
    */
-  private buildPromptWithFrames(
-    basePrompt: string,
-    frames: string[],
-    count: number
-  ): string {
+  private buildPromptWithFrames(basePrompt: string, frames: string[]): string {
     if (frames.length === 0) {
       return basePrompt;
     }
 
     // 给每个frame加上序号
-    const numberedFrames = frames.map((frame, index) => `第${index + 1}张：${frame}`);
-    const framesText = numberedFrames.join(' ');
+    const numberedFrames = frames.map(
+      (frame, index) => `第${index + 1}张：${frame}`,
+    );
+    const framesText = numberedFrames.join(" ");
     // 使用frames的数量，而不是count参数
     return `${basePrompt} ${framesText}，一共${frames.length}张图`;
   }

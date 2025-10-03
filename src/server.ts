@@ -1,3 +1,8 @@
+// 🔇 MCP服务器禁用DEBUG日志（必须在所有import之前）
+// MCP协议使用stdio通信，任何非JSON-RPC格式的输出都会导致连接失败
+// 必须在import logger之前设置，否则logger初始化时会读取旧值
+process.env.DEBUG = 'false';
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -5,11 +10,11 @@ import { generateImage, getImageResult, getApiClient } from "./api.js";
 import { logger } from './utils/logger.js';
 
 // 服务器启动调试信息
-logger.debug('server.ts loaded at:', new Date().toISOString());
-logger.debug('Node.js version:', process.version);
-logger.debug('Working directory:', process.cwd());
-logger.debug('Environment token available:', !!process.env.JIMENG_API_TOKEN);
-logger.debug('Environment token length:', process.env.JIMENG_API_TOKEN?.length || 'N/A');
+logger.debug('server.ts loaded', { timestamp: new Date().toISOString() });
+logger.debug('Node.js version', { version: process.version });
+logger.debug('Working directory', { cwd: process.cwd() });
+logger.debug('Environment token available', { available: !!process.env.JIMENG_API_TOKEN });
+logger.debug('Environment token length', { length: process.env.JIMENG_API_TOKEN?.length || 'N/A' });
 
 // 定义服务器返回类型接口
 export interface ServerInstance {
@@ -58,29 +63,27 @@ export const createServer = (): McpServer => {
       // 🔥 [MCP DEBUG] Tool call entry point - this is the CRITICAL debugging point
       logger.debug('=================================');
       logger.debug('generateImage tool called!');
-      logger.debug('Timestamp:', new Date().toISOString());
-      logger.debug('Raw params received:', JSON.stringify(params, null, 2));
+      logger.debug('Timestamp', { timestamp: new Date().toISOString() });
+      logger.debug('Raw params received', { params: JSON.stringify(params, null, 2) });
       logger.debug('=================================');
       try {
-        // 🔍 Debug logging - 记录MCP接收到的原始参数
-        console.log('🔍 [MCP Server] Received raw parameters:', JSON.stringify(params, null, 2));
-        
-        // 🔍 Debug logging - 记录环境变量状态
+        // 🔇 [MCP] console.log已禁用 - MCP协议使用stdio，任何输出都会破坏JSON-RPC通信
+        // console.log('🔍 [MCP Server] Received raw parameters:', JSON.stringify(params, null, 2));
+
         const hasToken = !!process.env.JIMENG_API_TOKEN;
-        console.log('🔍 [MCP Server] Environment token available:', hasToken);
-        if (hasToken) {
-          console.log('🔍 [MCP Server] Token length:', process.env.JIMENG_API_TOKEN?.length);
-        }
-        
-        // 🔍 Debug logging - 记录参数验证后的状态
-        console.log('🔍 [MCP Server] Validated parameters for API call:');
-        console.log('  - filePath:', params.filePath || 'undefined');
-        console.log('  - prompt:', params.prompt ? `"${params.prompt.substring(0, 50)}..."` : 'undefined');
-        console.log('  - model:', params.model || 'undefined');
-        console.log('  - aspectRatio:', params.aspectRatio || 'undefined');
-        console.log('  - sample_strength:', params.sample_strength);
-        console.log('  - negative_prompt:', params.negative_prompt || 'empty');
-        console.log('  - reference_strength:', params.reference_strength ? `[${params.reference_strength.join(', ')}]` : 'undefined');
+        // console.log('🔍 [MCP Server] Environment token available:', hasToken);
+        // if (hasToken) {
+        //   console.log('🔍 [MCP Server] Token length:', process.env.JIMENG_API_TOKEN?.length);
+        // }
+
+        // console.log('🔍 [MCP Server] Validated parameters for API call:');
+        // console.log('  - filePath:', params.filePath || 'undefined');
+        // console.log('  - prompt:', params.prompt ? `"${params.prompt.substring(0, 50)}..."` : 'undefined');
+        // console.log('  - model:', params.model || 'undefined');
+        // console.log('  - aspectRatio:', params.aspectRatio || 'undefined');
+        // console.log('  - sample_strength:', params.sample_strength);
+        // console.log('  - negative_prompt:', params.negative_prompt || 'empty');
+        // console.log('  - reference_strength:', params.reference_strength ? `[${params.reference_strength.join(', ')}]` : 'undefined');
 
         const imageUrls: string[] | string = await generateImage({
           filePath: params.filePath,
@@ -91,6 +94,7 @@ export const createServer = (): McpServer => {
           negative_prompt: params.negative_prompt,
           reference_strength: params.reference_strength,
           async: params.async,
+          // 不强制设置 count，让 API 根据 prompt 决定数量
           refresh_token: process.env.JIMENG_API_TOKEN
         } as any);
 
@@ -169,7 +173,7 @@ export const createServer = (): McpServer => {
     },
     async (params) => {
       try {
-        logger.debug('image_batch tool called with params:', JSON.stringify(params, null, 2));
+        logger.debug('image_batch tool called with params', { params: JSON.stringify(params, null, 2) });
 
         // 使用prompts数组和其长度
         const count = params.prompts.length;
@@ -209,7 +213,7 @@ export const createServer = (): McpServer => {
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        logger.error('image_batch failed:', errorMessage);
+        logger.error('image_batch failed', { error: errorMessage });
         return {
           content: [{ type: "text", text: `❌ 批量生成失败: ${errorMessage}` }],
           isError: true
@@ -232,11 +236,11 @@ export const createServer = (): McpServer => {
     },
     async ({ historyId }) => {
       try {
-        logger.debug('getImageResult tool called with historyId:', historyId);
+        logger.debug('getImageResult tool called with historyId', { historyId });
 
         const result = await getImageResult(historyId);
 
-        logger.debug('Query result:', JSON.stringify(result, null, 2));
+        logger.debug('Query result', { result: JSON.stringify(result, null, 2) });
 
         // 格式化响应
         if (result.status === 'completed') {
@@ -269,16 +273,25 @@ export const createServer = (): McpServer => {
         } else {
           // 进行中状态
           const statusEmoji = result.status === 'pending' ? '⏳' : '🔄';
+          let debugInfo = '';
+          // 添加调试信息（如果存在）
+          if (result.totalCount || result.finishedCount) {
+            debugInfo = `\n\n🔍 调试信息:\n- 总目标: ${result.totalCount || 'N/A'}张\n- 已完成: ${result.finishedCount || 'N/A'}张\n- 当前返回: ${result.itemCount || 'N/A'}张`;
+          }
+          // 添加智能继续生成调试信息
+          if (result._debug) {
+            debugInfo += `\n\n🔧 继续生成调试:\n- 应触发: ${result._debug.shouldTriggerContinuation ? '✅ 是' : '❌ 否'}\n- 有缓存: ${result._debug.hasCacheEntry ? '✅ 是' : '❌ 否'}\n- 已发送: ${result._debug.continuationSent ? '✅ 是' : '❌ 否'}`;
+          }
           return {
             content: [{
               type: "text",
-              text: `${statusEmoji} 生成中...\n\n状态: ${result.status}\n进度: ${result.progress}%`
+              text: `${statusEmoji} 生成中...\n\n状态: ${result.status}\n进度: ${result.progress}%${debugInfo}`
             }]
           };
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        logger.error('getImageResult failed:', errorMessage);
+        logger.error('getImageResult failed', { error: errorMessage });
         return {
           content: [{ type: "text", text: `❌ 查询失败: ${errorMessage}` }],
           isError: true
@@ -543,8 +556,8 @@ export const startServer = async (): Promise<void> => {
   const transport = new StdioServerTransport();
 
   logger.debug("Jimeng MCP Server 正在启动...");
-  logger.debug("stdin.isTTY:", process.stdin.isTTY);
-  logger.debug("stdout.isTTY:", process.stdout.isTTY);
+  logger.debug("stdin.isTTY", { isTTY: process.stdin.isTTY });
+  logger.debug("stdout.isTTY", { isTTY: process.stdout.isTTY });
   
   // 正确等待连接 - 这会阻塞直到连接关闭
   await server.connect(transport);
@@ -586,7 +599,7 @@ const isMainModule = (() => {
 
 if (isMainModule) {
   startServer().catch((error) => {
-    logger.error("启动MCP服务器失败:", error);
+    logger.error("启动MCP服务器失败", { error });
     process.exit(1);
   });
 } 
