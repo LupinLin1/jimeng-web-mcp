@@ -278,11 +278,8 @@ export class VideoService {
     // 按索引排序
     const sortedFrames = [...frames].sort((a, b) => a.idx - b.idx);
 
-    // 计算总时长并验证
+    // 计算总时长
     const totalDuration = sortedFrames.reduce((sum, f) => sum + f.duration_ms, 0);
-    if (totalDuration > 15000) {
-      throw new Error('总时长不能超过15秒');
-    }
 
     // 上传所有帧图片
     const uploadedFrames = await this.uploadFrames(sortedFrames.map(f => f.imagePath));
@@ -634,21 +631,27 @@ export class VideoService {
 
       const status = await this.checkTaskStatus(taskId);
 
-      if (status.status === 'completed') {
-        if (status.video_url) {
-          return status.video_url;
-        } else {
-          // 状态完成但没有URL，打印调试信息
-          console.error('视频生成完成但未找到URL，完整状态:', JSON.stringify(status, null, 2));
-          throw new Error('视频生成完成但未返回URL');
-        }
+      // 关键修改：参考旧代码逻辑
+      // 只要有video_url就返回，不强制要求status='completed'
+      // 因为有时候视频已经生成完成，但状态字段还没更新
+      if (status.video_url) {
+        console.log(`✅ [轮询${pollCount}] 成功获取到视频URL`);
+        return status.video_url;
       }
 
+      // 检查失败状态
       if (status.status === 'failed') {
         throw new Error(status.error || '视频生成失败');
       }
 
+      // 如果status是completed但没有URL，报错
+      if (status.status === 'completed' && !status.video_url) {
+        console.error('❌ 视频生成完成但未找到URL，完整状态:', JSON.stringify(status, null, 2));
+        throw new Error('视频生成完成但未返回URL');
+      }
+
       // 继续下一轮轮询
+      console.log(`⏳ [轮询${pollCount}] 状态=${status.status}, 继续等待...`);
     }
 
     throw new Error(`视频生成超时: taskId=${taskId}`);
@@ -667,7 +670,8 @@ export class VideoService {
       data: { submit_ids: [taskId] }  // 视频轮询使用submit_ids
     });
 
-    console.log('🔍 [checkTaskStatus] 响应:', JSON.stringify(response, null, 2).substring(0, 500));
+    // 输出完整响应（不截断）以便调试
+    console.log('🔍 [checkTaskStatus] 完整响应:', JSON.stringify(response, null, 2));
 
     const record = response?.data?.[taskId];
     if (!record) {
@@ -675,33 +679,68 @@ export class VideoService {
       return { status: 'processing' };
     }
 
-    console.log('📊 [checkTaskStatus] 找到record:', JSON.stringify(record, null, 2).substring(0, 500));
+    console.log('📊 [checkTaskStatus] 完整record:', JSON.stringify(record, null, 2));
 
-    // 解析状态（与旧代码一致）
-    const status = record.common_attr?.status ?? 'unknown';
-    const failCode = record.common_attr?.fail_code ?? null;
+    // 解析状态（支持多种状态字段）
+    const status = record.common_attr?.status ?? record.status ?? 'unknown';
+    const failCode = record.common_attr?.fail_code ?? record.fail_code ?? null;
 
     // 映射状态
     let mappedStatus: string;
-    if (status === 'completed' || status === 'success') {
+    if (status === 'completed' || status === 'success' || status === 50) {
       mappedStatus = 'completed';
-    } else if (status === 'failed' || status === 'error') {
+    } else if (status === 'failed' || status === 'error' || status === 30) {
       mappedStatus = 'failed';
+    } else if (status === 20 || status === 42 || status === 45) {
+      mappedStatus = 'processing';
     } else {
       mappedStatus = 'processing';
     }
 
-    // 提取视频URL（与旧代码一致，尝试多种路径）
+    // 提取视频URL（尝试所有可能的路径）
     let videoUrl = null;
     if (record.item_list && record.item_list.length > 0) {
       const item = record.item_list[0];
-      videoUrl = item?.video?.transcoded_video?.origin?.video_url ||
-                item?.video?.video_url ||
-                item?.video?.origin?.video_url ||
-                item?.common_attr?.cover_url ||
-                item?.aigc_video_params?.video_url ||
-                item?.url ||
-                item?.video_url;
+
+      // 打印完整item结构以便调试
+      console.log('🎬 [checkTaskStatus] 完整item结构:', JSON.stringify(item, null, 2));
+
+      // 尝试多种可能的路径
+      videoUrl =
+        // 常见路径
+        item?.video?.transcoded_video?.origin?.video_url ||
+        item?.video?.video_url ||
+        item?.video?.origin?.video_url ||
+        item?.video?.transcoded_video?.video_url ||
+
+        // 备选路径
+        item?.common_attr?.cover_url ||
+        item?.aigc_video_params?.video_url ||
+        item?.url ||
+        item?.video_url ||
+
+        // 新增可能的路径
+        item?.media_info?.video?.video_url ||
+        item?.media_info?.video_url ||
+        item?.video_info?.video_url ||
+        item?.output_video?.video_url ||
+        item?.result?.video_url;
+
+      // 如果还是没找到，深度搜索所有包含url的字段
+      if (!videoUrl) {
+        console.log('🔍 [checkTaskStatus] 深度搜索URL字段...');
+        videoUrl = this.deepSearchUrl(item);
+        if (videoUrl) {
+          console.log(`✅ [checkTaskStatus] 深度搜索找到URL:`, videoUrl);
+        }
+      }
+
+      if (!videoUrl) {
+        console.error('❌ [checkTaskStatus] 无法找到视频URL，完整item:', JSON.stringify(item, null, 2));
+      }
+    } else {
+      console.log('⚠️ [checkTaskStatus] item_list为空或不存在');
+      console.log('📦 [checkTaskStatus] record完整结构:', JSON.stringify(record, null, 2));
     }
 
     return {
@@ -709,6 +748,36 @@ export class VideoService {
       video_url: videoUrl,
       error: failCode ? `生成失败 (错误码: ${failCode})` : null
     };
+  }
+
+  /**
+   * 深度搜索对象中的URL字段
+   */
+  private deepSearchUrl(obj: any, depth: number = 0, maxDepth: number = 5): string | null {
+    if (!obj || typeof obj !== 'object' || depth > maxDepth) {
+      return null;
+    }
+
+    // 检查当前层级的所有键
+    for (const key of Object.keys(obj)) {
+      const lowerKey = key.toLowerCase();
+
+      // 如果键名包含url，并且值是字符串且以http开头
+      if ((lowerKey.includes('url') || lowerKey.includes('uri')) &&
+          typeof obj[key] === 'string' &&
+          obj[key].startsWith('http')) {
+        console.log(`🔍 [deepSearchUrl] 在 ${key} 找到URL (深度${depth}):`, obj[key]);
+        return obj[key];
+      }
+
+      // 递归搜索嵌套对象
+      if (typeof obj[key] === 'object') {
+        const found = this.deepSearchUrl(obj[key], depth + 1, maxDepth);
+        if (found) return found;
+      }
+    }
+
+    return null;
   }
 
   /**

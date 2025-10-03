@@ -2,6 +2,7 @@
  * ImageUploader - 图片上传服务
  * 使用image-size库替代手动解析（删除132行代码）
  * 提供图片上传、格式检测和批量上传功能
+ * 支持图片上传步骤的自动重试机制
  */
 
 import sizeOf from 'image-size';
@@ -11,6 +12,7 @@ import path from 'path';
 // @ts-ignore
 import crc32 from 'crc32';
 import { HttpClient } from './HttpClient.js';
+import { retryAsync } from '../utils/retry.js';
 
 export interface UploadResult {
   uri: string;           // 服务器返回的URL
@@ -88,20 +90,13 @@ export class ImageUploader {
       // 上传图片
       const uploadImgUrl = `https://${UploadAddress.UploadHosts[0]}/upload/v1/${UploadAddress.StoreInfos[0].StoreUri}`;
 
-      const imageUploadRes = await this.httpClient.request({
-        method: 'POST',
-        url: uploadImgUrl,
-        data: imageBuffer,
-        headers: {
-          Authorization: UploadAddress.StoreInfos[0].Auth,
-          'Content-Crc32': imageCrc32,
-          'Content-Type': 'application/octet-stream',
-        }
-      });
-
-      if (imageUploadRes.code !== 2000) {
-        throw new Error(imageUploadRes.message);
-      }
+      // 图片上传步骤：带重试机制（仅此步骤重试）
+      const imageUploadRes = await this.uploadImageDataWithRetry(
+        uploadImgUrl,
+        imageBuffer,
+        imageCrc32,
+        UploadAddress.StoreInfos[0].Auth
+      );
 
       // 提交上传
       const commitImgParams = {
@@ -200,6 +195,44 @@ export class ImageUploader {
     } catch (error) {
       throw new Error(`读取文件失败: ${filePath}`);
     }
+  }
+
+  /**
+   * 上传图片数据（带重试机制）
+   * 这是唯一需要重试的步骤，因为网络传输最容易失败
+   */
+  private async uploadImageDataWithRetry(
+    url: string,
+    imageBuffer: Buffer,
+    crc32Hash: string,
+    authToken: string
+  ): Promise<any> {
+    return retryAsync(
+      async () => {
+        const response = await this.httpClient.request({
+          method: 'POST',
+          url: url,
+          data: imageBuffer,
+          headers: {
+            Authorization: authToken,
+            'Content-Crc32': crc32Hash,
+            'Content-Type': 'application/octet-stream',
+          }
+        });
+
+        if (response.code !== 2000) {
+          throw new Error(response.message || '图片上传失败');
+        }
+
+        return response;
+      },
+      {
+        maxRetries: 3,
+        baseDelay: 1000,
+        maxDelay: 10000
+      },
+      '图片上传'
+    );
   }
 
   /**

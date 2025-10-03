@@ -296,6 +296,12 @@ export interface QueryResultResponse {
 
   /** 错误信息（仅当 status='failed' 时存在） */
   error?: string;
+
+  /** 是否还有更多图片正在生成（智能继续生成标记） */
+  needs_more?: boolean;
+
+  /** 提示信息（如继续生成提示） */
+  message?: string;
 }
 
 /**

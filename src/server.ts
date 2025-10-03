@@ -244,9 +244,14 @@ export const createServer = (): McpServer => {
           let resultText = `✅ 生成完成！\n\n状态: completed\n进度: 100%\n\n`;
 
           if (result.imageUrls && result.imageUrls.length > 0) {
-            resultText += `生成结果:\n${result.imageUrls.map((url: string) => `- ${url}`).join('\n')}`;
+            resultText += `生成结果 (${result.imageUrls.length}张):\n${result.imageUrls.map((url: string) => `- ${url}`).join('\n')}`;
           } else if (result.videoUrl) {
             resultText += `视频URL: ${result.videoUrl}`;
+          }
+
+          // 🔥 显示智能继续生成提示
+          if (result.needs_more) {
+            resultText += `\n\n⚠️  ${result.message || '还有更多图片正在生成，请稍后再次查询'}`;
           }
 
           return {

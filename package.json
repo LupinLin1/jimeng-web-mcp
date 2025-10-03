@@ -1,6 +1,6 @@
 {
   "name": "jimeng-web-mcp",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "MCP服务器项目，集成即梦AI图像生成",
   "type": "module",
   "main": "lib/index.js",

@@ -31,6 +31,24 @@ export class NewJimengClient {
   private creditService: NewCreditService;
   private videoService: VideoService;
 
+  // 异步任务参数缓存（用于智能继续生成）
+  private static asyncTaskCache = new Map<string, {
+    params: ImageGenerationParams;
+    uploadedImages: any[];
+    apiParams: any;
+  }>();
+
+  // 继续生成发送状态（防重复）
+  private static continuationSent = new Map<string, boolean>();
+
+  // 原始请求体缓存（用于继续生成）
+  private static requestBodyCache = new Map<string, {
+    submitId: string;
+    draftContent: string;
+    metricsExtra: string;
+    extend: any;
+  }>();
+
   constructor(token?: string) {
     // 初始化所有服务（组合模式）
     this.httpClient = new HttpClient(token);
@@ -68,7 +86,12 @@ export class NewJimengClient {
 
     // 处理frames参数（与旧代码一致）
     const validFrames = this.validateAndFilterFrames(frames);
-    const finalPrompt = this.buildPromptWithFrames(prompt, validFrames, count);
+    let finalPrompt = this.buildPromptWithFrames(prompt, validFrames, count);
+
+    // 🔥 关键修复：多张图必须在prompt中明确说明总数
+    if (count > 1 && validFrames.length === 0) {
+      finalPrompt = `${finalPrompt}，一共${count}张图`;
+    }
 
     // 处理参考图
     let uploadedImages: any[] = [];
@@ -100,17 +123,48 @@ export class NewJimengClient {
     }
 
     if (asyncMode) {
-      // 异步模式：返回historyId
-      return this.submitImageTask(apiParams);
+      // 异步模式：提交任务并缓存参数（用于智能继续生成）
+      const historyId = await this.submitImageTask(apiParams);
+
+      // 缓存参数以供后续继续生成使用
+      NewJimengClient.asyncTaskCache.set(historyId, {
+        params,
+        uploadedImages,
+        apiParams
+      });
+
+      console.log(`💾 [异步生成] 已缓存参数, historyId: ${historyId}, count: ${count}`);
+      console.log(`💾 [异步生成] 缓存内容:`, JSON.stringify({
+        'params.count': params.count,
+        'params.prompt': params.prompt?.substring(0, 50),
+        'apiParams.count': apiParams.count,
+        'uploadedImages.length': uploadedImages.length
+      }));
+
+      return historyId;
     }
 
     // 同步模式：等待完成
     const historyId = await this.submitImageTask(apiParams);
+
+    // 🔥 同步模式下也缓存参数（用于智能继续生成）
+    if (count > 4) {
+      NewJimengClient.asyncTaskCache.set(historyId, {
+        params,
+        uploadedImages,
+        apiParams
+      });
+      console.log(`💾 [同步缓存] 已缓存参数用于继续生成, historyId: ${historyId}`);
+    }
+
     let images = await this.waitForImageCompletion(historyId);
 
     // 继续生成逻辑（>4张）
-    if (count > 4) {
-      const remainingCount = count - 4;
+    // 🔥 关键修复：检查是否智能继续生成已经完成了所有图片
+    if (count > 4 && images.length < count) {
+      console.log(`🔄 [手动继续生成] 已获得${images.length}张，目标${count}张，需要继续生成`);
+
+      const remainingCount = count - images.length;
       const continueParams = {
         ...apiParams,
         count: Math.min(remainingCount, 4),
@@ -120,6 +174,8 @@ export class NewJimengClient {
       const continueHistoryId = await this.submitImageTask(continueParams);
       const continueImages = await this.waitForImageCompletion(continueHistoryId);
       images = [...images, ...continueImages];
+    } else if (count > 4) {
+      console.log(`✅ [继续生成] 智能继续生成已完成，实际获得${images.length}张图片`);
     }
 
     return images;
@@ -177,7 +233,57 @@ export class NewJimengClient {
       return { status: 'failed', error: '记录不存在' };
     }
 
-    return this.parseQueryResult(record, historyId);
+    // 解析基础结果
+    const result = this.parseQueryResult(record, historyId);
+
+    // 🔥 智能继续生成逻辑（修复：不管status是什么都检查，参考旧代码）
+    // 检测是否需要触发继续生成（仅对图片任务）
+    if (!isUUID) {
+      const statusCode = record.status;
+      const totalCount = record.total_image_count || 0;
+      const finishedCount = record.finished_image_count || 0;
+      const itemCount = record.item_list?.length || 0;
+
+      console.log(`🔍 [智能继续生成检测] historyId=${historyId}, status=${result.status}(${statusCode}), total=${totalCount}, finished=${finishedCount}, items=${itemCount}`);
+      console.log(`🔍 [缓存检查] 是否有缓存: ${NewJimengClient.asyncTaskCache.has(historyId)}, 是否已发送: ${NewJimengClient.continuationSent.has(historyId)}`);
+
+      // 判断是否需要继续生成（与旧代码一致）
+      // 1. totalCount > 4 - 需要生成超过4张
+      // 2. finishedCount >= 4 - 已完成至少4张
+      // 3. finishedCount < totalCount - 还没全部完成
+      // 4. statusCode !== 30 - 没有失败
+      // 5. 未发送过继续生成请求（防重复）
+      const needsContinuation = totalCount > 4 &&
+                               finishedCount >= 4 &&
+                               finishedCount < totalCount &&
+                               statusCode !== 30 &&
+                               !NewJimengClient.continuationSent.get(historyId);
+
+      console.log(`🔍 [判断结果] needsContinuation=${needsContinuation} (total>4: ${totalCount > 4}, finished>=4: ${finishedCount >= 4}, finished<total: ${finishedCount < totalCount}, notFailed: ${statusCode !== 30}, notSent: ${!NewJimengClient.continuationSent.get(historyId)})`);
+
+      if (needsContinuation) {
+        console.log(`🔄 [智能继续生成] 检测到需要继续: 目标${totalCount}张, 已完成${finishedCount}张, 当前${itemCount}张`);
+
+        // 标记为已处理，防止重复
+        NewJimengClient.continuationSent.set(historyId, true);
+
+        // 异步发送继续生成请求（不等待完成，与旧代码一致）
+        this.performAsyncContinueGeneration(historyId).catch(err => {
+          console.error(`❌ [智能继续生成] 失败:`, err);
+          NewJimengClient.continuationSent.delete(historyId); // 失败时清除标记，允许重试
+        });
+
+        // 提示用户需要再次查询
+        result.needs_more = true;
+        result.message = `已触发继续生成（${finishedCount}/${totalCount}），请稍后再次查询以获取所有图片`;
+      } else if (result.status === 'completed' && totalCount > itemCount && finishedCount === totalCount) {
+        // 所有图片已完成，但item_list不完整（可能需要多次查询）
+        result.needs_more = true;
+        result.message = `生成完成（${totalCount}张），但当前只返回${itemCount}张，可能需要再次查询`;
+      }
+    }
+
+    return result;
   }
 
   /**
@@ -322,6 +428,63 @@ export class NewJimengClient {
     }
 
     return result;
+  }
+
+  /**
+   * 执行异步继续生成（智能继续生成核心方法）
+   */
+  private async performAsyncContinueGeneration(historyId: string): Promise<void> {
+    console.log(`🔄 [AsyncContinue] 开始执行继续生成, historyId: ${historyId}`);
+
+    // 从缓存获取原始参数
+    const cached = NewJimengClient.asyncTaskCache.get(historyId);
+
+    if (!cached) {
+      console.error(`❌ [AsyncContinue] 未找到缓存参数, historyId: ${historyId}`);
+      throw new Error(`无法找到historyId对应的原始参数: ${historyId}`);
+    }
+
+    console.log(`💾 [AsyncContinue] 从缓存获取参数成功, count: ${cached.params.count}`);
+
+    // 计算剩余数量
+    const totalCount = cached.params.count || 1;
+    const remainingCount = totalCount - 4;
+
+    if (remainingCount <= 0) {
+      console.log(`⏭️  [AsyncContinue] 无需继续生成, totalCount: ${totalCount}`);
+      return;
+    }
+
+    // 构建继续生成请求
+    const continueParams = {
+      ...cached.apiParams,
+      count: Math.min(remainingCount, 4),
+      history_id: historyId  // 关键：使用原始historyId触发继续生成
+    };
+
+    console.log(`📤 [AsyncContinue] 提交继续生成请求: count=${continueParams.count}, history_id=${historyId}`);
+
+    // 提交继续生成任务
+    try {
+      const newHistoryId = await this.submitImageTask(continueParams);
+      console.log(`✅ [AsyncContinue] 继续生成任务已提交, 新historyId: ${newHistoryId}`);
+
+      // 如果还有更多图片需要生成，缓存新任务的参数
+      if (remainingCount > 4) {
+        NewJimengClient.asyncTaskCache.set(newHistoryId, {
+          params: {
+            ...cached.params,
+            count: remainingCount
+          },
+          uploadedImages: cached.uploadedImages,
+          apiParams: cached.apiParams
+        });
+        console.log(`💾 [AsyncContinue] 已缓存新任务参数, historyId: ${newHistoryId}, remaining: ${remainingCount - 4}`);
+      }
+    } catch (error) {
+      console.error(`❌ [AsyncContinue] 提交失败:`, error);
+      throw error;
+    }
   }
 
   // ==================== 视频生成功能 ====================
@@ -470,25 +633,50 @@ export class NewJimengClient {
    */
   private async submitImageTask(params: any): Promise<string> {
     const requestParams = this.httpClient.generateRequestParams();
-
-    // 构建完整的请求体结构（兼容即梦API）
-    const submitId = generateUuid();
-    const componentId = generateUuid();
     const hasRefImages = !!(params.reference_images && params.reference_images.length > 0);
 
-    const requestBody: any = {
-      extend: {
+    // 🔥 关键修复：继续生成必须重用原始请求参数
+    let requestBody: any;
+
+    if (params.history_id && NewJimengClient.requestBodyCache.has(params.history_id)) {
+      // 继续生成：重用原始参数，但更新generateCount
+      const cached = NewJimengClient.requestBodyCache.get(params.history_id)!;
+      console.log(`🔄 [继续生成] 重用原始请求参数, historyId: ${params.history_id}, count: ${params.count}`);
+
+      // 🔥 关键修复：更新metrics_extra中的generateCount为剩余数量
+      const originalMetrics = JSON.parse(cached.metricsExtra);
+      originalMetrics.generateCount = params.count || 1;  // 更新为剩余数量
+      const updatedMetricsExtra = jsonEncode(originalMetrics);
+
+      requestBody = {
+        extend: cached.extend,
+        submit_id: cached.submitId,          // ⚠️ 使用原始submit_id
+        metrics_extra: updatedMetricsExtra,  // ⚠️ 使用更新后的metrics_extra
+        draft_content: cached.draftContent,  // ⚠️ 使用原始draft_content
+        http_common_info: {
+          aid: 513695
+        },
+        action: 2,                           // ✅ 继续生成标识
+        history_id: params.history_id        // ✅ 原始任务ID
+      };
+    } else {
+      // 首次生成：构建新的请求参数
+      const submitId = generateUuid();
+      const componentId = generateUuid();
+
+      const extend = {
         root_model: params.model_name
-      },
-      submit_id: submitId,
-      metrics_extra: jsonEncode({
+      };
+
+      const metricsExtra = jsonEncode({
         promptSource: "custom",
         generateCount: params.count || 1,
         enterFrom: "click",
         generateId: submitId,
         isRegenerate: false
-      }),
-      draft_content: jsonEncode({
+      });
+
+      const draftContent = jsonEncode({
         type: "draft",
         id: generateUuid(),
         min_version: params.draft_version || DRAFT_VERSION,
@@ -517,16 +705,17 @@ export class NewJimengClient {
             ...this.buildAbilities(params, hasRefImages)
           }
         }]
-      }),
-      http_common_info: {
-        aid: 513695
-      }
-    };
+      });
 
-    // 如果有history_id，说明是继续生成
-    if (params.history_id) {
-      requestBody.action = 2;
-      requestBody.history_id = params.history_id;
+      requestBody = {
+        extend,
+        submit_id: submitId,
+        metrics_extra: metricsExtra,
+        draft_content: draftContent,
+        http_common_info: {
+          aid: 513695
+        }
+      };
     }
 
     const response = await this.httpClient.request({
@@ -539,6 +728,17 @@ export class NewJimengClient {
     const historyId = response?.data?.aigc_data?.history_record_id;
     if (!historyId) {
       throw new Error(response?.errmsg || '提交图片任务失败');
+    }
+
+    // 🔥 缓存首次请求的参数（用于继续生成）
+    if (!params.history_id) {
+      NewJimengClient.requestBodyCache.set(historyId, {
+        submitId: requestBody.submit_id,
+        draftContent: requestBody.draft_content,
+        metricsExtra: requestBody.metrics_extra,
+        extend: requestBody.extend
+      });
+      console.log(`💾 [缓存] 已保存首次请求参数, historyId: ${historyId}`);
     }
 
     return historyId;

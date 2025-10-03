@@ -55,14 +55,6 @@ export const multiFrameVideoOptionsSchema = baseVideoOptionsSchema.extend({
       },
       { message: '帧序号必须唯一' }
     )
-    .refine(
-      (frames) => {
-        // 验证总时长不超过15秒
-        const totalDuration = frames.reduce((sum, f) => sum + f.duration_ms, 0);
-        return totalDuration <= 15000;
-      },
-      { message: '总时长不能超过15秒' }
-    )
 });
 
 /**

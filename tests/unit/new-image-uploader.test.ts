@@ -3,6 +3,7 @@
  * Tests image-size library integration
  */
 
+import { jest } from '@jest/globals';
 import { ImageUploader } from '../../src/api/ImageUploader.js';
 import { HttpClient } from '../../src/api/HttpClient.js';
 import fs from 'fs';
@@ -54,7 +55,7 @@ describe('ImageUploader (New Implementation)', () => {
 
       const metadata = imageUploader.detectFormat(jpegBuffer);
 
-      expect(metadata.format).toBe('jpeg');
+      expect(metadata.format).toBe('jpg'); // image-size库返回'jpg'而不是'jpeg'
       expect(metadata.width).toBe(16);
       expect(metadata.height).toBe(16);
     });
@@ -89,6 +90,54 @@ describe('ImageUploader (New Implementation)', () => {
       }
 
       expect(protoChain).toEqual(['ImageUploader', 'Object']);
+    });
+  });
+
+  describe('Upload Retry Mechanism', () => {
+    it('验证重试机制已集成到图片上传步骤', () => {
+      // 验证uploadImageDataWithRetry方法存在
+      // 该方法内部使用retryAsync实现重试逻辑
+      // 详细的重试行为已在retry.test.ts中测试
+      expect(imageUploader['uploadImageDataWithRetry']).toBeDefined();
+      expect(typeof imageUploader['uploadImageDataWithRetry']).toBe('function');
+    });
+
+    it('获取凭证失败时应立即抛出错误', async () => {
+      let authAttempts = 0;
+
+      jest.spyOn(imageUploader as any, 'getUploadAuth').mockImplementation(() => {
+        authAttempts++;
+        throw new Error('Auth failed');
+      });
+
+      jest.spyOn(imageUploader as any, 'getFileContent').mockResolvedValue(
+        Buffer.from([0x89, 0x50, 0x4E, 0x47])
+      );
+
+      jest.spyOn(imageUploader, 'detectFormat').mockReturnValue({
+        format: 'png',
+        width: 100,
+        height: 100
+      });
+
+      await expect(imageUploader.upload('/test/image.png')).rejects.toThrow('Auth failed');
+
+      expect(authAttempts).toBe(1); // 只尝试一次，不重试
+    });
+
+    it('批量上传使用Promise.all保持原子性', async () => {
+      // 验证uploadBatch使用Promise.all而非Promise.allSettled
+      const uploadSpy = jest.spyOn(imageUploader, 'upload');
+      uploadSpy
+        .mockResolvedValueOnce({ uri: 'image1.jpg', originalPath: '/test1.png', width: 100, height: 100, format: 'png' })
+        .mockRejectedValueOnce(new Error('Upload failed'));
+
+      await expect(
+        imageUploader.uploadBatch(['/test/image1.png', '/test/image2.png'])
+      ).rejects.toThrow('Upload failed');
+
+      // 验证Promise.all行为：一个失败全部失败
+      expect(uploadSpy).toHaveBeenCalledTimes(2);
     });
   });
 });
