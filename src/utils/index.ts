@@ -44,3 +44,8 @@ export const urlEncode = (str: string): string => {
 export const unixTimestamp = () => {
   return parseInt(`${Date.now() / 1000}`);
 }
+
+// Export new utilities for code quality optimization
+export * from './cache-manager.js';
+export { logger } from './logger.js';
+export * from './prompt-validator.js';

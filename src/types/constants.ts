@@ -40,3 +40,55 @@ export const API_ENDPOINTS = {
   FRAME_INTERPOLATION: '/mweb/v1/video/frame_interpolation',
   SUPER_RESOLUTION: '/mweb/v1/video/super_resolution'
 } as const;
+
+/**
+ * Image generation limits
+ */
+export const MAX_IMAGES_PER_REQUEST = 4;
+export const MIN_IMAGE_COUNT = 1;
+export const MAX_IMAGE_COUNT = 50;
+
+/**
+ * Task status codes from JiMeng API
+ */
+export enum STATUS_CODES {
+  COMPLETED = 50,
+  FAILED = 30,
+  PENDING = 20,
+  PROCESSING = 10
+}
+
+/**
+ * Polling configuration for task status queries
+ */
+export const POLLING = {
+  MAX_ATTEMPTS: 60,
+  INTERVAL_MS: 2000,
+  TIMEOUT_MS: 120000 // 2 minutes
+} as const;
+
+/**
+ * Cache configuration
+ */
+export const CACHE_CONFIG = {
+  TTL_MS: 30 * 60 * 1000, // 30 minutes
+  EVICTION_INTERVAL_MS: 5 * 60 * 1000 // 5 minutes
+} as const;
+
+/**
+ * Continuation generation action codes
+ */
+export enum CONTINUATION_ACTION {
+  INITIAL = 1,
+  CONTINUE = 2
+}
+
+/**
+ * Log levels for structured logging
+ */
+export enum LogLevel {
+  DEBUG = 0,
+  INFO = 1,
+  WARN = 2,
+  ERROR = 3
+}

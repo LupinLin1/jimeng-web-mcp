@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.3] - 2025-10-03
+
+### 🐛 **Bug Fixes: Memory Leak & Code Quality**
+
+#### **Feature 007: Continue Generation Memory Leak Fix**
+
+**Memory Management Improvements** (FR-001, FR-002, FR-003)
+- ✅ **Fixed unbounded cache growth**: Replaced static Maps with TTL-based `CacheManager`
+  - 30-minute automatic eviction for abandoned tasks
+  - Explicit cleanup on task completion, failure, timeout, and errors
+  - Memory stable over 1000+ requests (<50MB growth)
+  - Cache size returns to 0 after all tasks complete
+- ✅ **Centralized cache lifecycle**: Single source of truth for all continuation generation state
+  - Before: 3 separate static Maps (`asyncTaskCache`, `continuationSent`, `requestBodyCache`)
+  - After: Unified `CacheManager` with comprehensive entry structure
+
+**Code Complexity Reduction** (FR-004, FR-005, FR-006)
+- ✅ **Refactored `submitImageTask` method**: From 130+ lines to 44 lines (66% reduction)
+  - Extracted `buildInitialRequest()` helper (57 lines)
+  - Extracted `buildContinuationRequest()` helper (25 lines)
+  - Clear separation of concerns: initial vs. continuation logic
+- ✅ **Improved maintainability**: All helper methods under 60 lines
+  - Easier to understand, test, and modify
+  - Reduced cognitive complexity
+
+**Prompt Validation** (FR-007)
+- ✅ **Prevent duplicate count declarations**: New `PromptValidator` utility
+  - Detects existing patterns: "一共N张图", "共N张", "总共N张", "N张图"
+  - Only appends count if missing
+  - Prevents "一共5张图，一共5张图" duplicates
+
+**Concurrency Safety** (FR-008, FR-009)
+- ✅ **Fixed race conditions**: Proper `continuationSent` flag management
+  - Flag stored in cache entry (not separate Map)
+  - Reset on continuation failure for retry
+  - Prevents duplicate submissions
+
+**Logging & Observability** (FR-010, FR-011, FR-012)
+- ✅ **Structured logging system**: Replaced ~20 `console.log` calls
+  - Level-based filtering: DEBUG, INFO, WARN, ERROR
+  - `DEBUG=false` suppresses verbose logs in production
+  - PII redaction: Automatic token/sessionid/password masking
+  - Structured context support
+
+**New Utilities**
+- `src/utils/cache-manager.ts` (188 lines) - TTL-based cache with automatic eviction
+- `src/utils/logger.ts` (115 lines) - Structured logging with PII redaction
+- `src/utils/prompt-validator.ts` (70 lines) - Smart prompt validation
+- `src/types/constants.ts` - Named constants replacing magic numbers
+
+**Test Coverage**
+- ✅ 44 new tests: CacheManager (16), Logger (13), PromptValidator (15)
+- ✅ Memory leak integration tests (4 scenarios)
+- ✅ Refactoring validation tests (8 tests)
+- ✅ All critical tests passing
+
 ## [1.12.0] - 2025-10-02
 
 ### 🏗️ **Major Refactoring: Composition Pattern Architecture**
