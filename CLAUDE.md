@@ -4,9 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **JiMeng Web MCP Server** - a TypeScript-based Model Context Protocol (MCP) server that integrates JiMeng AI's image and video generation services. The project directly calls JiMeng's official APIs through reverse engineering, bypassing third-party services.
+This is a **JiMeng Web MCP Server** - a TypeScript-based Model Context Protocol (MCP) server that directly accesses JiMeng AI's Web interface for image and video generation services.
+
+**⚠️ IMPORTANT**: This project is for **learning and research purposes only**. It accesses JiMeng's Web interface, not official APIs.
 
 ### Key Features
+- **Free Daily Credits**: Get 60-80 free credits daily, no payment required
+- **Latest Features**: Direct Web access ensures first access to new features
 - **Continue Generation**: Automatically triggers when requesting >4 images, returns all images in a single response
 - **Multi-reference Image Generation**: Supports up to 4 reference images for style mixing and fusion
 - **Video Generation**: Traditional first/last frame mode, intelligent multi-frame mode, and **main reference mode**

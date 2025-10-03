@@ -7,13 +7,24 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 [![MCP Protocol](https://img.shields.io/badge/MCP-1.10-green.svg)](https://modelcontextprotocol.io/)
 
-基于TypeScript的Model Context Protocol (MCP) 服务器，集成即梦AI图像和视频生成服务
+基于TypeScript的Model Context Protocol (MCP) 服务器，直接访问即梦AI Web端
 
-**🚀 直接对接官方API | 零第三方依赖 | 组合模式架构 | 100%类型安全**
+**🚀 直接访问Web端 | 每日免费积分 | 最新功能支持 | 组合模式架构 | 100%类型安全**
 
 [English](./README.en.md) | 中文
 
 </div>
+
+---
+
+## ⚠️ 免责声明
+
+**本项目仅供学习和研究使用，请勿用于商业或其他用途。**
+
+- 本项目通过技术手段访问即梦AI Web端接口
+- 使用本项目需遵守即梦AI的服务条款
+- 因使用本项目产生的任何问题，开发者不承担责任
+- 建议仅在学习研究场景下使用，不要滥用API接口
 
 ---
 
@@ -30,6 +41,11 @@
 - **首尾帧控制** - 精确控制视频起止画面
 - **多帧动画** - 2-10个关键帧，系统自动补间平滑过渡
 - **主体融合** - 将多张图片的主体组合到一个场景（使用`[图0]`语法）
+
+### 💰 免费积分优势
+- **每日免费积分** - 每天可获得60-80免费积分，无需付费
+- **最新功能支持** - 直接访问Web端，第一时间体验新功能
+- **无需API密钥** - 只需登录账号获取sessionid即可使用
 
 ### 🏗️ 现代化架构
 - **组合模式设计** - 74.6%代码减少（5,268行 → 1,335行）
