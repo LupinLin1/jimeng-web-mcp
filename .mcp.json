@@ -1,5 +1,12 @@
 {
   "mcpServers": {
+    "jimeng-web-mcp": {
+      "command": "node",
+      "args": ["lib/index.js"],
+      "env": {
+        "JIMENG_API_TOKEN": "165fe506411b95d771e619b7d509bb28"
+      }
+    },
     "chrome-devtools": {
       "command": "npx",
       "args": ["-y", "chrome-devtools-mcp@latest"]

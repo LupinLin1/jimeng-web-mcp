@@ -10,15 +10,14 @@
 import { describe, it, expect, beforeAll } from '@jest/globals';
 import { NewJimengClient } from '../../src/api/NewJimengClient.js';
 
-describe('继续生成功能集成测试', () => {
+const token = process.env.JIMENG_API_TOKEN;
+const describeOrSkip = token ? describe : describe.skip;
+
+describeOrSkip('继续生成功能集成测试', () => {
   let client: NewJimengClient;
-  const token = process.env.JIMENG_API_TOKEN;
 
   beforeAll(() => {
-    if (!token) {
-      throw new Error('需要设置 JIMENG_API_TOKEN 环境变量');
-    }
-    client = new NewJimengClient(token);
+    client = new NewJimengClient(token!);
   });
 
   it('同步模式：生成6张图片应自动继续生成', async () => {

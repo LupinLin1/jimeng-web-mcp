@@ -61,9 +61,9 @@ const getApiClient = (token?: string): NewJimengClient => {
 export function generateImage(params: ImageGenerationParams & { async: true }): Promise<string>;
 export function generateImage(params: ImageGenerationParams & { async?: false }): Promise<string[]>;
 export function generateImage(params: ImageGenerationParams): Promise<string[] | string> {
-  console.log('🔍 [重构后API] generateImage 被调用');
-  console.log('🔍 [参数] 文件数量:', params?.filePath ? params.filePath.length : 0);
-  console.log('🔍 [参数] 模型:', params.model || 'jimeng-4.0 (默认)');
+  // console.log('🔍 [重构后API] generateImage 被调用');
+  // console.log('🔍 [参数] 文件数量:', params?.filePath ? params.filePath.length : 0);
+  // console.log('🔍 [参数] 模型:', params.model || 'jimeng-4.0 (默认)');
 
   if (!params.refresh_token) {
     throw new Error('refresh_token is required');
@@ -74,7 +74,7 @@ export function generateImage(params: ImageGenerationParams): Promise<string[] |
   return client.generateImage(params as any)
     .catch(error => {
       console.error('❌ [重构后API] 图像生成失败:', error.message);
-      console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
+      // console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
       throw error;
     });
 }
@@ -84,8 +84,8 @@ export function generateImage(params: ImageGenerationParams): Promise<string[] |
  * ✨ 支持传统模式和智能多帧模式
  */
 export const generateVideo = (params: VideoGenerationParams): Promise<string> => {
-  console.log('🔍 [重构后API] generateVideo 被调用');
-  console.log('🔍 [参数] 模式:', params.multiFrames ? '多帧模式' : '传统模式');
+  // console.log('🔍 [重构后API] generateVideo 被调用');
+  // console.log('🔍 [参数] 模式:', params.multiFrames ? '多帧模式' : '传统模式');
 
   if (!params.refresh_token) {
     throw new Error('refresh_token is required');
@@ -96,7 +96,7 @@ export const generateVideo = (params: VideoGenerationParams): Promise<string> =>
   return client.generateVideo(params)
     .catch(error => {
       console.error('❌ [重构后API] 视频生成失败:', error.message);
-      console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
+      // console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
       throw error;
     });
 };
@@ -106,8 +106,8 @@ export const generateVideo = (params: VideoGenerationParams): Promise<string> =>
  * ✨ 支持2-4张参考图，使用[图N]语法引用
  */
 export const generateMainReferenceVideo = (params: MainReferenceVideoParams): Promise<string> => {
-  console.log('🔍 [重构后API] generateMainReferenceVideo 被调用');
-  console.log('🔍 [参数] 参考图数量:', params.referenceImages.length);
+  // console.log('🔍 [重构后API] generateMainReferenceVideo 被调用');
+  // console.log('🔍 [参数] 参考图数量:', params.referenceImages.length);
 
   if (!params.refresh_token) {
     throw new Error('refresh_token is required');
@@ -125,7 +125,7 @@ export const generateMainReferenceVideo = (params: MainReferenceVideoParams): Pr
 // ============== 后处理功能 ==============
 
 export async function frameInterpolation(params: FrameInterpolationParams): Promise<string> {
-  console.log('🔍 [重构后API] frameInterpolation 被调用');
+  // console.log('🔍 [重构后API] frameInterpolation 被调用');
 
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -137,7 +137,7 @@ export async function frameInterpolation(params: FrameInterpolationParams): Prom
 }
 
 export async function superResolution(params: SuperResolutionParams): Promise<string> {
-  console.log('🔍 [重构后API] superResolution 被调用');
+  // console.log('🔍 [重构后API] superResolution 被调用');
 
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -149,7 +149,7 @@ export async function superResolution(params: SuperResolutionParams): Promise<st
 }
 
 export async function generateAudioEffect(params: AudioEffectGenerationParams): Promise<string> {
-  console.log('🔍 [重构后API] generateAudioEffect 被调用');
+  // console.log('🔍 [重构后API] generateAudioEffect 被调用');
 
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -161,8 +161,8 @@ export async function generateAudioEffect(params: AudioEffectGenerationParams): 
 }
 
 export async function videoPostProcess(params: VideoPostProcessUnifiedParams): Promise<string> {
-  console.log('🔍 [重构后API] videoPostProcess 被调用');
-  console.log('🔍 [参数] 操作类型:', params.operation);
+  // console.log('🔍 [重构后API] videoPostProcess 被调用');
+  // console.log('🔍 [参数] 操作类型:', params.operation);
 
   const token = params.refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -192,7 +192,7 @@ export async function videoPostProcess(params: VideoPostProcessUnifiedParams): P
  * ```
  */
 export const generateImageAsync = async (params: ImageGenerationParams): Promise<string> => {
-  console.log('🔍 [重构后API] generateImageAsync 被调用');
+  // console.log('🔍 [重构后API] generateImageAsync 被调用');
 
   if (!params.refresh_token) {
     throw new Error('refresh_token is required');
@@ -226,7 +226,7 @@ export const getImageResult = async (
   historyId: string,
   refresh_token?: string
 ): Promise<QueryResultResponse> => {
-  console.log('🔍 [重构后API] getImageResult 被调用');
+  // console.log('🔍 [重构后API] getImageResult 被调用');
 
   const token = refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -259,7 +259,7 @@ export const getBatchResults = async (
   ids: string[],
   refresh_token?: string
 ): Promise<Record<string, QueryResultResponse>> => {
-  console.log('🔍 [重构后API] getBatchResults 被调用，查询', ids.length, '个任务');
+  // console.log('🔍 [重构后API] getBatchResults 被调用，查询', ids.length, '个任务');
 
   const token = refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -281,7 +281,7 @@ export const queryVideoResult = async (
   submitId: string,
   refresh_token?: string
 ): Promise<QueryResultResponse> => {
-  console.log('🔍 [重构后API] queryVideoResult 被调用');
+  // console.log('🔍 [重构后API] queryVideoResult 被调用');
 
   const token = refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {
@@ -303,7 +303,7 @@ export const queryVideoResults = async (
   submitIds: string[],
   refresh_token?: string
 ): Promise<Record<string, any>> => {
-  console.log('🔍 [重构后API] queryVideoResults 被调用，查询', submitIds.length, '个视频');
+  // console.log('🔍 [重构后API] queryVideoResults 被调用，查询', submitIds.length, '个视频');
 
   const token = refresh_token || process.env.JIMENG_API_TOKEN;
   if (!token) {

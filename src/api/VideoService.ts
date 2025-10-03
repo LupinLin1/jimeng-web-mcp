@@ -558,7 +558,7 @@ export class VideoService {
     };
 
     // 调试：打印请求体
-    console.log('🔍 [主体参考] 请求体:', JSON.stringify(requestBody, null, 2));
+    // console.log('🔍 [主体参考] 请求体:', JSON.stringify(requestBody, null, 2));
 
     // 提交任务
     const taskId = await this.submitTaskWithDraft(requestBody);
@@ -626,7 +626,7 @@ export class VideoService {
 
       // 第一次等待60秒，后续等待5秒（与旧代码一致）
       const waitTime = pollCount === 1 ? 60000 : 5000;
-      console.log(`🔄 [轮询${pollCount}] 等待 ${waitTime/1000}秒...`);
+      // console.log(`🔄 [轮询${pollCount}] 等待 ${waitTime/1000}秒...`);
       await this.sleep(waitTime);
 
       const status = await this.checkTaskStatus(taskId);
@@ -635,7 +635,7 @@ export class VideoService {
       // 只要有video_url就返回，不强制要求status='completed'
       // 因为有时候视频已经生成完成，但状态字段还没更新
       if (status.video_url) {
-        console.log(`✅ [轮询${pollCount}] 成功获取到视频URL`);
+        // console.log(`✅ [轮询${pollCount}] 成功获取到视频URL`);
         return status.video_url;
       }
 
@@ -651,7 +651,7 @@ export class VideoService {
       }
 
       // 继续下一轮轮询
-      console.log(`⏳ [轮询${pollCount}] 状态=${status.status}, 继续等待...`);
+      // console.log(`⏳ [轮询${pollCount}] 状态=${status.status}, 继续等待...`);
     }
 
     throw new Error(`视频生成超时: taskId=${taskId}`);
@@ -671,15 +671,15 @@ export class VideoService {
     });
 
     // 输出完整响应（不截断）以便调试
-    console.log('🔍 [checkTaskStatus] 完整响应:', JSON.stringify(response, null, 2));
+    // console.log('🔍 [checkTaskStatus] 完整响应:', JSON.stringify(response, null, 2));
 
     const record = response?.data?.[taskId];
     if (!record) {
-      console.log('⚠️  [checkTaskStatus] 未找到record，继续等待');
+      // console.log('⚠️  [checkTaskStatus] 未找到record，继续等待');
       return { status: 'processing' };
     }
 
-    console.log('📊 [checkTaskStatus] 完整record:', JSON.stringify(record, null, 2));
+    // console.log('📊 [checkTaskStatus] 完整record:', JSON.stringify(record, null, 2));
 
     // 解析状态（支持多种状态字段）
     const status = record.common_attr?.status ?? record.status ?? 'unknown';
@@ -703,7 +703,7 @@ export class VideoService {
       const item = record.item_list[0];
 
       // 打印完整item结构以便调试
-      console.log('🎬 [checkTaskStatus] 完整item结构:', JSON.stringify(item, null, 2));
+      // console.log('🎬 [checkTaskStatus] 完整item结构:', JSON.stringify(item, null, 2));
 
       // 尝试多种可能的路径
       videoUrl =
@@ -728,10 +728,10 @@ export class VideoService {
 
       // 如果还是没找到，深度搜索所有包含url的字段
       if (!videoUrl) {
-        console.log('🔍 [checkTaskStatus] 深度搜索URL字段...');
+        // console.log('🔍 [checkTaskStatus] 深度搜索URL字段...');
         videoUrl = this.deepSearchUrl(item);
         if (videoUrl) {
-          console.log(`✅ [checkTaskStatus] 深度搜索找到URL:`, videoUrl);
+          // console.log(`✅ [checkTaskStatus] 深度搜索找到URL:`, videoUrl);
         }
       }
 
@@ -739,8 +739,8 @@ export class VideoService {
         console.error('❌ [checkTaskStatus] 无法找到视频URL，完整item:', JSON.stringify(item, null, 2));
       }
     } else {
-      console.log('⚠️ [checkTaskStatus] item_list为空或不存在');
-      console.log('📦 [checkTaskStatus] record完整结构:', JSON.stringify(record, null, 2));
+      // console.log('⚠️ [checkTaskStatus] item_list为空或不存在');
+      // console.log('📦 [checkTaskStatus] record完整结构:', JSON.stringify(record, null, 2));
     }
 
     return {
@@ -766,7 +766,7 @@ export class VideoService {
       if ((lowerKey.includes('url') || lowerKey.includes('uri')) &&
           typeof obj[key] === 'string' &&
           obj[key].startsWith('http')) {
-        console.log(`🔍 [deepSearchUrl] 在 ${key} 找到URL (深度${depth}):`, obj[key]);
+        // console.log(`🔍 [deepSearchUrl] 在 ${key} 找到URL (深度${depth}):`, obj[key]);
         return obj[key];
       }
 

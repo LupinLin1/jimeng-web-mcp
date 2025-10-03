@@ -62,9 +62,9 @@ export enum STATUS_CODES {
  * Polling configuration for task status queries
  */
 export const POLLING = {
-  MAX_ATTEMPTS: 60,
+  MAX_ATTEMPTS: 180, // 6 minutes (increased for continue generation)
   INTERVAL_MS: 2000,
-  TIMEOUT_MS: 120000 // 2 minutes
+  TIMEOUT_MS: 360000 // 6 minutes
 } as const;
 
 /**

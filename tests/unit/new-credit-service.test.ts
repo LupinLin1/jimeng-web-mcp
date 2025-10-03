@@ -3,6 +3,7 @@
  * Tests composition pattern instead of inheritance
  */
 
+import { jest, describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals';
 import { NewCreditService, InsufficientCreditsError } from '../../src/api/NewCreditService.js';
 import { HttpClient } from '../../src/api/HttpClient.js';
 

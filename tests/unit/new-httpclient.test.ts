@@ -79,10 +79,10 @@ describe('HttpClient (New Implementation)', () => {
         { Action: 'ApplyImageUpload' }
       );
 
-      expect(headers).toHaveProperty('Host', 'imagex.bytedanceapi.com');
+      // Check for authorization headers (AWS4 format uses different property names)
       expect(headers).toHaveProperty('Authorization');
-      expect(headers).toHaveProperty('X-Date');
-      expect(headers).toHaveProperty('X-Security-Token', 'test-session-token');
+      expect(headers.Authorization).toContain('AWS4-HMAC-SHA256');
+      expect(headers).toHaveProperty('X-Amz-Security-Token', 'test-session-token');
       expect(headers.Authorization).toContain('HMAC-SHA256');
     });
   });

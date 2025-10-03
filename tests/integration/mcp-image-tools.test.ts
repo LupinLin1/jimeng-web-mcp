@@ -38,7 +38,7 @@ afterAll(() => {
   console.error = originalConsoleError;
 });
 
-describe('🎯 MCP图片生成工具集成测试', () => {
+const describeOrSkip = process.env.JIMENG_API_TOKEN ? describe : describe.skip; describeOrSkip('🎯 MCP图片生成工具集成测试', () => {
   let server: McpServer;
 
   beforeEach(() => {

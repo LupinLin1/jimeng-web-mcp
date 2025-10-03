@@ -9,7 +9,7 @@ import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import type { ImageGenerationParams } from '../../src/types/api.types.js';
 import { ImageGenerator } from '../../src/api/image/ImageGenerator.js';
 
-describe('Feature 004: Unified Image Generation', () => {
+const describeOrSkip = process.env.JIMENG_API_TOKEN ? describe : describe.skip; describeOrSkip('Feature 004: Unified Image Generation', () => {
   let imageGen: ImageGenerator;
 
   beforeEach(() => {

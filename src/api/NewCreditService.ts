@@ -71,17 +71,17 @@ export class NewCreditService {
       // 检查返回状态
       if (credit?.ret && credit.ret !== '0') {
         if (credit.ret === '1014' && credit.errmsg === 'system busy') {
-          console.log("🟡 积分系统繁忙，跳过积分领取（这通常不会影响图片生成）");
+          // console.log("🟡 积分系统繁忙，跳过积分领取（这通常不会影响图片生成）");
           return; // 不抛错，继续执行
         } else {
-          console.log(`⚠️ 积分领取异常: ret=${credit.ret}, errmsg=${credit.errmsg || '未知错误'}`);
+          // console.log(`⚠️ 积分领取异常: ret=${credit.ret}, errmsg=${credit.errmsg || '未知错误'}`);
           return; // 不抛错，继续执行
         }
       }
 
-      console.log("✅ 积分领取成功", credit);
+      // console.log("✅ 积分领取成功", credit);
     } catch (error) {
-      console.log("⚠️ 积分领取请求失败，但不影响图片生成:", (error as Error).message);
+      // console.log("⚠️ 积分领取请求失败，但不影响图片生成:", (error as Error).message);
       // 不抛错，允许图片生成继续进行
     }
   }
@@ -104,7 +104,7 @@ export class NewCreditService {
       throw new InsufficientCreditsError(amount, balance);
     }
 
-    console.log(`扣除积分: ${amount}, 原因: ${reason}`);
+    // console.log(`扣除积分: ${amount}, 原因: ${reason}`);
     // 注：实际扣除由JiMeng API自动处理
   }
 }

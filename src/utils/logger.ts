@@ -91,8 +91,9 @@ class Logger {
       output += ` ${JSON.stringify(sanitizedContext)}`;
     }
 
-    const stream = useStderr ? process.stderr : process.stdout;
-    stream.write(output + '\n');
+    // 🔇 MCP服务器：所有日志输出到stderr，避免破坏stdio的JSON-RPC通信
+    // MCP协议使用stdout进行JSON-RPC通信，任何非JSON-RPC的stdout输出都会导致连接失败
+    process.stderr.write(output + '\n');
   }
 
   private sanitizeContext(context: Record<string, any>): Record<string, any> {

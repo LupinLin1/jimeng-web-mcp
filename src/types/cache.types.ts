@@ -5,7 +5,7 @@
  * the three static Maps (asyncTaskCache, continuationSent, requestBodyCache).
  */
 
-import type { ImageGenerationParams } from './api.types';
+import type { ImageGenerationParams } from './api.types.js';
 
 /**
  * Cache entry lifecycle states

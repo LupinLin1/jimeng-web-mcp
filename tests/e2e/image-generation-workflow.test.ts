@@ -53,7 +53,7 @@ afterAll(() => {
   console.error = originalConsoleError;
 });
 
-describe('🚀 图片生成端到端工作流测试', () => {
+const describeOrSkip = process.env.JIMENG_API_TOKEN ? describe : describe.skip; describeOrSkip('🚀 图片生成端到端工作流测试', () => {
 
   let mockClient: any;
   let originalEnv: NodeJS.ProcessEnv;

@@ -27,7 +27,7 @@ let generateTextToVideo: VideoGenerationMethod;
 let generateMultiFrameVideo: VideoGenerationMethod;
 let generateMainReferenceVideo: VideoGenerationMethod;
 
-describe('Sync/Async Behavior Tests', () => {
+const describeOrSkip = process.env.JIMENG_API_TOKEN ? describe : describe.skip; describeOrSkip('Sync/Async Behavior Tests', () => {
   beforeEach(() => {
     // TODO: 替换为真实实现
     generateTextToVideo = async (options: any) => {

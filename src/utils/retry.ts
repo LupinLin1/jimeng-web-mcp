@@ -107,7 +107,7 @@ export async function retryAsync<T>(
 
       // 成功则返回
       if (attempt > 1) {
-        console.log(`[SUCCESS] [RETRY-SUCCESS] ${context}重试成功, 尝试次数=${attempt}/${maxRetries + 1}`);
+        // console.log(`[SUCCESS] [RETRY-SUCCESS] ${context}重试成功, 尝试次数=${attempt}/${maxRetries + 1}`);
       }
       return result;
 
@@ -132,9 +132,10 @@ export async function retryAsync<T>(
       // 计算退避延迟
       const backoff = calculateBackoff(attempt, baseDelay, maxDelay);
 
+      const err = error as Error;
       console.warn(
         `[RETRY] [RETRY-ATTEMPT] ${context}重试 ${attempt}/${maxRetries}, ` +
-        `等待${Math.round(backoff)}ms, 错误=${error.message || error}`
+        `等待${Math.round(backoff)}ms, 错误=${err.message || err}`
       );
 
       // 等待后重试

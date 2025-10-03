@@ -297,11 +297,30 @@ export interface QueryResultResponse {
   /** 错误信息（仅当 status='failed' 时存在） */
   error?: string;
 
+  /** 调试信息：总目标数量 */
+  totalCount?: number;
+
+  /** 调试信息：已完成数量 */
+  finishedCount?: number;
+
+  /** 调试信息：当前返回的item数量 */
+  itemCount?: number;
+
   /** 是否还有更多图片正在生成（智能继续生成标记） */
   needs_more?: boolean;
 
   /** 提示信息（如继续生成提示） */
   message?: string;
+
+  /** 智能继续生成调试信息 */
+  _debug?: {
+    /** 是否有缓存条目 */
+    hasCacheEntry: boolean;
+    /** 是否已发送继续生成请求 */
+    continuationSent: boolean;
+    /** 是否应该触发继续生成 */
+    shouldTriggerContinuation: boolean;
+  };
 }
 
 /**

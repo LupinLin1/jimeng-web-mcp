@@ -66,9 +66,9 @@ describe('Schema Validation Integration', () => {
     it('should validate valid multi-frame options', () => {
       const validOptions = {
         frames: [
-          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' },
-          { idx: 1, duration_ms: 2000, prompt: 'Frame 2', image_path: '/frame2.jpg' },
-          { idx: 2, duration_ms: 1000, prompt: 'Frame 3', image_path: '/frame3.jpg' }
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', imagePath: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Frame 2', imagePath: '/frame2.jpg' },
+          { idx: 2, duration_ms: 1000, prompt: 'Frame 3', imagePath: '/frame3.jpg' }
         ],
         model: 'jimeng-video-3.0',
         resolution: '720p',
@@ -83,7 +83,7 @@ describe('Schema Validation Integration', () => {
     it('should reject insufficient frames', () => {
       const invalidOptions = {
         frames: [
-          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' }
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', imagePath: '/frame1.jpg' }
         ]
       };
 
@@ -96,7 +96,7 @@ describe('Schema Validation Integration', () => {
           idx: i,
           duration_ms: 1000,
           prompt: `Frame ${i}`,
-          image_path: `/frame${i}.jpg`
+          imagePath: `/frame${i}.jpg`
         }))
       };
 
@@ -106,8 +106,8 @@ describe('Schema Validation Integration', () => {
     it('should reject duplicate frame indices', () => {
       const invalidOptions = {
         frames: [
-          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' },
-          { idx: 0, duration_ms: 2000, prompt: 'Frame 2', image_path: '/frame2.jpg' } // Duplicate idx
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 1', imagePath: '/frame1.jpg' },
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 2', imagePath: '/frame2.jpg' } // Duplicate idx
         ]
       };
 
@@ -117,8 +117,8 @@ describe('Schema Validation Integration', () => {
     it('should reject negative frame indices', () => {
       const invalidOptions = {
         frames: [
-          { idx: -1, duration_ms: 2000, prompt: 'Frame 1', image_path: '/frame1.jpg' },
-          { idx: 0, duration_ms: 2000, prompt: 'Frame 2', image_path: '/frame2.jpg' }
+          { idx: -1, duration_ms: 2000, prompt: 'Frame 1', imagePath: '/frame1.jpg' },
+          { idx: 0, duration_ms: 2000, prompt: 'Frame 2', imagePath: '/frame2.jpg' }
         ]
       };
 
@@ -198,8 +198,8 @@ describe('Schema Validation Integration', () => {
 
       expect(() => multiFrameVideoOptionsSchema.parse({
         frames: [
-          { idx: 0, duration_ms: 2000, prompt: 'Test 1', image_path: '/frame1.jpg' },
-          { idx: 1, duration_ms: 2000, prompt: 'Test 2', image_path: '/frame2.jpg' }
+          { idx: 0, duration_ms: 2000, prompt: 'Test 1', imagePath: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Test 2', imagePath: '/frame2.jpg' }
         ],
         ...commonParams
       })).not.toThrow();
@@ -221,8 +221,8 @@ describe('Schema Validation Integration', () => {
 
       const multiFrameResult = multiFrameVideoOptionsSchema.safeParse({
         frames: [
-          { idx: 0, duration_ms: 2000, prompt: 'Test 1', image_path: '/frame1.jpg' },
-          { idx: 1, duration_ms: 2000, prompt: 'Test 2', image_path: '/frame2.jpg' }
+          { idx: 0, duration_ms: 2000, prompt: 'Test 1', imagePath: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Test 2', imagePath: '/frame2.jpg' }
         ],
         model: 'jimeng-video-3.0',
         resolution: '1080p',
@@ -261,8 +261,8 @@ describe('Schema Validation Integration', () => {
 
       expect(() => multiFrameVideoOptionsSchema.parse({
         frames: [
-          { idx: 0, duration_ms: 2000, prompt: 'Test 1', image_path: '/frame1.jpg' },
-          { idx: 1, duration_ms: 2000, prompt: 'Test 2', image_path: '/frame2.jpg' }
+          { idx: 0, duration_ms: 2000, prompt: 'Test 1', imagePath: '/frame1.jpg' },
+          { idx: 1, duration_ms: 2000, prompt: 'Test 2', imagePath: '/frame2.jpg' }
         ],
         model: baseOptions.model,
         async: false
