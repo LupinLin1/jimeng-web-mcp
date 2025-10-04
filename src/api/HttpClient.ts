@@ -9,6 +9,7 @@ import { generateCookie } from '../utils/auth.js';
 import { DEFAULT_ASSISTANT_ID, UA } from '../types/models.js';
 import { generateUuid, jsonEncode, toUrlParams, generateMsToken, unixTimestamp } from '../utils/index.js';
 import { generate_a_bogus } from '../utils/a_bogus.js';
+import { logger } from '../utils/logger.js';
 import crypto from 'crypto';
 
 export interface RequestOptions {
@@ -50,7 +51,7 @@ export class HttpClient {
       data = {},
       headers = {},
       params = {},
-      timeout = 60000
+      timeout = 120000 // 增加超时时间到120秒
     } = options;
 
     const baseUrl = 'https://jimeng.jianying.com';
@@ -61,6 +62,7 @@ export class HttpClient {
       "Accept-Encoding": "gzip, deflate, br, zstd",
       "Accept-language": "zh-CN,zh;q=0.9",
       "Cache-control": "no-cache",
+      "Content-Type": "application/json",  // 🔥 添加Content-Type
       "Last-event-id": "undefined",
       Appid: DEFAULT_ASSISTANT_ID,
       Appvr: "5.8.0",
@@ -83,6 +85,8 @@ export class HttpClient {
       'Cookie': generateCookie(this.refreshToken),
       ...headers
     };
+
+    logger.debug(`[HttpClient] Request: ${method} ${fullUrl}`);
 
     try {
       const response: AxiosResponse<T> = await axios({
@@ -302,7 +306,7 @@ export class HttpClient {
     if (error.response) {
       throw new Error(`即梦API请求错误: ${JSON.stringify(error.response.data)}`);
     } else if (error.request) {
-      throw new Error(`即梦API请求失败: 无响应`);
+      throw new Error(`[FINAL-DEBUG] HttpClient.handleError: Caught error with no response.`);
     } else {
       throw new Error(`即梦API请求失败: ${error.message}`);
     }

@@ -126,23 +126,23 @@ export const createServer = (): McpServer => {
           }]
         };
       } catch (error) {
-        // 🔍 Debug logging - 记录详细错误信息
-        console.error('🔍 [MCP Server] Error caught in generateImage tool:');
-        console.error('🔍 [MCP Server] Error type:', error?.constructor?.name);
-        console.error('🔍 [MCP Server] Error message:', error instanceof Error ? error.message : String(error));
+        // 🔍 Debug logging - 记录详细错误信息 (使用logger以避免破坏stdio)
+        logger.debug('🔍 [MCP Server] Error caught in generateImage tool');
+        logger.debug(`🔍 [MCP Server] Error type: ${error?.constructor?.name}`);
+        logger.debug(`🔍 [MCP Server] Error message: ${error instanceof Error ? error.message : String(error)}`);
         if (error instanceof Error && error.stack) {
-          console.error('🔍 [MCP Server] Error stack:', error.stack);
+          logger.debug(`🔍 [MCP Server] Error stack: ${error.stack}`);
         }
-        
+
         // 🔍 记录错误时的参数状态
-        console.error('🔍 [MCP Server] Parameters when error occurred:', JSON.stringify({
+        logger.debug(`🔍 [MCP Server] Parameters when error occurred: ${JSON.stringify({
           filePath: params.filePath,
           prompt: params.prompt ? `${params.prompt.substring(0, 100)}...` : undefined,
           model: params.model,
           aspectRatio: params.aspectRatio,
           sample_strength: params.sample_strength,
           negative_prompt: params.negative_prompt
-        }, null, 2));
+        }, null, 2)}`);
         
         const errorMessage = error instanceof Error ? error.message : String(error);
         return {

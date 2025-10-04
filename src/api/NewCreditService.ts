@@ -5,6 +5,7 @@
  */
 
 import { HttpClient } from './HttpClient.js';
+import { logger } from '../utils/logger.js';
 
 export interface CreditInfo {
   giftCredit: number;
@@ -27,7 +28,7 @@ export class NewCreditService {
       const credit = await this.getCredit();
       return credit.totalCredit;
     } catch (error) {
-      console.error('查询积分失败:', error);
+      logger.debug(`查询积分失败: ${error}`);
       return 0; // 失败时返回0而非抛出异常
     }
   }

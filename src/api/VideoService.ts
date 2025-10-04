@@ -8,6 +8,7 @@
 import { HttpClient } from './HttpClient.js';
 import { ImageUploader } from './ImageUploader.js';
 import { getModel } from '../types/models.js';
+import { logger } from '../utils/logger.js';
 
 // ==================== 类型定义 ====================
 
@@ -646,7 +647,7 @@ export class VideoService {
 
       // 如果status是completed但没有URL，报错
       if (status.status === 'completed' && !status.video_url) {
-        console.error('❌ 视频生成完成但未找到URL，完整状态:', JSON.stringify(status, null, 2));
+        logger.debug(`❌ 视频生成完成但未找到URL，完整状态: ${JSON.stringify(status, null, 2)}`);
         throw new Error('视频生成完成但未返回URL');
       }
 
@@ -736,7 +737,7 @@ export class VideoService {
       }
 
       if (!videoUrl) {
-        console.error('❌ [checkTaskStatus] 无法找到视频URL，完整item:', JSON.stringify(item, null, 2));
+        logger.debug(`❌ [checkTaskStatus] 无法找到视频URL，完整item: ${JSON.stringify(item, null, 2)}`);
       }
     } else {
       // console.log('⚠️ [checkTaskStatus] item_list为空或不存在');

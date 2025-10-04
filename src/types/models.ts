@@ -4,6 +4,7 @@
  */
 
 import { generateUuid } from '../utils/index.js';
+import { logger } from '../utils/logger.js';
 
 // ============== 模型映射 ==============
 
@@ -93,7 +94,7 @@ export const ASPECT_RATIO_PRESETS: AspectRatioPreset[] = [
 export function getModel(model: string): string {
   const mappedModel = MODEL_MAP[model];
   if (!mappedModel) {
-    console.warn(`未知模型: ${model}，使用默认模型: ${DEFAULT_MODEL}`);
+    logger.debug(`未知模型: ${model}，使用默认模型: ${DEFAULT_MODEL}`);
     return MODEL_MAP[DEFAULT_MODEL];
   }
   return mappedModel;

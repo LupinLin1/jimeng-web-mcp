@@ -3,6 +3,8 @@
  * 提供通用的重试逻辑、指数退避算法和错误分类
  */
 
+import { logger } from './logger.js';
+
 /**
  * 重试配置选项
  */
@@ -119,13 +121,13 @@ export async function retryAsync<T>(
 
       // 已达最大重试次数
       if (attempt > maxRetries) {
-        console.error(`[FATAL] [RETRY-FATAL] ${context}重试失败, 已达最大重试次数=${maxRetries}, 错误=${error}`);
+        logger.debug(`[FATAL] [RETRY-FATAL] ${context}重试失败, 已达最大重试次数=${maxRetries}, 错误=${error}`);
         throw error;
       }
 
       // 不可重试的错误
       if (!canRetry) {
-        console.error(`[FATAL] [RETRY-SKIP] ${context}遇到不可重试错误, 立即失败, 错误=${error}`);
+        logger.debug(`[FATAL] [RETRY-SKIP] ${context}遇到不可重试错误, 立即失败, 错误=${error}`);
         throw error;
       }
 
@@ -133,7 +135,7 @@ export async function retryAsync<T>(
       const backoff = calculateBackoff(attempt, baseDelay, maxDelay);
 
       const err = error as Error;
-      console.warn(
+      logger.debug(
         `[RETRY] [RETRY-ATTEMPT] ${context}重试 ${attempt}/${maxRetries}, ` +
         `等待${Math.round(backoff)}ms, 错误=${err.message || err}`
       );

@@ -73,8 +73,8 @@ export function generateImage(params: ImageGenerationParams): Promise<string[] |
 
   return client.generateImage(params as any)
     .catch(error => {
-      console.error('❌ [重构后API] 图像生成失败:', error.message);
-      // console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
+      // ❌ MCP模式禁止console输出，会破坏stdio通信
+      // console.error('❌ [重构后API] 图像生成失败:', error.message);
       throw error;
     });
 }
@@ -95,8 +95,8 @@ export const generateVideo = (params: VideoGenerationParams): Promise<string> =>
 
   return client.generateVideo(params)
     .catch(error => {
-      console.error('❌ [重构后API] 视频生成失败:', error.message);
-      // console.log('💡 提示: 如果问题持续，请使用 api-original-backup.ts 中的原始实现');
+      // ❌ MCP模式禁止console输出，会破坏stdio通信
+      // console.error('❌ [重构后API] 视频生成失败:', error.message);
       throw error;
     });
 };
@@ -117,7 +117,8 @@ export const generateMainReferenceVideo = (params: MainReferenceVideoParams): Pr
 
   return client.generateMainReferenceVideo(params)
     .catch(error => {
-      console.error('❌ [重构后API] 主体参考视频生成失败:', error.message);
+      // ❌ MCP模式禁止console输出，会破坏stdio通信
+      // console.error('❌ [重构后API] 主体参考视频生成失败:', error.message);
       throw error;
     });
 };
